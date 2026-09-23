@@ -1,6 +1,6 @@
 window.topicData = window.topicData || {};
 
-window.topicData['topic_kinetic_theory'] = {
+window.topicData["experimental_chemistry"] = {
  title: 'Laboratory Apparatus, Purity & Separation Techniques',
   description: 'Apparatus selection, measurement, criteria of purity, filtration, distillation, and chromatography.',
   questions: [
@@ -532,4 +532,4 @@ window.topicData['topic_kinetic_theory'] = {
         explanation: 'Nucleon number (mass number) is defined as the total number of protons and neutrons in the nucleus.'
       }
     ]
-  }
+  };
