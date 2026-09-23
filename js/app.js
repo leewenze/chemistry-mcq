@@ -221,6 +221,18 @@ function renderQuestions() {
         const isSubmitted = state && state.submitted;
         const selectedOpt = state ? state.selected : undefined;
 
+        // =========================================================
+        // 📸 IMAGE HANDLING LOGIC ADDED HERE
+        // =========================================================
+        let imageHTML = "";
+        if (q.image) {
+            imageHTML = `
+                <div class="my-4 flex justify-center">
+                    <img src="${q.image}" alt="Question Diagram" class="max-h-72 w-auto object-contain rounded-xl border border-slate-200 bg-slate-50 p-2 shadow-sm" />
+                </div>
+            `;
+        }
+
         let optionsHTML = "";
         q.options.forEach((optText, optIdx) => {
             let optionStyles = "border-slate-200 hover:bg-slate-50 text-slate-700";
@@ -276,6 +288,9 @@ function renderQuestions() {
                     <span class="text-slate-400"><i class="fa-solid fa-bookmark mr-1"></i>${q.source || 'Exam Question'}</span>
                 </div>
                 <h3 class="text-slate-900 font-semibold text-base sm:text-lg mb-4 leading-snug">${q.question}</h3>
+                
+                ${imageHTML}
+
                 <div class="space-y-2">
                     ${optionsHTML}
                 </div>
