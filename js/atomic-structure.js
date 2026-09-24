@@ -68,10 +68,10 @@ window.topicData['atomic_structure'] = {
       question: 'The diagram shows the structure of an ion.<br><br>What is the correct position in the Periodic Table of the element from which this ion was formed?',
       image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/atomic-structure-05.png',
       options: [
-        'period: 2 | group: III',
-        'period: 2 | group: 0',
-        'period: 3 | group: III',
-        'period: 3 | group: 0'
+        'period: 2 | group: 13',
+        'period: 2 | group: 18',
+        'period: 3 | group: 13',
+        'period: 3 | group: 18'
       ],
       answer: 2,
       explanation: 'The Al<sup>3+</sup> ion has lost 3 valence electrons to achieve a 2,8 configuration. The neutral aluminum atom has configuration 2,8,3 (3 electron shells = Period 3; 3 valence electrons = Group III).'
