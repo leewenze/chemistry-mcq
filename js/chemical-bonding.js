@@ -213,7 +213,7 @@ window.topicData['chemical_bonding'] = {
         'Diagram C',
         'Diagram D'
       ],
-      answer: 0,
+      answer: 2,
       explanation: 'Like CO<sub>2</sub>, CS<sub>2</sub> forms double covalent bonds between Carbon and each Sulfur atom (S=C=S), sharing 4 electrons per bond pair.'
     },
     {
