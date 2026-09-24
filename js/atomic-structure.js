@@ -45,8 +45,8 @@ window.topicData['atomic_structure'] = {
         'W: 20 | X: 18 | Y: 32 | Z: 18',
         'W: 20 | X: 19 | Y: 34 | Z: 16'
       ],
-      answer: 0,
-      explanation: 'Potassium has atomic number 19, so K<sup>+</sup> has W = 19 protons and X = 18 electrons (19 - 1). Sulfur has atomic number 16. With 16 neutrons, mass number Y = 32. A S<sup>2-</sup> ion gains 2 electrons, giving Z = 18 electrons.'
+      answer: 2,
+      explanation: 'Potassium has atomic number 19, so W = 39 - 19 = 20 neutrons, K<sup>+</sup> has 1 less electrons so X = 18 electrons (19 - 1). Sulfur has atomic number 16. With 16 neutrons, mass number Y = 32. A S<sup>2-</sup> ion gains 2 electrons, giving Z = 18 electrons.'
     },
     {
       id: 'atom_q4',
