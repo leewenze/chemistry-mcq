@@ -38,7 +38,7 @@ window.topicData['salts'] = {
       id: 'salts_q3',
       source: '[2018 Paper 1, Q17]',
       question: 'When dilute sulfuric acid and sodium hydroxide react, sodium hydrogen sulfate, NaHSO<sub>4</sub>, is first formed:<br>H<sub>2</sub>SO<sub>4</sub>(aq) + NaOH(aq) → NaHSO<sub>4</sub>(aq) + H<sub>2</sub>O(l)<br><br>Aqueous sodium hydrogen sulfate dissociates into ions:<br>NaHSO<sub>4</sub>(aq) → Na<sup>+</sup>(aq) + H<sup>+</sup>(aq) + SO<sub>4</sub><sup>2−</sup>(aq)<br><br>If more sodium hydroxide is added, sodium sulfate, Na<sub>2</sub>SO<sub>4</sub>, can be formed:<br>H<sub>2</sub>SO<sub>4</sub>(aq) + 2NaOH(aq) → Na<sub>2</sub>SO<sub>4</sub>(aq) + 2H<sub>2</sub>O(l)<br><br>Which results for these two salts, when tested with Universal Indicator and barium nitrate solution, are correct?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/salts-03.png',
       options: [
         'NaHSO₄: pH > 7, addition of barium nitrate: no reaction | Na₂SO₄: pH 7, addition of barium nitrate: no reaction',
         'NaHSO₄: pH > 7, addition of barium nitrate: white precipitate | Na₂SO₄: pH 7, addition of barium nitrate: white precipitate',
@@ -108,7 +108,7 @@ window.topicData['salts'] = {
       id: 'salts_q8',
       source: '[2021 Paper 1, Q13]',
       question: 'Some properties of four substances are shown in the table.<br><br>Which substance is silver chloride?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/salts-08.png',
       options: [
         'state at room temp: liquid | conducts at room temp: ✗ | conducts molten: ✗ | conducts in water: ✓',
         'state at room temp: solid | conducts at room temp: ✓ | conducts molten: ✓ | conducts in water: insoluble',
