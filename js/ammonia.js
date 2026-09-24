@@ -38,7 +38,7 @@ window.topicData['ammonia'] = {
       id: 'amm_q3',
       source: '[2016 Paper 1, Q14]',
       question: 'The formation of ammonia is an exothermic reaction:<br>N<sub>2</sub>(g) + 3H<sub>2</sub>(g) ⇌ 2NH<sub>3</sub>(g)&nbsp;&nbsp;&nbsp;&nbsp;ΔH = −92 kJ/mol (or −46 kJ/mol of NH<sub>3</sub> formed)<br><br>The activation energy for the forward reaction (N<sub>2</sub> + 3H<sub>2</sub> → 2NH<sub>3</sub>) is +73 kJ per mole of NH<sub>3</sub>.<br><br>What is the value of the activation energy for the reverse reaction (decomposition of ammonia into its elements per mole of NH<sub>3</sub>)?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/ammonia-03.png',
       options: [
         '46 kJ/mol',
         '73 kJ/mol',
