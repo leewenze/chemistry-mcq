@@ -10,7 +10,7 @@ window.topicData['separation_techniques'] = {
       id: 'sep_q1',
       source: '[2014 Paper 1, Q1]',
       question: 'A paper chromatogram was prepared using a mixture of substances. After drying, the chromatogram is shown in the diagram.<br><br>Which statement is correct?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/separation-techniques-01.png',
       options: [
         'Locating agents are always needed to interpret a chromatogram.',
         'The chromatography paper must have been placed with the solvent below level Z.',
@@ -24,7 +24,6 @@ window.topicData['separation_techniques'] = {
       id: 'sep_q2',
       source: '[2014 Paper 1, Q2]',
       question: 'Three separations are listed:<br>1. obtaining water from sodium chloride solution<br>2. obtaining iodine from a mixture of iodine and nickel<br>3. obtaining solid sodium chloride from aqueous sodium chloride<br><br>Which techniques would be involved in these separations?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
       options: [
         '1: distillation, 2: sublimation, 3: evaporation',
         '1: distillation, 2: sublimation, 3: filtration',
@@ -52,7 +51,7 @@ window.topicData['separation_techniques'] = {
       id: 'sep_q4',
       source: '[2018 Paper 1, Q2]',
       question: 'The diagram shows the results of a chromatography experiment to identify the dyes present in a sample of ink.<br><br>Which two dyes make up the ink sample?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/separation-techniques-04.png',
       options: [
         '1 and 2',
         '1 and 5',
@@ -66,7 +65,7 @@ window.topicData['separation_techniques'] = {
       id: 'sep_q5',
       source: '[2019 Paper 1, Q3]',
       question: 'Liquids X and Y are immiscible.<br>• X has a higher boiling point than Y.<br>• X has a higher density than Y.<br>• X and Y can be separated from each other both by fractional distillation and by use of a separating funnel.<br><br>Which row correctly gives the first liquid to be collected by fractional distillation and the lower liquid in the separating funnel?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/separation-techniques-05.png',
       options: [
         'First liquid collected by fractional distillation: X | Lower liquid in separating funnel: X',
         'First liquid collected by fractional distillation: X | Lower liquid in separating funnel: Y',
@@ -94,7 +93,7 @@ window.topicData['separation_techniques'] = {
       id: 'sep_q7',
       source: '[2021 Paper 1, Q2]',
       question: 'The boiling points of some of the substances found in air are given in the table.<br>Air is cooled to -250 °C so that some of the substances in it condense.<br><br>As the temperature is raised, which substance will turn into a gas first?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/separation-techniques-07.png',
       options: [
         'argon',
         'neon',
@@ -108,7 +107,7 @@ window.topicData['separation_techniques'] = {
       id: 'sep_q8',
       source: '[2022 Paper 1, Q2]',
       question: 'X, Y and Z are all mixtures of alcohols. A paper chromatogram is obtained for samples of X, Y and Z.<br><br>Which row is correct?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/separation-techniques-08.png',
       options: [
         'Statement 1: Z contains at least four alcohols. | Statement 2: X, Y and Z could contain the same alcohol.',
         'Statement 1: Z contains at least four alcohols. | Statement 2: X, Y and Z could not contain the same alcohol.',
