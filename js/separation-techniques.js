@@ -58,8 +58,8 @@ window.topicData['separation_techniques'] = {
         '2 and 4',
         '3 and 4'
       ],
-      answer: 2,
-      explanation: 'Comparing vertical spot alignments on the chromatogram shows that the spots in the ink sample match the heights of spots in dyes 2 and 4.'
+      answer: 1,
+      explanation: 'Comparing vertical spot alignments on the chromatogram shows that the spots in the ink sample match the heights of spots in dyes 1 and 5.'
     },
     {
       id: 'sep_q5',
