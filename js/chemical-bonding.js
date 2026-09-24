@@ -24,7 +24,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q2',
       source: '[2014 Paper 1, Q7]',
       question: 'The diagram shows the structure of a compound of carbon and silicon, (SiC)<sub>n</sub>.<br><br>Which statement would be true for (SiC)<sub>n</sub>?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-bonding-02.png',
       options: [
         'It acts as a lubricant.',
         'It conducts electricity.',
@@ -52,7 +52,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q4',
       source: '[2014 Paper 1, Q10 / 2018 Paper 1, Q7]',
       question: 'A compound contains two elements, metal Y and non-metal Z. The compound consists of a lattice of positive ions and negative ions. Each positive ion is surrounded by eight negative ions and each negative ion is surrounded by four positive ions.<br><br>Which ions are present in the compound, and what is its formula?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'ions present: Y<sup>+</sup> Z<sup>2-</sup> | formula: Y<sub>2</sub>Z',
         'ions present: Y<sup>2+</sup> Z<sup>-</sup> | formula: YZ<sub>2</sub>',
@@ -108,7 +108,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q8',
       source: '[2015 Paper 1, Q4]',
       question: 'Which row shows the substances in the order of their melting points?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'lowest: bromine → chlorine → diamond → highest: sodium',
         'lowest: chlorine → bromine → sodium → highest: diamond',
@@ -122,7 +122,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q9',
       source: '[2015 Paper 1, Q5]',
       question: 'The table shows some properties of four substances. Which substance has a structure held together by electrostatic forces of attraction between oppositely charged ions?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-bonding-09.png',
       options: [
         'melting point: -120 °C | boiling point: -60 °C | soluble in water: yes | conducts electricity solid: no | conducts electricity molten: no',
         'melting point: 546 °C | boiling point: 974 °C | soluble in water: no | conducts electricity solid: yes | conducts electricity molten: yes',
@@ -178,7 +178,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q13',
       source: '[2015 Paper 1, Q10]',
       question: 'Covalent bonds are formed when atoms share electrons. How many electrons are provided by each of the atoms oxygen, fluorine and carbon when they form covalent compounds?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'oxygen: 1 | fluorine: 2 | carbon: 3',
         'oxygen: 1 | fluorine: 2 | carbon: 4',
@@ -206,7 +206,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q15',
       source: '[2015 Paper 1, Q12]',
       question: 'Carbon disulfide, CS<sub>2</sub>, is a covalent liquid. Which is the dot-and-cross diagram for carbon disulfide?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-bonding-15.png',
       options: [
         'Diagram A',
         'Diagram B',
@@ -220,7 +220,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q16',
       source: '[2016 Paper 1, Q5]',
       question: 'Which statements correctly describe the properties of mixtures of iron and sulfur, and the compound iron(II) sulfide, FeS?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-bonding-16.png',
       options: [
         '1 only',
         '1 and 2',
@@ -234,7 +234,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q17',
       source: '[2016 Paper 1, Q6]',
       question: 'Which substance could be graphite?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'melting point: -52 °C | boiling point: -2 °C | electrical conductivity: poor',
         'melting point: 98 °C | boiling point: 883 °C | electrical conductivity: good',
@@ -500,7 +500,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q36',
       source: '[2021 Paper 1, Q25]',
       question: 'The arrangement of atoms in pure iron is shown.<br><br>Steel can be made by adding carbon to pure iron. Which description of the arrangement of atoms in steel is correct?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-bonding-36.png',
       options: [
         'a regular pattern of carbon atoms with iron atoms fitting into the gaps between them',
         'a regular pattern of iron atoms with carbon atoms fitting into the gaps between them',
@@ -528,7 +528,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q38',
       source: '[2022 Paper 1, Q6]',
       question: 'Part of the giant lattice structure of sodium chloride is shown.<br><br>The structure repeats to make a giant lattice. In the giant lattice, how many chloride ions directly surround each sodium ion?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-bonding-38.png',
       options: [
         '3',
         '4',
@@ -542,7 +542,7 @@ window.topicData['chemical_bonding'] = {
       id: 'bond_q39',
       source: '[2022 Paper 1, Q7]',
       question: 'In one molecule of carbon dioxide, CO<sub>2</sub>, what is the total number of electrons present and how many electrons are involved in bonding between the carbon and oxygen atoms?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'total number of electrons: 16 | electrons involved in bonding: 4',
         'total number of electrons: 16 | electrons involved in bonding: 8',
