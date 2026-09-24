@@ -9,7 +9,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q1',
       source: '[2015 Paper 1, Q1]',
-      question: 'Magnesium ribbon was reacted with excess dilute hydrochloric acid. The graph shows the volume of hydrogen gas evolved at 20 second intervals until the reaction had finished. Which piece of apparatus would be suitable for measuring the volume of hydrogen gas evolved?',
+      question: 'Magnesium ribbon was reacted with excess dilute hydrochloric acid. The graph shows the volume of hydrogen gas evolved at 20 second intervals until the reaction had finished. <br><br>Which piece of apparatus would be suitable for measuring the volume of hydrogen gas evolved?',
       // Fixed: Raw URL + Property renamed to 'image'
       image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-01.png',
       options: [
@@ -24,7 +24,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q2',
       source: '[2016 Paper 1, Q1]',
-      question: 'The table gives the density and solubility in water of four gases. Two methods of collection of gases are by upward delivery and by displacement of water. Which row correctly shows whether each of these methods could or could not be used to collect each gas?',
+      question: 'The table gives the density and solubility in water of four gases. <br>Two methods of collection of gases are by upward delivery and by displacement of water. <br>Which row correctly shows whether each of these methods could or could not be used to collect each gas?',
       image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-02.png',
       options: [
         'gas 1 | upward delivery: no | displacement of water: no',
@@ -38,7 +38,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q3',
       source: '[2017 Paper 1, Q1]',
-      question: 'A student is provided with two drying agents: concentrated sulfuric acid and calcium oxide. Which method should he use to collect a sample of dry ammonia? [Mr: NH3, 17]',
+      question: 'A student is provided with two drying agents: concentrated sulfuric acid and calcium oxide. <br>Which method should he use to collect a sample of dry ammonia? <br>[Mr: NH<sub>3</sub>, 17]',
       image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-03.png',
       options: [
         'Concentrated sulfuric acid drying agent with upward delivery',
@@ -52,7 +52,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q4',
       source: '[2019 Paper 1, Q1]',
-      question: 'A gas turns moist red litmus paper blue, is soluble in water and is less dense than air. Which diagram shows a correct way of drying and collecting the gas?',
+      question: 'A gas turns moist red litmus paper blue, is soluble in water and is less dense than air. <br>Which diagram shows a correct way of drying and collecting the gas?',
       image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-04.png',
       options: [
         'Calcium oxide drying tube and upward delivery',
@@ -66,7 +66,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q5',
       source: '[2020 Paper 1, Q1]',
-      question: 'When an excess of dilute acid is added to a known quantity of sodium carbonate, the temperature of the mixture changes. An experiment is designed to measure the temperature change when all the carbonate reacts with the acid. In addition to a thermometer and measuring cylinder, the following pieces of apparatus are available:\n1. gas syringe\n2. stopwatch\n3. balance\n4. Styrofoam cup\n\nWhich pieces of apparatus are needed for this experiment?',
+      question: 'When an excess of dilute acid is added to a known quantity of sodium carbonate, the temperature of the mixture changes. An experiment is designed to measure the temperature change when all the carbonate reacts with the acid. In addition to a thermometer and measuring cylinder, the following pieces of apparatus are available:<br>1. gas syringe<br>2. stopwatch<br>3. balance<br>4. Styrofoam cup<br><br>Which pieces of apparatus are needed for this experiment?',
       image: '',
       options: [
         '1, 2, 3 and 4',
@@ -94,7 +94,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q7',
       source: '[2022 Paper 1, Q1]',
-      question: 'A student investigates the rate of reaction between a solid and a liquid. During the reaction, the student measures the volume of gas released. The student is provided with a conical flask, a pipette and a balance. Which additional apparatus is needed?<br>1. stopwatch<br>2. gas syringe<br>3. thermometer',
+      question: 'A student investigates the rate of reaction between a solid and a liquid. During the reaction, the student measures the volume of gas released. The student is provided with a conical flask, a pipette and a balance. <br>Which additional apparatus is needed?<br>1. stopwatch<br>2. gas syringe<br>3. thermometer',
       image: '',
       options: [
         '1 and 2',
