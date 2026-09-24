@@ -192,7 +192,7 @@ window.topicData['chemical_calculations'] = {
       id: 'calc_q14',
       source: '[2019 Paper 1, Q11]',
       question: 'Magnesium reacts with dilute sulfuric acid to form magnesium sulfate and hydrogen:<br>Mg + H<sub>2</sub>SO<sub>4</sub> → MgSO<sub>4</sub> + H<sub>2</sub><br><br>2.4 g of magnesium react with exactly 100 cm³ of 1 mol/dm³ sulfuric acid to give 2.4 dm³ of hydrogen at r.t.p.<br>Which row would give 4.8 dm³ of hydrogen at room temperature and pressure?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'mass of Mg: 2.4 g | H<sub>2</sub>SO<sub>4</sub> volume: 100 cm³ | H<sub>2</sub>SO<sub>4</sub> concentration: 2 mol/dm³',
         'mass of Mg: 2.4 g | H<sub>2</sub>SO<sub>4</sub> volume: 200 cm³ | H<sub>2</sub>SO<sub>4</sub> concentration: 1 mol/dm³',
@@ -220,7 +220,7 @@ window.topicData['chemical_calculations'] = {
       id: 'calc_q16',
       source: '[2019 Paper 1, Q16]',
       question: 'The table shows information about some fuels.<br><br>Which statements are correct?<br>1. Octane produces more heat than hydrogen or methane for each gram of fuel burned.<br>2. On complete combustion, 1 g of hydrogen produces 286 kJ of energy.<br>3. When methane is completely combusted, the energy required for bond breaking is less than the energy released in bond forming.',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-calculations-16.png',
       options: [
         '1, 2 and 3',
         '2 and 3 only',
@@ -318,7 +318,7 @@ window.topicData['chemical_calculations'] = {
       id: 'calc_q23',
       source: '[2022 Paper 1, Q9]',
       question: 'The structure of an organic compound is shown.<br><br>What is the empirical formula of the compound?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-calculations-23.png',
       options: [
         'HC(C<sub>3</sub>H<sub>5</sub>O<sub>2</sub>)<sub>3</sub>',
         'C<sub>3</sub>H<sub>5</sub>O<sub>2</sub>',
@@ -346,7 +346,7 @@ window.topicData['chemical_calculations'] = {
       id: 'calc_q25',
       source: '[2022 Paper 1, Q11]',
       question: 'A solution containing 0.016 mol of barium hydroxide is added to a conical flask. The aqueous barium hydroxide is titrated with 1.25 mol/dm³ nitric acid.<br><br>Which volume of nitric acid is needed to give a neutral solution?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/chemical-calculations-25.png',
       options: [
         '6.4 cm³',
         '12.8 cm³',
