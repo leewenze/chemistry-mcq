@@ -3,8 +3,8 @@ window.topicData = window.topicData || {};
 
 // Add Acids, Bases & Salts topic
 window.topicData['acids_bases'] = {
-  title: 'Acids, Bases & Salts',
-  description: 'Questions covering acid-base theories, pH scale, reactions of acids/bases, preparation of salts, oxides, and indicators.',
+  title: 'Acids & Bases',
+  description: 'Questions covering acid-base theories, pH scale, reactions of acids/bases, oxides, and indicators.',
   questions: [
     {
       id: 'ab_q1',
