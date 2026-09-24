@@ -94,7 +94,7 @@ window.topicData['experimental_chemistry'] = {
     {
       id: 't2_q7',
       source: '[2022 Paper 1, Q1]',
-      question: 'A student investigates the rate of reaction between a solid and a liquid. During the reaction, the student measures the volume of gas released. The student is provided with a conical flask, a pipette and a balance. Which additional apparatus is needed?\n1. stopwatch\n2. gas syringe\n3. thermometer',
+      question: 'A student investigates the rate of reaction between a solid and a liquid. During the reaction, the student measures the volume of gas released. The student is provided with a conical flask, a pipette and a balance. Which additional apparatus is needed?<br>1. stopwatch<br>2. gas syringe<br>3. thermometer',
       image: '',
       options: [
         '1 and 2',
