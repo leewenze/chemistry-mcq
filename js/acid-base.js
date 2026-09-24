@@ -108,7 +108,7 @@ window.topicData['acids_bases'] = {
       id: 'ab_q8',
       source: '[2018 Paper 1, Q15]',
       question: 'The table gives some statements about acids and bases and explanations for these statements.<br><br>Which row shows both a correct statement and a correct explanation for the statement?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/acid-base-08.png',
       options: [
         'statement: ammonia can be made by heating ammonium sulfate with calcium hydroxide | explanation: the hydroxide ion acts as a base and removes H⁺ from the ammonium ion',
         'statement: the pH of a weak acid is higher than the pH of a strong acid of the same concentration | explanation: pH shows the extent of ionisation – the more ionised the acid is, the higher the pH',
@@ -122,7 +122,7 @@ window.topicData['acids_bases'] = {
       id: 'ab_q9',
       source: '[2018 Paper 1, Q16]',
       question: 'Methylamine dissolves in water to give an alkaline solution.<br>A few drops of Universal Indicator are added to an aqueous solution of methylamine.<br><br>Which row shows the pH of the solution and the colour of the solution after the indicator has been added?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/acid-base-09.png',
       options: [
         'pH: greater than 7 | colour of solution: blue',
         'pH: greater than 7 | colour of solution: orange',
@@ -150,7 +150,7 @@ window.topicData['acids_bases'] = {
       id: 'ab_q11',
       source: '[2019 Paper 1, Q15]',
       question: 'The diagram shows two substances, R and S, being heated together.<br><br>Which row is correct?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/acid-base-11.png',
       options: [
         'substance R: ammonium chloride | substance S: aqueous sodium hydroxide | colour change of damp Universal Indicator paper: turns blue',
         'substance R: ammonium chloride | substance S: hydrochloric acid | colour change of damp Universal Indicator paper: turns red',
@@ -164,7 +164,7 @@ window.topicData['acids_bases'] = {
       id: 'ab_q12',
       source: '[2020 Paper 1, Q13]',
       question: 'Dilute sulfuric acid is added to separate samples of solid substances.<br>Which row shows which solid substances will react with dilute sulfuric acid to evolve gas?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/acid-base-12.png',
       options: [
         'copper: ✓ | magnesium: ✓ | zinc oxide: ✗ | sodium carbonate: ✗',
         'copper: ✓ | magnesium: ✗ | zinc oxide: ✓ | sodium carbonate: ✗',
@@ -220,7 +220,7 @@ window.topicData['acids_bases'] = {
       id: 'ab_q16',
       source: '[2022 Paper 1, Q14]',
       question: 'The table gives some statements about acids and bases and explanations for these statements.<br><br>Which row shows both a correct statement and a correct explanation for the statement?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/acid-base-16.png',
       options: [
         'statement: ammonia can be made by heating ammonium carbonate with calcium hydroxide | explanation: the hydroxide ion removes H⁺ from the ammonium ion',
         'statement: the pH of a weak acid is higher than the pH of a strong acid of the same concentration | explanation: pH shows the extent of ionisation – the more ionised the acid is, the higher the pH',
