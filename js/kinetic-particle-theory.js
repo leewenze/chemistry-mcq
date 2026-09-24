@@ -23,7 +23,7 @@ window.topicData['kinetic_particle_theory'] = {
       id: 'kpt_q2',
       source: '[2016 Paper 1, Q3]',
       question: 'Which row correctly shows the order of the rates of diffusion of the gases ammonia, carbon dioxide and hydrogen bromide?',
-      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-02.png',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/kinetic-particle-theory-02.png',
       options: [
         'CO<sub>2</sub>, HBr, NH<sub>3</sub>',
         'HBr, CO<sub>2</sub>, NH<sub>3</sub>',
