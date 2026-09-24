@@ -38,7 +38,7 @@ window.topicData['qualitative_analysis'] = {
       id: 'qa_q3',
       source: '[2015 Paper 1, Q24]',
       question: 'The following observations were made by separately reacting three solutions containing metal ions with an excess of aqueous sodium hydroxide and an excess of aqueous ammonia:<br><br>• Solution 1: White precipitate insoluble in excess NaOH(aq); No precipitate in NH<sub>3</sub>(aq).<br>• Solution 2: White precipitate soluble in excess NaOH(aq) giving a colourless solution; White precipitate insoluble in excess NH<sub>3</sub>(aq).<br>• Solution 3: White precipitate soluble in excess NaOH(aq); White precipitate soluble in excess NH<sub>3</sub>(aq).<br><br>Which metal ions are present in each solution?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/qualitative-analysis-03.png',
       options: [
         '1: Al³⁺ | 2: Ca²⁺ | 3: Zn²⁺',
         '1: Al³⁺ | 2: Zn²⁺ | 3: Ca²⁺',
@@ -80,7 +80,7 @@ window.topicData['qualitative_analysis'] = {
       id: 'qa_q6',
       source: '[2016 Paper 1, Q21]',
       question: 'An aqueous solution of a compound, T, undergoes the following reactions:<br>• T + NaOH(aq) → Green precipitate<br>• T + AgNO₃(aq) + HNO₃(aq) → Yellow precipitate<br><br>What is T?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/qualitative-analysis-06.png',
       options: [
         'iron(II) carbonate',
         'iron(III) chloride',
@@ -122,7 +122,7 @@ window.topicData['qualitative_analysis'] = {
       id: 'qa_q9',
       source: '[2018 Paper 1, Q3]',
       question: 'Two solutions, W and X, were tested as shown:<br>• Solution W + dilute KI(aq) → Yellow precipitate<br>• Solution X + excess NaOH(aq) → White precipitate soluble in excess giving a colourless solution<br>• Solution X + excess NH₃(aq) → White precipitate soluble in excess giving a colourless solution<br><br>What are solutions W and X?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/qualitative-analysis-09.png',
       options: [
         'W: ammonium sulfate | X: zinc sulfate',
         'W: lead(II) nitrate | X: aluminium sulfate',
@@ -150,7 +150,7 @@ window.topicData['qualitative_analysis'] = {
       id: 'qa_q11',
       source: '[2019 Paper 1, Q4]',
       question: 'Three different experiments with colour changes are carried out:<br>1. Sulfur dioxide is tested with acidified potassium manganate(VII) solution.<br>2. Universal Indicator solution is added to a solution of a weak acid.<br>3. Aqueous potassium iodide and dilute nitric acid are mixed. Then aqueous silver nitrate is added.<br><br>Which row correctly identifies the experiments that correspond to the colour changes?<br>• Colourless solution to a yellow precipitate<br>• Purple to colourless<br>• Green to orange',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/qualitative-analysis-11.png',
       options: [
         'colourless to yellow ppt: 1 | purple to colourless: 2 | green to orange: 3',
         'colourless to yellow ppt: 2 | purple to colourless: 1 | green to orange: 3',
@@ -178,7 +178,7 @@ window.topicData['qualitative_analysis'] = {
       id: 'qa_q13',
       source: '[2021 Paper 1, Q3]',
       question: 'An aqueous solution of a salt is tested and the following results are obtained:<br>• Excess NaOH(aq): White precipitate formed, dissolves in excess to give a colourless solution.<br>• Excess NH₃(aq): White precipitate formed, insoluble in excess.<br><br>What is the cation in the salt?',
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/qualitative-analysis-13.png',
       options: [
         'Al³⁺',
         'Ca²⁺',
