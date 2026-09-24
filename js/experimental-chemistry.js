@@ -32,7 +32,7 @@ window.topicData['experimental_chemistry'] = {
         'gas 3 | upward delivery: yes | displacement of water: yes',
         'gas 4 | upward delivery: yes | displacement of water: yes'
       ],
-      answer: 1,
+      answer: 2,
       explanation: 'Upward delivery is used for gases less dense than air. Displacement of water requires the gas to be insoluble or sparingly soluble in water.'
     },
     {
