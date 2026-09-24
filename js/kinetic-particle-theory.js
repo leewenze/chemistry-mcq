@@ -10,7 +10,6 @@ window.topicData['kinetic_particle_theory'] = {
       id: 'kpt_q1',
       source: '[2014 Paper 1, Q4]',
       question: 'Two gases, P and Q, were separately released in a laboratory on a cold day. The experiment was repeated on a hot day. The time taken for the gases to reach the opposite end of the laboratory was recorded for each experiment.<br><br>The relative molecular mass of gas P was 34 and the relative molecular mass of gas Q was 64.<br><br>Which gas on which day would reach the end of the laboratory in the shortest time?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
       options: [
         'gas: P, day: cold',
         'gas: P, day: hot',
@@ -24,12 +23,12 @@ window.topicData['kinetic_particle_theory'] = {
       id: 'kpt_q2',
       source: '[2016 Paper 1, Q3]',
       question: 'Which row correctly shows the order of the rates of diffusion of the gases ammonia, carbon dioxide and hydrogen bromide?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-02.png',
       options: [
-        'CO2, HBr, NH3',
-        'HBr, CO2, NH3',
-        'HBr, NH3, CO2',
-        'NH3, CO2, HBr'
+        'CO<sub>2</sub>, HBr, NH<sub>3</sub>',
+        'HBr, CO<sub>2</sub>, NH<sub>3</sub>',
+        'HBr, NH<sub>3</sub>, CO<sub>2</sub>',
+        'NH<sub>3</sub>, CO<sub>2</sub>, HBr'
       ],
       answer: 1,
       explanation: 'Rate of diffusion is inversely proportional to molecular mass. Comparing Mr values: HBr (81) > CO2 (44) > NH3 (17). Therefore, HBr diffuses slowest and NH3 diffuses fastest.'
@@ -38,7 +37,7 @@ window.topicData['kinetic_particle_theory'] = {
       id: 'kpt_q3',
       source: '[2017 Paper 1, Q3]',
       question: 'The stopper was removed from a bottle containing perfume X and the time taken for the smell to reach the opposite side of the room was noted.<br><br>The experiment was repeated using perfume Y. Perfume Y has a higher relative molecular mass than perfume X.<br><br>Which row gives:<br>• the name of the process by which the perfume spreads around the room,<br>• the identity of the perfume that reaches the opposite side of the room in the shorter time?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+
       options: [
         'name of process: diffusion | perfume reaching opposite side of room in shorter time: perfume X',
         'name of process: diffusion | perfume reaching opposite side of room in shorter time: perfume Y',
