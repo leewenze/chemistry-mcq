@@ -10,7 +10,7 @@ window.topicData['atomic_structure'] = {
       id: 'atom_q1',
       source: '[2014 Paper 1, Q6]',
       question: 'An element, R, has p protons and n neutrons in its nucleus.<br><br>Which row gives a possible correct number of protons, neutrons and electrons in a negative ion of an isotope of R?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'protons: p | neutrons: n + 1 | electrons: p + 1',
         'protons: p | neutrons: n + 1 | electrons: p - 1',
@@ -38,7 +38,7 @@ window.topicData['atomic_structure'] = {
       id: 'atom_q3',
       source: '[2016 Paper 1, Q4]',
       question: 'The table shows details of the particles present in an atom of potassium and in ions of potassium and sulfur.<br><br>What are the values of W, X, Y and Z?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/atomic-structure-03.png',
       options: [
         'W: 19 | X: 18 | Y: 32 | Z: 18',
         'W: 19 | X: 19 | Y: 34 | Z: 16',
@@ -66,7 +66,7 @@ window.topicData['atomic_structure'] = {
       id: 'atom_q5',
       source: '[2017 Paper 1, Q5]',
       question: 'The diagram shows the structure of an ion.<br><br>What is the correct position in the Periodic Table of the element from which this ion was formed?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/atomic-structure-05.png',
       options: [
         'period: 2 | group: III',
         'period: 2 | group: 0',
@@ -136,7 +136,7 @@ window.topicData['atomic_structure'] = {
       id: 'atom_q10',
       source: '[2021 Paper 1, Q5]',
       question: 'An atom of one isotope of bromine is represented by the symbol <sup>81</sup><sub>35</sub>Br.<br><br>Which row is correct for an atom of a different isotope of bromine?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: '',
       options: [
         'number of neutrons: 44 | number of protons: 35 | nucleon number: 44',
         'number of neutrons: 44 | number of protons: 35 | nucleon number: 79',
