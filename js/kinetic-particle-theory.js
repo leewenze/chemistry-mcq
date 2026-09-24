@@ -77,18 +77,18 @@ window.topicData['kinetic_particle_theory'] = {
       explanation: 'Argon (Ar, Mr = 40) is lighter than Carbon Dioxide (CO2, Mr = 44), so Argon diffuses faster. Higher temperature (40 °C) provides more kinetic energy, making Argon at 40 °C the fastest.'
     },
     {
-      id: 'kpt_q6',
-      source: '[2021 Paper 1, Q4]',
-      question: 'The rate of diffusion of five gases is measured. The gases are CO, CO2, C2H4, C3H8 and N2.<br><br>The list gives four pairs of gases:<br>1. CO and C2H4<br>2. CO and N2<br>3. CO2 and C3H8<br>4. C2H4 and C3H8<br><br>In which pairs would both gases diffuse at the same rate, under the same conditions of temperature and pressure?',
-      image: '',
-      options: [
-        '1, 2 and 3',
-        '1 and 2 only',
-        '1 only',
-        '3 and 4'
-      ],
-      answer: 0,
-      explanation: 'Gases with equal relative molecular masses (Mr) diffuse at identical rates under identical conditions:<br>• Pair 1: CO (28) and C2H4 (28)<br>• Pair 2: CO (28) and N2 (28)<br>• Pair 3: CO2 (44) and C3H8 (44)'
+  id: 'kpt_q6',
+  source: '[2021 Paper 1, Q4]',
+  question: 'The rate of diffusion of five gases is measured. The gases are CO, CO<sub>2</sub>, C<sub>2</sub>H<sub>4</sub>, C<sub>3</sub>H<sub>8</sub> and N<sub>2</sub>.<br><br>The list gives four pairs of gases:<br>1. CO and C<sub>2</sub>H<sub>4</sub><br>2. CO and N<sub>2</sub><br>3. CO<sub>2</sub> and C<sub>3</sub>H<sub>8</sub><br>4. C<sub>2</sub>H<sub>4</sub> and C<sub>3</sub>H<sub>8</sub><br><br>In which pairs would both gases diffuse at the same rate, under the same conditions of temperature and pressure?',
+  image: '',
+  options: [
+    '1, 2 and 3',
+    '1 and 2 only',
+    '1 only',
+    '3 and 4'
+  ],
+  answer: 0,
+  explanation: 'Gases with equal relative molecular masses (Mr) diffuse at identical rates under identical conditions:<br>• Pair 1: CO (28) and C<sub>2</sub>H<sub>4</sub> (28)<br>• Pair 2: CO (28) and N<sub>2</sub> (28)<br>• Pair 3: CO<sub>2</sub> (44) and C<sub>3</sub>H<sub>8</sub> (44)'
     }
   ]
 };
