@@ -105,4 +105,4 @@ window.topicData = window.topicData || {};
       explanation: 'Measuring the rate of gas release requires a gas syringe (to measure volume) and a stopwatch (to track time intervals).'
     }
   ]
-}
+};
