@@ -25,7 +25,7 @@ window.topicData['experimental_chemistry'] = {
       id: 't2_q2',
       source: '[2016 Paper 1, Q1]',
       question: 'The table gives the density and solubility in water of four gases. Two methods of collection of gases are by upward delivery and by displacement of water. Which row correctly shows whether each of these methods could or could not be used to collect each gas?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-02.png',
       options: [
         'gas 1 | upward delivery: no | displacement of water: no',
         'gas 2 | upward delivery: no | displacement of water: yes',
@@ -39,7 +39,7 @@ window.topicData['experimental_chemistry'] = {
       id: 't2_q3',
       source: '[2017 Paper 1, Q1]',
       question: 'A student is provided with two drying agents: concentrated sulfuric acid and calcium oxide. Which method should he use to collect a sample of dry ammonia? [Mr: NH3, 17]',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-03.png',
       options: [
         'Concentrated sulfuric acid drying agent with upward delivery',
         'Concentrated sulfuric acid drying agent with downward delivery',
@@ -53,7 +53,7 @@ window.topicData['experimental_chemistry'] = {
       id: 't2_q4',
       source: '[2019 Paper 1, Q1]',
       question: 'A gas turns moist red litmus paper blue, is soluble in water and is less dense than air. Which diagram shows a correct way of drying and collecting the gas?',
-      image: 'PASTE_YOUR_RAW_IMAGE_URL_HERE',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/experimental-chemistry-04.png',
       options: [
         'Calcium oxide drying tube and upward delivery',
         'Concentrated sulfuric acid wash bottle and downward delivery',
