@@ -10,7 +10,7 @@ window.topicData = window.topicData || {};
       id: 't2_q1',
       source: '[2015 Paper 1, Q1]',
       question: 'Magnesium ribbon was reacted with excess dilute hydrochloric acid. The graph shows the volume of hydrogen gas evolved at 20 second intervals until the reaction had finished. Which piece of apparatus would be suitable for measuring the volume of hydrogen gas evolved?',
-      imageUrl: 'PASTE_YOUR_IMAGE_URL_HERE',
+      imageUrl: 'https://github.com/leewenze/chemistry-mcq/blob/main/js/images/experimental-chemistry-01.png',
       options: [
         '50 cm³ burette',
         '100 cm³ gas syringe',
