@@ -134,6 +134,7 @@ window.resetSingleQuestion = resetSingleQuestion;
  * Exits Exam Mode and restores Practice Mode
  */
 function exitExamMode() {
+    // Only prompt for confirmation if an exam is active AND hasn't been graded yet
     if (activeExamQuestions && !isExamGraded) {
         const confirmExit = confirm("Are you sure you want to exit the exam? Your current exam progress will be lost.");
         if (!confirmExit) return;
@@ -150,6 +151,7 @@ function exitExamMode() {
     activeExamQuestions = null;
     isExamGraded = false;
 
+    // Hide timer bar when leaving Exam Mode
     const timerBar = document.getElementById('exam-timer-bar');
     if (timerBar) timerBar.classList.add('hidden');
 
@@ -160,7 +162,6 @@ function exitExamMode() {
         renderQuestions();
     }
 }
-
 /**
  * Handles Submission for both Exam Paper Mode and Practice Topic Mode
  */
@@ -188,8 +189,16 @@ function handleSubmitPaper() {
     if (activeExamQuestions) {
         isExamGraded = true;
         
+        // Stop the countdown timer, but keep the container/bar visible so the Exit Exam button remains available
+        if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
+            try { ExamEngine.stopTimer(); } catch (e) {}
+        }
+
+        // NOTE: If you previously hid `timerBar` here, ensure it is NOT hidden:
         const timerBar = document.getElementById('exam-timer-bar');
-        if (timerBar) timerBar.classList.add('hidden');
+        if (timerBar) {
+            timerBar.classList.remove('hidden'); 
+        }
 
         try {
             if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
@@ -200,9 +209,6 @@ function handleSubmitPaper() {
         }
 
         if (!results) {
-            if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-                try { ExamEngine.stopTimer(); } catch (e) {}
-            }
             results = calculateExamResults(questions);
         }
 
