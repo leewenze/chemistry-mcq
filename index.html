@@ -242,6 +242,7 @@
 <script>
     function toggleExamConfig() {
         const drawer = document.getElementById('topic-selection-drawer');
+        if (!drawer) return;
         drawer.classList.toggle('hidden');
         if (!drawer.classList.contains('hidden')) {
             populateTopicCheckboxes();
@@ -256,7 +257,7 @@
         grid.innerHTML = '';
 
         if (topics.length === 0) {
-            grid.innerHTML = '<p class="text-xs text-amber-400">Loading topic data...</p>';
+            grid.innerHTML = '<p class="text-xs text-amber-400 col-span-2">No topic data loaded yet.</p>';
             return;
         }
 
@@ -278,7 +279,8 @@
     function syncSelectAllCheckbox() {
         const checkboxes = document.querySelectorAll('.exam-topic-cb');
         const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-        document.getElementById('select-all-topics').checked = allChecked;
+        const selectAll = document.getElementById('select-all-topics');
+        if (selectAll) selectAll.checked = allChecked;
     }
 
     function startTimedExam() {
@@ -288,51 +290,36 @@
         if (checkboxes.length > 0) {
             selectedKeys = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
             if (selectedKeys.length === 0) {
-                alert('Please select at least one topic!');
+                alert('Please select at least one topic for your exam!');
                 return;
             }
         }
 
+        // Generate randomized 40-question paper
         const examQuestions = ExamEngine.generateExam(selectedKeys, 40);
 
-        if (examQuestions.length === 0) {
-            alert('No questions available in selected topics.');
+        if (!examQuestions || examQuestions.length === 0) {
+            alert('No questions found in the selected topics.');
             return;
         }
 
-        // 1. Update Title and Headers for Exam Mode
-        const topicBadge = document.getElementById('current-topic-badge');
-        const topicTotalQ = document.getElementById('current-topic-total-q');
-        const topicTitle = document.getElementById('current-topic-title');
-        const topicDesc = document.getElementById('current-topic-desc');
+        // Close topic drawer if open
+        const drawer = document.getElementById('topic-selection-drawer');
+        if (drawer) drawer.classList.add('hidden');
 
-        if (topicBadge) topicBadge.textContent = "MOCK EXAM";
-        if (topicTotalQ) topicTotalQ.textContent = `${examQuestions.length} Questions`;
-        if (topicTitle) topicTitle.textContent = "60-Minute Timed Practice Paper";
-        if (topicDesc) topicDesc.textContent = "Answer all questions and click 'Submit All & Grade' before the timer runs out.";
-
-        // 2. Render exam paper onto screen using available app renderers
-        if (typeof window.renderQuestions === 'function') {
-            window.renderQuestions(examQuestions);
-        } else if (typeof window.renderExamToUI === 'function') {
+        // Render questions using app.js global function
+        if (typeof window.renderExamToUI === 'function') {
             window.renderExamToUI(examQuestions);
-        } else if (typeof window.loadQuestions === 'function') {
-            window.loadQuestions(examQuestions);
         } else {
-            console.warn("Standard renderers not found. Attempting basic UI fill...");
-            renderExamFallback(examQuestions);
+            alert('Error connecting to app rendering system.');
+            return;
         }
 
-        // 3. Display Sticky Timer Bar
-        document.getElementById('exam-timer-bar').classList.remove('hidden');
+        // Display Sticky Timer Bar
+        const timerBar = document.getElementById('exam-timer-bar');
+        if (timerBar) timerBar.classList.remove('hidden');
 
-        // 4. Attach submission handler to main action button
-        const submitBtn = document.getElementById('submit-topic-btn');
-        if (submitBtn) {
-            submitBtn.onclick = handleSubmitExam;
-        }
-
-        // 5. Start 60-Minute Countdown Timer
+        // Start 60-Minute Countdown Timer
         ExamEngine.startTimer(
             (timeStr, secondsLeft) => {
                 const timerEl = document.getElementById('timer-display');
@@ -346,92 +333,15 @@
                 }
             },
             () => {
-                alert("Time's up! Automatically submitting your exam paper.");
-                handleSubmitExam();
+                alert("Time's up! Submitting your exam automatically.");
+                if (typeof handleSubmitPaper === 'function') {
+                    handleSubmitPaper();
+                }
             },
             60
         );
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Fallback UI renderer if app.js doesn't expose render functions globally
-    function renderExamFallback(questions) {
-        const container = document.getElementById('questions-list');
-        if (!container) return;
-
-        container.innerHTML = questions.map((q, idx) => `
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div class="flex items-center justify-between text-xs text-slate-400">
-                    <span class="font-bold text-indigo-600">Question ${idx + 1} of ${questions.length}</span>
-                    <span>${q.topicKey ? q.topicKey.replace('-', ' ').toUpperCase() : ''}</span>
-                </div>
-                <p class="text-slate-800 font-medium text-base">${q.question}</p>
-                ${q.image ? `<div class="question-image-container"><img src="${q.image}" class="question-img" alt="Question Diagram"></div>` : ''}
-                <div class="space-y-2">
-                    ${q.options.map((opt, oIdx) => `
-                        <label class="flex items-center p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-indigo-50/50 hover:border-indigo-200 transition cursor-pointer">
-                            <input type="radio" name="exam_q_${q.id \vert{}\vert{} idx}" value="${oIdx}" class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-3 text-sm text-slate-700">${opt}</span>
-                        </label>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function handleSubmitExam() {
-        const results = ExamEngine.submitExam();
-
-        // Hide Sticky Timer Bar
-        document.getElementById('exam-timer-bar').classList.add('hidden');
-
-        // Reveal grading in app.js if supported
-        if (typeof window.revealExamGrading === 'function') {
-            window.revealExamGrading(results);
-        }
-
-        // Render Final Results Modal
-        showExamResultsModal(results);
-    }
-
-    function showExamResultsModal(results) {
-        const oldModal = document.getElementById('exam-result-modal');
-        if (oldModal) oldModal.remove();
-
-        const badgeColor = results.percentage >= 75 ? 'bg-emerald-500' : (results.percentage >= 50 ? 'bg-amber-500' : 'bg-rose-500');
-
-        const modalHTML = `
-            <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-                <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
-                    <div class="w-16 h-16 ${badgeColor} text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
-                        <i class="fa-solid ${results.percentage >= 50 ? 'fa-award' : 'fa-triangle-exclamation'}"></i>
-                    </div>
-
-                    <h2 class="text-2xl font-bold text-slate-900">Exam Completed!</h2>
-                    <p class="text-xs text-slate-500 mt-1">Here is your final performance breakdown.</p>
-
-                    <div class="grid grid-cols-2 gap-3 my-6">
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                            <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Score</span>
-                            <span class="text-2xl font-black text-indigo-600">${results.score} <span class="text-sm text-slate-400 font-normal">/ ${results.total}</span></span>
-                            <span class="text-xs text-slate-500 block mt-0.5">(${results.percentage}%)</span>
-                        </div>
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                            <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Time Spent</span>
-                            <span class="text-lg font-bold text-slate-800 block mt-1">${results.timeSpentFormatted}</span>
-                            <span class="text-[11px] text-slate-400 block">Out of 60:00</span>
-                        </div>
-                    </div>
-
-                    <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition">
-                        Review Answers & Explanations
-                    </button>
-                </div>
-            </div>
-        `;
-
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
     }
 </script>
 
