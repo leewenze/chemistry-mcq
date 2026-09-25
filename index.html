@@ -250,10 +250,15 @@
 
     function populateTopicCheckboxes() {
         const grid = document.getElementById('topic-checkboxes-grid');
-        if (!grid || grid.children.length > 0) return;
+        if (!grid) return;
 
         const topics = ExamEngine.getAvailableTopics();
         grid.innerHTML = '';
+
+        if (topics.length === 0) {
+            grid.innerHTML = '<p class="text-xs text-amber-400">Loading topic data...</p>';
+            return;
+        }
 
         topics.forEach(t => {
             grid.innerHTML += `
@@ -295,23 +300,39 @@
             return;
         }
 
-        // Display Timer Bar
-        document.getElementById('exam-timer-bar').classList.remove('hidden');
+        // 1. Update Title and Headers for Exam Mode
+        const topicBadge = document.getElementById('current-topic-badge');
+        const topicTotalQ = document.getElementById('current-topic-total-q');
+        const topicTitle = document.getElementById('current-topic-title');
+        const topicDesc = document.getElementById('current-topic-desc');
 
-        // Render exam paper to UI
-        if (typeof renderQuestions === 'function') {
-            renderQuestions(examQuestions);
-        } else if (typeof renderExamToUI === 'function') {
-            renderExamToUI(examQuestions);
+        if (topicBadge) topicBadge.textContent = "MOCK EXAM";
+        if (topicTotalQ) topicTotalQ.textContent = `${examQuestions.length} Questions`;
+        if (topicTitle) topicTitle.textContent = "60-Minute Timed Practice Paper";
+        if (topicDesc) topicDesc.textContent = "Answer all questions and click 'Submit All & Grade' before the timer runs out.";
+
+        // 2. Render exam paper onto screen using available app renderers
+        if (typeof window.renderQuestions === 'function') {
+            window.renderQuestions(examQuestions);
+        } else if (typeof window.renderExamToUI === 'function') {
+            window.renderExamToUI(examQuestions);
+        } else if (typeof window.loadQuestions === 'function') {
+            window.loadQuestions(examQuestions);
+        } else {
+            console.warn("Standard renderers not found. Attempting basic UI fill...");
+            renderExamFallback(examQuestions);
         }
 
-        // Attach submission handler to button
+        // 3. Display Sticky Timer Bar
+        document.getElementById('exam-timer-bar').classList.remove('hidden');
+
+        // 4. Attach submission handler to main action button
         const submitBtn = document.getElementById('submit-topic-btn');
         if (submitBtn) {
             submitBtn.onclick = handleSubmitExam;
         }
 
-        // Start 60-Minute Timer
+        // 5. Start 60-Minute Countdown Timer
         ExamEngine.startTimer(
             (timeStr, secondsLeft) => {
                 const timerEl = document.getElementById('timer-display');
@@ -330,32 +351,58 @@
             },
             60
         );
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Fallback UI renderer if app.js doesn't expose render functions globally
+    function renderExamFallback(questions) {
+        const container = document.getElementById('questions-list');
+        if (!container) return;
+
+        container.innerHTML = questions.map((q, idx) => `
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between text-xs text-slate-400">
+                    <span class="font-bold text-indigo-600">Question ${idx + 1} of ${questions.length}</span>
+                    <span>${q.topicKey ? q.topicKey.replace('-', ' ').toUpperCase() : ''}</span>
+                </div>
+                <p class="text-slate-800 font-medium text-base">${q.question}</p>
+                ${q.image ? `<div class="question-image-container"><img src="${q.image}" class="question-img" alt="Question Diagram"></div>` : ''}
+                <div class="space-y-2">
+                    ${q.options.map((opt, oIdx) => `
+                        <label class="flex items-center p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-indigo-50/50 hover:border-indigo-200 transition cursor-pointer">
+                            <input type="radio" name="exam_q_${q.id \vert{}\vert{} idx}" value="${oIdx}" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-3 text-sm text-slate-700">${opt}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
     }
 
     function handleSubmitExam() {
         const results = ExamEngine.submitExam();
 
-        // Hide Timer Bar
+        // Hide Sticky Timer Bar
         document.getElementById('exam-timer-bar').classList.add('hidden');
 
-        // Reveal answers/explanations across all rendered questions
-        if (typeof revealExamGrading === 'function') {
-            revealExamGrading(results);
+        // Reveal grading in app.js if supported
+        if (typeof window.revealExamGrading === 'function') {
+            window.revealExamGrading(results);
         }
 
-        // Render Results Modal
+        // Render Final Results Modal
         showExamResultsModal(results);
     }
 
     function showExamResultsModal(results) {
-        // Remove existing modal if present
         const oldModal = document.getElementById('exam-result-modal');
         if (oldModal) oldModal.remove();
 
         const badgeColor = results.percentage >= 75 ? 'bg-emerald-500' : (results.percentage >= 50 ? 'bg-amber-500' : 'bg-rose-500');
 
         const modalHTML = `
-            <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+            <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
                 <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
                     <div class="w-16 h-16 ${badgeColor} text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
                         <i class="fa-solid ${results.percentage >= 50 ? 'fa-award' : 'fa-triangle-exclamation'}"></i>
