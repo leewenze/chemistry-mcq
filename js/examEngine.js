@@ -3,11 +3,10 @@
  */
 window.ExamEngine = (function () {
     let timerInterval = null;
-    let totalExamDuration = 3600; // Default 60 mins in seconds
+    let totalExamDuration = 3600; // 60 mins in seconds
     let timeRemaining = 3600;
     let isExamActive = false;
     let examPaper = [];
-    let userAnswers = {}; // Stores user answers: { questionId: selectedIndex }
 
     function getAvailableTopics() {
         const topicData = window.topicData || {};
@@ -30,7 +29,7 @@ window.ExamEngine = (function () {
                     pool.push({
                         ...q,
                         topicKey: key,
-                        uniqueId: `exam_${key}_${q.id || idx}`
+                        id: q.id || `exam_${key}_${idx}`
                     });
                 });
             }
@@ -38,20 +37,15 @@ window.ExamEngine = (function () {
 
         if (pool.length === 0) return [];
 
-        // Shuffle pool
+        // Shuffle pool randomly
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
         }
 
         examPaper = pool.slice(0, Math.min(count, pool.length));
-        userAnswers = {}; // Reset answers
         isExamActive = true;
         return examPaper;
-    }
-
-    function recordAnswer(questionId, optionIndex) {
-        userAnswers[questionId] = optionIndex;
     }
 
     function startTimer(onTick, onTimeUp, minutes = 60) {
@@ -81,10 +75,7 @@ window.ExamEngine = (function () {
         isExamActive = false;
     }
 
-    /**
-     * Grades the exam and calculates time spent
-     */
-    function submitExam() {
+    function submitExam(userAnswers = {}) {
         stopTimer();
 
         const secondsUsed = totalExamDuration - timeRemaining;
@@ -92,8 +83,9 @@ window.ExamEngine = (function () {
         const total = examPaper.length;
 
         examPaper.forEach(q => {
-            const selected = userAnswers[q.uniqueId];
-            if (selected !== undefined && selected === q.correctAnswer) {
+            const userEntry = userAnswers[q.id];
+            const selected = userEntry ? userEntry.selected : undefined;
+            if (selected !== undefined && selected === q.answer) {
                 score++;
             }
         });
@@ -106,9 +98,7 @@ window.ExamEngine = (function () {
             total: total,
             percentage: percentage,
             secondsUsed: secondsUsed,
-            timeSpentFormatted: timeSpentFormatted,
-            userAnswers: userAnswers,
-            examPaper: examPaper
+            timeSpentFormatted: timeSpentFormatted
         };
     }
 
@@ -128,7 +118,6 @@ window.ExamEngine = (function () {
     return {
         getAvailableTopics: getAvailableTopics,
         generateExam: generateExam,
-        recordAnswer: recordAnswer,
         startTimer: startTimer,
         stopTimer: stopTimer,
         submitExam: submitExam,
