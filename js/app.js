@@ -329,16 +329,11 @@ function selectTopic(key) {
     if (mobileBtn) mobileBtn.classList.remove("hidden");
     
     if (mainContainer) {
-        // Clear conflicting auto-margin and offset classes
-        mainContainer.classList.remove("mx-auto", "ml-auto", "w-full", "md:ml-64", "md:ml-72", "md:ml-80");
+        // Remove centering auto-margins and standard offset constraints
+        mainContainer.classList.remove("mx-auto", "ml-auto", "w-full");
         
-        // Dynamically align main margin based on sidebar offset width
-        if (sidebar && sidebar.offsetWidth > 0) {
-            mainContainer.style.marginLeft = ""; // reset inline standard
-            mainContainer.classList.add("md:ml-72"); // Default snug fit for standard sidebars
-        } else {
-            mainContainer.classList.add("md:ml-72");
-        }
+        // Ensure main container fills remaining width and stays left-aligned directly against the sidebar
+        mainContainer.classList.add("md:ml-72", "mr-auto", "max-w-none");
     }
 
     activeExamQuestions = null;
@@ -623,7 +618,7 @@ window.renderExamToUI = function(examQuestions) {
     // 2. Expand Main Container to full width without offset
     const mainContainer = document.querySelector("main");
     if (mainContainer) {
-        mainContainer.classList.remove("md:ml-64", "md:ml-72", "md:ml-80");
+        mainContainer.classList.remove("md:ml-64", "md:ml-72", "md:ml-80", "mr-auto");
         mainContainer.classList.add("w-full", "mx-auto");
     }
 
