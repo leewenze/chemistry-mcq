@@ -128,9 +128,8 @@ function handleSubmitPaper() {
         // Stop timer & calculate results from ExamEngine
         let results = null;
         if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
-            results = ExamEngine.submitExam();
+            results = ExamEngine.submitExam(userAnswers);
         } else {
-            // Fallback calculation if submitExam is not in engine
             if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
                 ExamEngine.stopTimer();
             }
@@ -158,9 +157,6 @@ function handleSubmitPaper() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/**
- * Calculates Score & Time Spent for Modal
- */
 function calculateExamResults(questions) {
     let score = 0;
     const total = questions.length;
@@ -182,9 +178,6 @@ function calculateExamResults(questions) {
     };
 }
 
-/**
- * Renders Score & Time Spent Popup Modal
- */
 function showExamResultsModal(results) {
     const oldModal = document.getElementById('exam-result-modal');
     if (oldModal) oldModal.remove();
@@ -261,11 +254,9 @@ function renderTopicSidebar() {
                 }
             }
             
-            // Exit Exam Mode and return to Practice Mode
             activeExamQuestions = null;
             isExamGraded = false;
             
-            // Hide exam timer bar if present
             const timerBar = document.getElementById('exam-timer-bar');
             if (timerBar) timerBar.classList.add('hidden');
 
@@ -318,9 +309,6 @@ function selectTopic(key) {
     renderQuestions();
 }
 
-/**
- * Returns active questions based on current mode (Exam vs Topic Practice)
- */
 function getActiveQuestions() {
     if (activeExamQuestions) {
         return activeExamQuestions;
@@ -413,7 +401,6 @@ function renderQuestions() {
         const isSubmitted = state && state.submitted;
         const selectedOpt = state ? state.selected : undefined;
 
-        // Image Handling
         let imageHTML = "";
         if (q.image) {
             imageHTML = `
@@ -423,7 +410,6 @@ function renderQuestions() {
             `;
         }
 
-        // Options Rendering
         let optionsHTML = "";
         q.options.forEach((optText, optIdx) => {
             let optionStyles = "border-slate-200 hover:bg-slate-50 text-slate-700";
@@ -458,7 +444,6 @@ function renderQuestions() {
             `;
         });
 
-        // Answer Feedback & Explanation Box
         let feedbackBanner = "";
         if (isSubmitted) {
             const isCorrect = selectedOpt === q.answer;
@@ -523,11 +508,6 @@ function selectOption(qId, optIdx) {
     }
     userAnswers[qId].selected = optIdx;
 
-    // Record answer in ExamEngine if active
-    if (window.ExamEngine && typeof ExamEngine.recordAnswer === 'function') {
-        ExamEngine.recordAnswer(qId, optIdx);
-    }
-
     saveProgress();
     renderQuestions();
     updateTopicProgress();
@@ -563,12 +543,8 @@ function saveProgress() {
 window.renderExamToUI = function(examQuestions) {
     if (!examQuestions || examQuestions.length === 0) return;
 
-    // Standardize IDs for Exam Questions so option state saves cleanly
-    activeExamQuestions = examQuestions.map((q, idx) => ({
-        ...q,
-        id: q.id || `exam_q_${idx + 1}`
-    }));
-    
+    // Retain questions and ensure exact references are maintained
+    activeExamQuestions = examQuestions;
     isExamGraded = false;
 
     const topicBadge = document.getElementById("current-topic-badge");
