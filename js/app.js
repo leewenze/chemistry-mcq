@@ -23,8 +23,9 @@ function initApp() {
     setupEventListeners();
 }
 
-// Setup Event Listeners
+// Global Event Delegation for reliable click handling
 function setupEventListeners() {
+    // Mobile menu triggers
     const mobileBtn = document.getElementById("mobile-menu-btn");
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("sidebar-overlay");
@@ -39,6 +40,7 @@ function setupEventListeners() {
         overlay.addEventListener("click", toggleMobileMenu);
     }
 
+    // Reset Progress
     const resetBtn = document.getElementById("reset-progress-btn");
     if (resetBtn) {
         resetBtn.addEventListener("click", () => {
@@ -54,6 +56,7 @@ function setupEventListeners() {
         });
     }
 
+    // Question Filtering Buttons
     document.querySelectorAll(".filter-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
             document.querySelectorAll(".filter-btn").forEach(b => {
@@ -71,6 +74,7 @@ function setupEventListeners() {
         });
     });
 
+    // Question Shuffling
     const randomizeBtn = document.getElementById("randomize-btn");
     if (randomizeBtn) {
         randomizeBtn.addEventListener("click", () => {
@@ -91,16 +95,20 @@ function setupEventListeners() {
         });
     }
 
-    // Attach listener to Submit Topic/Exam Button
-    const submitBtn = document.getElementById("submit-topic-btn");
-    if (submitBtn) {
-        submitBtn.removeEventListener("click", handleSubmitPaper);
-        submitBtn.addEventListener("click", handleSubmitPaper);
-    }
+    // GLOBAL CLICK DELEGATION FOR ALL SUBMIT BUTTONS
+    document.addEventListener("click", (e) => {
+        const target = e.target.closest("#submit-topic-btn, .submit-exam-btn, [data-action='submit-paper']");
+        if (target) {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSubmitPaper();
+        }
+    });
 }
 
-// Make globally accessible in case HTML triggers via onclick="handleSubmitPaper()"
+// Make functions globally available for direct inline HTML handlers
 window.handleSubmitPaper = handleSubmitPaper;
+window.exitExamMode = exitExamMode;
 
 /**
  * Exits Exam Mode and restores Practice Mode
@@ -135,14 +143,15 @@ function exitExamMode() {
     }
 }
 
-window.exitExamMode = exitExamMode;
-
 /**
  * Handles Submission for both Exam Paper Mode and Practice Topic Mode
  */
 function handleSubmitPaper() {
     const questions = getActiveQuestions();
-    if (!questions || questions.length === 0) return;
+    if (!questions || questions.length === 0) {
+        alert("No active questions available to grade.");
+        return;
+    }
 
     let unansweredCount = 0;
     questions.forEach(q => {
@@ -156,6 +165,8 @@ function handleSubmitPaper() {
         if (!confirmSubmit) return;
     }
 
+    let results = null;
+
     if (activeExamQuestions) {
         isExamGraded = true;
         
@@ -164,7 +175,6 @@ function handleSubmitPaper() {
         if (timerBar) timerBar.classList.add('hidden');
 
         // Safely invoke ExamEngine or fall back to internal scoring
-        let results = null;
         try {
             if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
                 results = ExamEngine.submitExam(userAnswers);
@@ -180,11 +190,14 @@ function handleSubmitPaper() {
             results = calculateExamResults(questions);
         }
 
-        // Show score and time spent modal
+        // Show score modal
         showExamResultsModal(results);
+    } else {
+        results = calculateExamResults(questions);
+        showPracticeResultsModal(results);
     }
 
-    // Mark all questions as submitted to reveal answer key & explanations
+    // Mark all questions as submitted to reveal answer keys & explanations
     questions.forEach(q => {
         if (!userAnswers[q.id]) {
             userAnswers[q.id] = { selected: undefined };
@@ -256,6 +269,36 @@ function showExamResultsModal(results) {
 
                 <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition cursor-pointer">
                     Review Answers & Explanations
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function showPracticeResultsModal(results) {
+    const oldModal = document.getElementById('exam-result-modal');
+    if (oldModal) oldModal.remove();
+
+    const modalHTML = `
+        <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
+                <div class="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                    <i class="fa-solid fa-check-double"></i>
+                </div>
+
+                <h2 class="text-2xl font-bold text-slate-900">Topic Graded!</h2>
+                <p class="text-xs text-slate-500 mt-1">Practice topic review score.</p>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 my-6">
+                    <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Score</span>
+                    <span class="text-3xl font-black text-indigo-600">${results.score} <span class="text-sm text-slate-400 font-normal">/ ${results.total}</span></span>
+                    <span class="text-xs text-slate-500 block mt-1">(${results.percentage}%)</span>
+                </div>
+
+                <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition cursor-pointer">
+                    Review Explanations
                 </button>
             </div>
         </div>
@@ -624,13 +667,7 @@ window.renderExamToUI = function(examQuestions) {
     const timerBar = document.getElementById('exam-timer-bar');
     if (timerBar) timerBar.classList.remove('hidden');
 
-    // 3. Ensure Submit Button Listener is Attached
-    const submitBtn = document.getElementById("submit-topic-btn");
-    if (submitBtn) {
-        submitBtn.onclick = handleSubmitPaper;
-    }
-
-    // 4. Update Header Details
+    // 3. Update Header Details
     const topicBadge = document.getElementById("current-topic-badge");
     const topicTitle = document.getElementById("current-topic-title");
     const topicDesc = document.getElementById("current-topic-desc");
