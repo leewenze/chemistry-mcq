@@ -6,6 +6,7 @@ let currentTopicKey = Object.keys(topicData)[0] || "";
 let activeFilter = "all"; // "all", "incorrect", "unanswered"
 let userAnswers = JSON.parse(localStorage.getItem("mcq_user_answers") || "{}");
 let topicShuffledOrder = {}; // Stores randomized question orders per topic
+let activeExamQuestions = null; // Holds ExamEngine paper when running a timed exam
 
 // Initialize UI on DOM Load
 document.addEventListener("DOMContentLoaded", () => {
@@ -32,18 +33,24 @@ function setupEventListeners() {
         overlay.classList.toggle("hidden");
     };
 
-    mobileBtn.addEventListener("click", toggleMobileMenu);
-    overlay.addEventListener("click", toggleMobileMenu);
+    if (mobileBtn && sidebar && overlay) {
+        mobileBtn.addEventListener("click", toggleMobileMenu);
+        overlay.addEventListener("click", toggleMobileMenu);
+    }
 
-    document.getElementById("reset-progress-btn").addEventListener("click", () => {
-        if (confirm("Are you sure you want to reset all saved answers and progress?")) {
-            userAnswers = {};
-            localStorage.removeItem("mcq_user_answers");
-            renderTopicSidebar();
-            selectTopic(currentTopicKey);
-            updateGlobalStats();
-        }
-    });
+    const resetBtn = document.getElementById("reset-progress-btn");
+    if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+            if (confirm("Are you sure you want to reset all saved answers and progress?")) {
+                userAnswers = {};
+                localStorage.removeItem("mcq_user_answers");
+                activeExamQuestions = null;
+                renderTopicSidebar();
+                if (currentTopicKey) selectTopic(currentTopicKey);
+                updateGlobalStats();
+            }
+        });
+    }
 
     document.querySelectorAll(".filter-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
@@ -62,22 +69,74 @@ function setupEventListeners() {
         });
     });
 
-    document.getElementById("randomize-btn").addEventListener("click", () => {
-        const topic = topicData[currentTopicKey];
-        if (!topic) return;
-        
-        let indices = topic.questions.map((_, idx) => idx);
-        for (let i = indices.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [indices[i], indices[j]] = [indices[j], indices[i]];
+    const randomizeBtn = document.getElementById("randomize-btn");
+    if (randomizeBtn) {
+        randomizeBtn.addEventListener("click", () => {
+            if (activeExamQuestions) {
+                alert("Question shuffling is disabled during active timed mock exams.");
+                return;
+            }
+            const topic = topicData[currentTopicKey];
+            if (!topic) return;
+            
+            let indices = topic.questions.map((_, idx) => idx);
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            topicShuffledOrder[currentTopicKey] = indices;
+            renderQuestions();
+        });
+    }
+
+    const submitBtn = document.getElementById("submit-topic-btn");
+    if (submitBtn) {
+        submitBtn.addEventListener("click", () => {
+            handleSubmitExam();
+        });
+    }
+}
+
+/**
+ * Handles Grading for both Active ExamEngine Papers & Standard Topic Practice
+ */
+function handleSubmitExam() {
+    const questions = getActiveQuestions();
+    if (!questions || questions.length === 0) return;
+
+    let unansweredCount = 0;
+    questions.forEach(q => {
+        if (!userAnswers[q.id] || userAnswers[q.id].selected === undefined) {
+            unansweredCount++;
         }
-        topicShuffledOrder[currentTopicKey] = indices;
-        renderQuestions();
     });
 
-    document.getElementById("submit-topic-btn").addEventListener("click", () => {
-        gradeTopic(currentTopicKey);
+    if (unansweredCount > 0) {
+        const confirmSubmit = confirm(`You have ${unansweredCount} unanswered question(s). Are you sure you want to submit and grade this paper?`);
+        if (!confirmSubmit) return;
+    }
+
+    // Stop ExamEngine timer if running
+    if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
+        ExamEngine.stopTimer();
+    }
+
+    // Mark all answered (and unanswered) items as submitted to trigger explanation card expansion
+    questions.forEach(q => {
+        if (!userAnswers[q.id]) {
+            userAnswers[q.id] = { selected: undefined };
+        }
+        userAnswers[q.id].submitted = true;
     });
+
+    saveProgress();
+    renderQuestions();
+    updateGlobalStats();
+    updateTopicProgress();
+    renderTopicSidebar();
+
+    // Scroll smoothly to top of paper to view score and feedback
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderTopicSidebar() {
@@ -85,7 +144,9 @@ function renderTopicSidebar() {
     const countBadge = document.getElementById("topic-count-badge");
     const keys = Object.keys(topicData);
     
-    countBadge.textContent = `${keys.length} Topics`;
+    if (countBadge) countBadge.textContent = `${keys.length} Topics`;
+    if (!list) return;
+    
     list.innerHTML = "";
 
     keys.forEach((key, index) => {
@@ -94,10 +155,10 @@ function renderTopicSidebar() {
         
         let answeredCount = 0;
         topic.questions.forEach(q => {
-            if (userAnswers[q.id] !== undefined) answeredCount++;
+            if (userAnswers[q.id] !== undefined && userAnswers[q.id].selected !== undefined) answeredCount++;
         });
 
-        const isSelected = key === currentTopicKey;
+        const isSelected = key === currentTopicKey && !activeExamQuestions;
         const btn = document.createElement("button");
         btn.className = `w-full text-left p-3 rounded-xl transition flex items-center justify-between group ${
             isSelected 
@@ -107,8 +168,10 @@ function renderTopicSidebar() {
 
         btn.onclick = () => {
             selectTopic(key);
-            document.getElementById("sidebar").classList.add("-translate-x-full");
-            document.getElementById("sidebar-overlay").classList.add("hidden");
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("sidebar-overlay");
+            if (sidebar) sidebar.classList.add("-translate-x-full");
+            if (overlay) overlay.classList.add("hidden");
         };
 
         btn.innerHTML = `
@@ -130,35 +193,55 @@ function renderTopicSidebar() {
 }
 
 function selectTopic(key) {
+    activeExamQuestions = null; // Exit exam mode if active
     currentTopicKey = key;
     renderTopicSidebar();
 
     const topic = topicData[key];
     if (!topic) return;
 
-    document.getElementById("current-topic-badge").textContent = `Topic ${Object.keys(topicData).indexOf(key) + 1}`;
-    document.getElementById("current-topic-title").textContent = topic.title;
-    document.getElementById("current-topic-desc").textContent = topic.description;
-    document.getElementById("current-topic-total-q").textContent = `${topic.questions.length} Questions`;
+    const topicBadge = document.getElementById("current-topic-badge");
+    const topicTitle = document.getElementById("current-topic-title");
+    const topicDesc = document.getElementById("current-topic-desc");
+    const topicTotalQ = document.getElementById("current-topic-total-q");
+
+    if (topicBadge) topicBadge.textContent = `Topic ${Object.keys(topicData).indexOf(key) + 1}`;
+    if (topicTitle) topicTitle.textContent = topic.title;
+    if (topicDesc) topicDesc.textContent = topic.description;
+    if (topicTotalQ) topicTotalQ.textContent = `${topic.questions.length} Questions`;
 
     updateTopicProgress();
     renderQuestions();
 }
 
-function updateTopicProgress() {
+/**
+ * Returns active questions based on whether an Exam Engine paper or single topic is selected
+ */
+function getActiveQuestions() {
+    if (activeExamQuestions) {
+        return activeExamQuestions;
+    }
     const topic = topicData[currentTopicKey];
-    if (!topic) return;
+    return topic ? topic.questions : [];
+}
 
-    const total = topic.questions.length;
+function updateTopicProgress() {
+    const questions = getActiveQuestions();
+    if (!questions) return;
+
+    const total = questions.length;
     let answered = 0;
 
-    topic.questions.forEach(q => {
-        if (userAnswers[q.id] !== undefined) answered++;
+    questions.forEach(q => {
+        if (userAnswers[q.id] !== undefined && userAnswers[q.id].selected !== undefined) answered++;
     });
 
     const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
-    document.getElementById("topic-progress-text").textContent = `${percent}%`;
-    document.getElementById("topic-progress-bar").style.width = `${percent}%`;
+    const progressText = document.getElementById("topic-progress-text");
+    const progressBar = document.getElementById("topic-progress-bar");
+
+    if (progressText) progressText.textContent = `${percent}%`;
+    if (progressBar) progressBar.style.width = `${percent}%`;
 }
 
 function updateGlobalStats() {
@@ -170,7 +253,7 @@ function updateGlobalStats() {
         const topic = topicData[key];
         topic.questions.forEach(q => {
             totalQuestions++;
-            if (userAnswers[q.id] !== undefined) {
+            if (userAnswers[q.id] !== undefined && userAnswers[q.id].selected !== undefined) {
                 totalAnswered++;
                 if (userAnswers[q.id].selected === q.answer) {
                     totalCorrect++;
@@ -179,35 +262,40 @@ function updateGlobalStats() {
         });
     });
 
-    document.getElementById("global-total-answered").textContent = `${totalAnswered} / ${totalQuestions}`;
+    const globalAnsweredEl = document.getElementById("global-total-answered");
+    const globalAccuracyEl = document.getElementById("global-accuracy");
+
+    if (globalAnsweredEl) globalAnsweredEl.textContent = `${totalAnswered} / ${totalQuestions}`;
     const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-    document.getElementById("global-accuracy").textContent = `${accuracy}%`;
+    if (globalAccuracyEl) globalAccuracyEl.textContent = `${accuracy}%`;
 }
 
 function renderQuestions() {
     const container = document.getElementById("questions-list");
-    const topic = topicData[currentTopicKey];
+    if (!container) return;
+
+    const questions = getActiveQuestions();
     container.innerHTML = "";
 
-    if (!topic || topic.questions.length === 0) {
+    if (!questions || questions.length === 0) {
         container.innerHTML = `
             <div class="bg-white p-12 text-center rounded-2xl border border-slate-200">
                 <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
-                <h3 class="text-slate-600 font-medium">No questions available in this topic yet.</h3>
+                <h3 class="text-slate-600 font-medium">No questions available in this selection.</h3>
             </div>
         `;
         return;
     }
 
-    let questionIndices = topic.questions.map((_, i) => i);
-    if (topicShuffledOrder[currentTopicKey]) {
+    let questionIndices = questions.map((_, i) => i);
+    if (!activeExamQuestions && topicShuffledOrder[currentTopicKey]) {
         questionIndices = topicShuffledOrder[currentTopicKey];
     }
 
     let renderedCount = 0;
 
     questionIndices.forEach(qIdx => {
-        const q = topic.questions[qIdx];
+        const q = questions[qIdx];
         const state = userAnswers[q.id];
 
         if (activeFilter === "unanswered" && state && state.selected !== undefined) return;
@@ -216,14 +304,12 @@ function renderQuestions() {
         renderedCount++;
 
         const card = document.createElement("div");
-        card.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition hover:border-slate-300";
+        card.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition hover:border-slate-300 mb-6 last:mb-0";
 
         const isSubmitted = state && state.submitted;
         const selectedOpt = state ? state.selected : undefined;
 
-        // =========================================================
-        // 📸 IMAGE HANDLING LOGIC ADDED HERE
-        // =========================================================
+        // Image Handling
         let imageHTML = "";
         if (q.image) {
             imageHTML = `
@@ -233,6 +319,7 @@ function renderQuestions() {
             `;
         }
 
+        // Options Rendering
         let optionsHTML = "";
         q.options.forEach((optText, optIdx) => {
             let optionStyles = "border-slate-200 hover:bg-slate-50 text-slate-700";
@@ -267,6 +354,7 @@ function renderQuestions() {
             `;
         });
 
+        // Answer Feedback & Explanation Box
         let feedbackBanner = "";
         if (isSubmitted) {
             const isCorrect = selectedOpt === q.answer;
@@ -353,20 +441,30 @@ function resetSingleQuestion(qId) {
 }
 
 function gradeTopic(key) {
-    const topic = topicData[key];
-    if (!topic) return;
-
-    topic.questions.forEach(q => {
-        if (userAnswers[q.id] && userAnswers[q.id].selected !== undefined) {
-            userAnswers[q.id].submitted = true;
-        }
-    });
-
-    saveProgress();
-    renderQuestions();
-    updateGlobalStats();
+    handleSubmitExam();
 }
 
 function saveProgress() {
     localStorage.setItem("mcq_user_answers", JSON.stringify(userAnswers));
 }
+
+/**
+ * Global Bridge: Invoked when ExamEngine generates and launches a timed mock exam paper
+ */
+window.renderExamToUI = function(examQuestions) {
+    activeExamQuestions = examQuestions;
+
+    const topicBadge = document.getElementById("current-topic-badge");
+    const topicTitle = document.getElementById("current-topic-title");
+    const topicDesc = document.getElementById("current-topic-desc");
+    const topicTotalQ = document.getElementById("current-topic-total-q");
+
+    if (topicBadge) topicBadge.textContent = `Mock Exam`;
+    if (topicTitle) topicTitle.textContent = `60-Minute Timed Practice Paper`;
+    if (topicDesc) topicDesc.textContent = `Full randomized exam generated across all topics. Complete all questions and click submit to grade.`;
+    if (topicTotalQ) topicTotalQ.textContent = `${examQuestions.length} Questions`;
+
+    renderTopicSidebar();
+    updateTopicProgress();
+    renderQuestions();
+};
