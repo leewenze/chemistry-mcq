@@ -8,86 +8,25 @@ window.ExamEngine = (function () {
     let isExamActive = false;
     let examPaper = [];
 
-    // Automatically bind modal controls once DOM loads
-    document.addEventListener("DOMContentLoaded", () => {
-        setupExamModal();
-    });
-
-    function setupExamModal() {
-        const startExamBtn = document.getElementById("start-exam-btn");
-        const examModal = document.getElementById("exam-setup-modal");
-        const openExamModalBtn = document.getElementById("open-exam-modal-btn") || document.getElementById("exam-mode-btn");
-
-        // Show modal when Exam Mode button is clicked
-        if (openExamModalBtn && examModal) {
-            openExamModalBtn.addEventListener("click", () => {
-                examModal.classList.remove("hidden");
-                examModal.classList.add("flex");
-            });
-        }
-
-        // Handle "Start Exam" action
-        if (startExamBtn) {
-            startExamBtn.addEventListener("click", () => {
-                startNewExamSession();
-            });
-        }
+    /**
+     * Returns an array of available topic keys and titles for the configuration drawer
+     */
+    function getAvailableTopics() {
+        const topicData = window.topicData || {};
+        return Object.keys(topicData).map(key => ({
+            key: key,
+            title: topicData[key].title || key
+        }));
     }
 
-    function startNewExamSession() {
-        // Collect checked topic checkboxes if present, or use all topics
-        const checkedBoxes = document.querySelectorAll('.topic-select-checkbox:checked');
-        let selectedKeys = [];
-        if (checkedBoxes.length > 0) {
-            selectedKeys = Array.from(checkedBoxes).map(cb => cb.value);
-        }
-
-        // Generate paper
-        const paper = generateExam(selectedKeys, 40);
-
-        if (!paper || paper.length === 0) {
-            alert("No questions found to generate an exam paper.");
-            return;
-        }
-
-        // Hide setup modal if visible
-        const examModal = document.getElementById("exam-setup-modal");
-        if (examModal) {
-            examModal.classList.add("hidden");
-            examModal.classList.remove("flex");
-        }
-
-        // Show sticky top timer bar
-        const timerBar = document.getElementById('exam-timer-bar');
-        const timerDisplay = document.getElementById('exam-timer-display');
-        if (timerBar) timerBar.classList.remove('hidden');
-
-        // Start 60-minute countdown
-        startTimer(
-            (timeStr) => {
-                if (timerDisplay) timerDisplay.textContent = timeStr;
-            },
-            () => {
-                alert("Time's up! Submitting your exam automatically.");
-                if (window.handleSubmitPaper) window.handleSubmitPaper();
-            },
-            60
-        );
-
-        // Bridge: Call app.js to render exam questions onto screen
-        if (typeof window.renderExamToUI === "function") {
-            window.renderExamToUI(paper);
-        } else {
-            console.error("renderExamToUI is not defined in app.js!");
-        }
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
+    /**
+     * Generates a randomized exam paper across selected topic keys
+     */
     function generateExam(selectedTopicKeys = [], count = 40) {
         const topicData = window.topicData || {};
         let pool = [];
 
+        // If no topics selected, grab all topic keys
         const keysToUse = (selectedTopicKeys && selectedTopicKeys.length > 0) 
             ? selectedTopicKeys 
             : Object.keys(topicData);
@@ -107,7 +46,7 @@ window.ExamEngine = (function () {
 
         if (pool.length === 0) return [];
 
-        // Fisher-Yates Randomization Shuffle
+        // Shuffle questions (Fisher-Yates)
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -160,7 +99,6 @@ window.ExamEngine = (function () {
             }
         });
 
-        const timeSpentFormatted = formatTimeSpent(secondsUsed);
         const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
 
         return {
@@ -168,7 +106,7 @@ window.ExamEngine = (function () {
             total: total,
             percentage: percentage,
             secondsUsed: secondsUsed,
-            timeSpentFormatted: timeSpentFormatted
+            timeSpentFormatted: formatTimeSpent(secondsUsed)
         };
     }
 
@@ -186,11 +124,12 @@ window.ExamEngine = (function () {
     }
 
     return {
+        getAvailableTopics: getAvailableTopics,
         generateExam: generateExam,
-        startNewExamSession: startNewExamSession,
         startTimer: startTimer,
         stopTimer: stopTimer,
         submitExam: submitExam,
-        isExamRunning: function () { return isExamActive; }
+        isExamRunning: function () { return isExamActive; },
+        getExamPaper: function () { return examPaper; }
     };
 })();
