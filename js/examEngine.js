@@ -83,14 +83,20 @@ window.ExamEngine = (function () {
         isExamActive = false;
     }
 
-    function submitExam(userAnswers = {}) {
+    /**
+     * FIXED: Can take userAnswers AND optional activeQuestions fallback array
+     */
+    function submitExam(userAnswers = {}, fallbackQuestions = []) {
         stopTimer();
 
         const secondsUsed = totalExamDuration - timeRemaining;
         let score = 0;
-        const total = examPaper.length;
+        
+        // Use internal examPaper, or fallback to passed questions if internal paper is empty
+        const activePaper = (examPaper && examPaper.length > 0) ? examPaper : fallbackQuestions;
+        const total = activePaper.length;
 
-        examPaper.forEach(q => {
+        activePaper.forEach(q => {
             const userEntry = userAnswers[q.id];
             const selected = userEntry ? userEntry.selected : undefined;
             if (selected !== undefined && Number(selected) === Number(q.answer)) {
@@ -116,6 +122,7 @@ window.ExamEngine = (function () {
     }
 
     function formatTimeSpent(seconds) {
+        if (isNaN(seconds) || seconds < 0) return "0 sec";
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
         if (m === 0) return `${s} sec${s !== 1 ? 's' : ''}`;
