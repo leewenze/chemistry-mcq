@@ -1,170 +1,114 @@
 /**
- * Advanced Exam Engine Utility with Topic Selection & Sticky Timer
+ * Exam Engine - Manages the 40 MCQ Timed Mock Exam Mode
  */
-const ExamEngine = {
-  activeExam: [],
-  timerInterval: null,
-  timeRemaining: 60 * 60, // 60 minutes in seconds
+window.ExamEngine = (function () {
+    let timerInterval = null;
+    let timeRemaining = 3600; // 60 minutes in seconds
 
-  /**
-   * Retrieves available topics loaded in window.topicData.
-   * @returns {Array} List of objects with key and title.
-   */
-  getAvailableTopics() {
-    if (!window.topicData) return [];
-    return Object.keys(window.topicData).map(key => ({
-      key: key,
-      title: window.topicData[key].title || key
-    }));
-  },
+    /**
+     * Collects 40 questions across all loaded topics and starts Exam Mode.
+     */
+    function startExam() {
+        const topicData = window.topicData || {};
+        const allQuestions = [];
 
-  /**
-   * Generates an exam paper guaranteed to include at least 1 question per selected topic.
-   * @param {Array<string>} selectedTopicKeys - Keys of selected topics (if empty/null, selects ALL)
-   * @param {number} totalQuestions - Target paper size (default: 40)
-   * @returns {Array} List of indexed exam questions
-   */
-  generateExam(selectedTopicKeys = [], totalQuestions = 40) {
-    this.stopTimer();
+        // Pool all questions across all loaded topics
+        Object.keys(topicData).forEach(topicKey => {
+            const topic = topicData[topicKey];
+            if (topic && topic.questions && Array.isArray(topic.questions)) {
+                topic.questions.forEach((q, idx) => {
+                    allQuestions.push({
+                        ...q,
+                        // Ensure unique ID for local storage tracking
+                        id: `exam_${topicKey}_${q.id || idx}` 
+                    });
+                });
+            }
+        });
 
-    if (!window.topicData || Object.keys(window.topicData).length === 0) {
-      console.error('ExamEngine: No topics found in window.topicData');
-      return [];
-    }
-
-    // Default to ALL topics if none specified or array is empty
-    let topicsToUse = selectedTopicKeys;
-    if (!topicsToUse || topicsToUse.length === 0) {
-      topicsToUse = Object.keys(window.topicData);
-    }
-
-    const mandatoryQuestions = [];
-    const poolRemaining = [];
-
-    // 1. Separate questions: ensure at least 1 per selected topic
-    topicsToUse.forEach(topicKey => {
-      const topic = window.topicData[topicKey];
-      if (topic && topic.questions && topic.questions.length > 0) {
-        // Clone questions and attach topic metadata
-        const formatted = topic.questions.map(q => ({
-          ...q,
-          parentTopicKey: topicKey,
-          parentTopicTitle: topic.title
-        }));
-
-        // Shuffle questions within this topic
-        this.shuffleArray(formatted);
-
-        // Take the first question as mandatory for this topic
-        mandatoryQuestions.push(formatted[0]);
-
-        // Put the rest into the general pool
-        for (let i = 1; i < formatted.length; i++) {
-          poolRemaining.push(formatted[i]);
+        if (allQuestions.length === 0) {
+            alert("No questions found! Please check that topicData is loaded.");
+            return;
         }
-      }
-    });
 
-    // 2. Shuffle remaining pool and gather needed extra questions
-    this.shuffleArray(poolRemaining);
-    const slotsNeeded = Math.max(0, totalQuestions - mandatoryQuestions.length);
-    const extraQuestions = poolRemaining.slice(0, slotsNeeded);
-
-    // 3. Combine mandatory + extra, then shuffle the full exam order
-    const finalSelection = [...mandatoryQuestions, ...extraQuestions];
-    this.shuffleArray(finalSelection);
-
-    // 4. Assign exam numbers 1 to N
-    this.activeExam = finalSelection.map((q, index) => ({
-      ...q,
-      examNumber: index + 1
-    }));
-
-    return this.activeExam;
-  },
-
-  /**
-   * Fisher-Yates array shuffle helper
-   */
-  shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-  },
-
-  /**
-   * Starts the 60-minute countdown timer.
-   */
-  startTimer(onTick, onTimeUp, minutes = 60) {
-    this.stopTimer();
-    this.timeRemaining = minutes * 60;
-
-    if (typeof onTick === 'function') {
-      onTick(this.getFormattedTime(), this.timeRemaining);
-    }
-
-    this.timerInterval = setInterval(() => {
-      this.timeRemaining--;
-
-      if (typeof onTick === 'function') {
-        onTick(this.getFormattedTime(), this.timeRemaining);
-      }
-
-      if (this.timeRemaining <= 0) {
-        this.stopTimer();
-        if (typeof onTimeUp === 'function') {
-          onTimeUp();
+        // Shuffle all collected questions
+        for (let i = allQuestions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
         }
-      }
-    }, 1000);
-  },
 
-  stopTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
+        // Select up to 40 MCQs
+        const examPaper = allQuestions.slice(0, Math.min(40, allQuestions.length));
+
+        // Start 60-Minute Countdown Timer
+        startTimer(3600);
+
+        // Render the questions in the app
+        if (typeof window.renderExamToUI === "function") {
+            window.renderExamToUI(examPaper);
+        } else {
+            console.error("renderExamToUI function is missing in app.js.");
+        }
     }
-  },
 
-  getFormattedTime() {
-    const mins = Math.floor(this.timeRemaining / 60);
-    const secs = this.timeRemaining % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  },
+    function startTimer(durationInSeconds) {
+        stopTimer(); // Clear any running timer
+        timeRemaining = durationInSeconds;
 
-  /**
-   * Grades responses and calculates final score
-   */
-  gradeExam(userAnswers = {}) {
-    this.stopTimer();
+        let timerBar = document.getElementById("exam-timer-bar");
+        let timerDisplay = document.getElementById("exam-timer-display");
 
-    let score = 0;
-    const total = this.activeExam.length;
+        // Create timer banner if missing in DOM
+        if (!timerBar) {
+            timerBar = document.createElement("div");
+            timerBar.id = "exam-timer-bar";
+            timerBar.className = "sticky top-0 z-30 bg-slate-900 text-white px-4 py-3 shadow-md flex items-center justify-between";
+            timerBar.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span class="inline-block w-2.5 h-2.5 bg-rose-500 rounded-full animate-pulse"></span>
+                    <span class="font-semibold text-sm">Exam Mode Active (40 MCQs)</span>
+                </div>
+                <div class="font-mono text-sm font-bold bg-slate-800 px-3 py-1 rounded-lg border border-slate-700" id="exam-timer-display">
+                    60:00
+                </div>
+            `;
+            document.body.prepend(timerBar);
+            timerDisplay = document.getElementById("exam-timer-display");
+        } else {
+            timerBar.classList.remove("hidden");
+        }
 
-    const results = this.activeExam.map(q => {
-      const selectedIndex = userAnswers[q.examNumber];
-      const isCorrect = selectedIndex !== undefined && Number(selectedIndex) === q.answer;
+        updateTimerUI(timerDisplay);
 
-      if (isCorrect) score++;
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerUI(timerDisplay);
 
-      return {
-        examNumber: q.examNumber,
-        question: q.question,
-        parentTopic: q.parentTopicTitle,
-        source: q.source,
-        userSelection: selectedIndex !== undefined ? Number(selectedIndex) : null,
-        correctAnswer: q.answer,
-        isCorrect: isCorrect,
-        explanation: q.explanation
-      };
-    });
+            if (timeRemaining <= 0) {
+                stopTimer();
+                alert("Time's up! Submitting your exam paper now.");
+                const submitBtn = document.getElementById("submit-topic-btn");
+                if (submitBtn) submitBtn.click();
+            }
+        }, 1000);
+    }
+
+    function updateTimerUI(displayEl) {
+        if (!displayEl) return;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        displayEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
 
     return {
-      score,
-      total,
-      percentage: total > 0 ? parseFloat(((score / total) * 100).toFixed(1)) : 0,
-      results
+        start: startExam,
+        stopTimer: stopTimer
     };
-  }
-};
+})();
