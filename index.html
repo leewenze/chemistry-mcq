@@ -252,7 +252,7 @@
         const grid = document.getElementById('topic-checkboxes-grid');
         if (!grid || grid.children.length > 0) return;
 
-        const topics = ExamEngine.getAvailableTopics ? ExamEngine.getAvailableTopics() : [];
+        const topics = ExamEngine.getAvailableTopics();
         grid.innerHTML = '';
 
         topics.forEach(t => {
@@ -277,7 +277,6 @@
     }
 
     function startTimedExam() {
-        // Collect topic selections
         let selectedKeys = [];
         const checkboxes = document.querySelectorAll('.exam-topic-cb');
         
@@ -289,53 +288,103 @@
             }
         }
 
-        // Generate 40 questions paper using ExamEngine
-        let examQuestions = [];
-        if (typeof ExamEngine.generateExam === 'function') {
-            examQuestions = ExamEngine.generateExam(selectedKeys, 40);
-        } else if (typeof ExamEngine.start === 'function') {
-            ExamEngine.start();
-            return;
-        }
+        const examQuestions = ExamEngine.generateExam(selectedKeys, 40);
 
         if (examQuestions.length === 0) {
             alert('No questions available in selected topics.');
             return;
         }
 
-        // Show Timer Bar
+        // Display Timer Bar
         document.getElementById('exam-timer-bar').classList.remove('hidden');
 
-        // Render questions using available UI renderer
+        // Render exam paper to UI
         if (typeof renderQuestions === 'function') {
             renderQuestions(examQuestions);
         } else if (typeof renderExamToUI === 'function') {
             renderExamToUI(examQuestions);
         }
 
-        // Start Timer
-        if (typeof ExamEngine.startTimer === 'function') {
-            ExamEngine.startTimer(
-                (timeStr, secondsLeft) => {
-                    const timerEl = document.getElementById('timer-display');
-                    if (timerEl) {
-                        timerEl.textContent = timeStr;
-                        if (secondsLeft <= 300) {
-                            timerEl.classList.add('timer-warning');
-                        } else {
-                            timerEl.classList.remove('timer-warning');
-                        }
-                    }
-                },
-                () => {
-                    alert("Time's up! Submitting your exam paper.");
-                    if (typeof handleSubmitExam === 'function') {
-                        handleSubmitExam();
-                    }
-                },
-                60
-            );
+        // Attach submission handler to button
+        const submitBtn = document.getElementById('submit-topic-btn');
+        if (submitBtn) {
+            submitBtn.onclick = handleSubmitExam;
         }
+
+        // Start 60-Minute Timer
+        ExamEngine.startTimer(
+            (timeStr, secondsLeft) => {
+                const timerEl = document.getElementById('timer-display');
+                if (timerEl) {
+                    timerEl.textContent = timeStr;
+                    if (secondsLeft <= 300) {
+                        timerEl.classList.add('timer-warning');
+                    } else {
+                        timerEl.classList.remove('timer-warning');
+                    }
+                }
+            },
+            () => {
+                alert("Time's up! Automatically submitting your exam paper.");
+                handleSubmitExam();
+            },
+            60
+        );
+    }
+
+    function handleSubmitExam() {
+        const results = ExamEngine.submitExam();
+
+        // Hide Timer Bar
+        document.getElementById('exam-timer-bar').classList.add('hidden');
+
+        // Reveal answers/explanations across all rendered questions
+        if (typeof revealExamGrading === 'function') {
+            revealExamGrading(results);
+        }
+
+        // Render Results Modal
+        showExamResultsModal(results);
+    }
+
+    function showExamResultsModal(results) {
+        // Remove existing modal if present
+        const oldModal = document.getElementById('exam-result-modal');
+        if (oldModal) oldModal.remove();
+
+        const badgeColor = results.percentage >= 75 ? 'bg-emerald-500' : (results.percentage >= 50 ? 'bg-amber-500' : 'bg-rose-500');
+
+        const modalHTML = `
+            <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+                <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
+                    <div class="w-16 h-16 ${badgeColor} text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                        <i class="fa-solid ${results.percentage >= 50 ? 'fa-award' : 'fa-triangle-exclamation'}"></i>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-slate-900">Exam Completed!</h2>
+                    <p class="text-xs text-slate-500 mt-1">Here is your final performance breakdown.</p>
+
+                    <div class="grid grid-cols-2 gap-3 my-6">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Score</span>
+                            <span class="text-2xl font-black text-indigo-600">${results.score} <span class="text-sm text-slate-400 font-normal">/ ${results.total}</span></span>
+                            <span class="text-xs text-slate-500 block mt-0.5">(${results.percentage}%)</span>
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Time Spent</span>
+                            <span class="text-lg font-bold text-slate-800 block mt-1">${results.timeSpentFormatted}</span>
+                            <span class="text-[11px] text-slate-400 block">Out of 60:00</span>
+                        </div>
+                    </div>
+
+                    <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition">
+                        Review Answers & Explanations
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
     }
 </script>
 
