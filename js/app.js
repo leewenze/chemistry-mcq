@@ -294,7 +294,11 @@ function selectTopic(key) {
 
     if (sidebar) sidebar.classList.remove("hidden");
     if (mobileBtn) mobileBtn.classList.remove("hidden");
-    if (mainContainer) mainContainer.classList.add("md:ml-64");
+    if (mainContainer) {
+        mainContainer.classList.add("md:ml-64");
+        // Ensure main expands to fill all space next to sidebar
+        mainContainer.classList.add("w-full"); 
+    }
 
     activeExamQuestions = null;
     isExamGraded = false;
