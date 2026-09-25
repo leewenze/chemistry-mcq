@@ -8,19 +8,89 @@ window.ExamEngine = (function () {
     let isExamActive = false;
     let examPaper = [];
 
-    function getAvailableTopics() {
-        const topicData = window.topicData || {};
-        return Object.keys(topicData).map(key => ({
-            key: key,
-            title: topicData[key].title || key
-        }));
+    // Automatically bind modal controls once DOM loads
+    document.addEventListener("DOMContentLoaded", () => {
+        setupExamModal();
+    });
+
+    function setupExamModal() {
+        const startExamBtn = document.getElementById("start-exam-btn");
+        const examModal = document.getElementById("exam-setup-modal");
+        const openExamModalBtn = document.getElementById("open-exam-modal-btn") || document.getElementById("exam-mode-btn");
+
+        // Show modal when Exam Mode button is clicked
+        if (openExamModalBtn && examModal) {
+            openExamModalBtn.addEventListener("click", () => {
+                examModal.classList.remove("hidden");
+                examModal.classList.add("flex");
+            });
+        }
+
+        // Handle "Start Exam" action
+        if (startExamBtn) {
+            startExamBtn.addEventListener("click", () => {
+                startNewExamSession();
+            });
+        }
+    }
+
+    function startNewExamSession() {
+        // Collect checked topic checkboxes if present, or use all topics
+        const checkedBoxes = document.querySelectorAll('.topic-select-checkbox:checked');
+        let selectedKeys = [];
+        if (checkedBoxes.length > 0) {
+            selectedKeys = Array.from(checkedBoxes).map(cb => cb.value);
+        }
+
+        // Generate paper
+        const paper = generateExam(selectedKeys, 40);
+
+        if (!paper || paper.length === 0) {
+            alert("No questions found to generate an exam paper.");
+            return;
+        }
+
+        // Hide setup modal if visible
+        const examModal = document.getElementById("exam-setup-modal");
+        if (examModal) {
+            examModal.classList.add("hidden");
+            examModal.classList.remove("flex");
+        }
+
+        // Show sticky top timer bar
+        const timerBar = document.getElementById('exam-timer-bar');
+        const timerDisplay = document.getElementById('exam-timer-display');
+        if (timerBar) timerBar.classList.remove('hidden');
+
+        // Start 60-minute countdown
+        startTimer(
+            (timeStr) => {
+                if (timerDisplay) timerDisplay.textContent = timeStr;
+            },
+            () => {
+                alert("Time's up! Submitting your exam automatically.");
+                if (window.handleSubmitPaper) window.handleSubmitPaper();
+            },
+            60
+        );
+
+        // Bridge: Call app.js to render exam questions onto screen
+        if (typeof window.renderExamToUI === "function") {
+            window.renderExamToUI(paper);
+        } else {
+            console.error("renderExamToUI is not defined in app.js!");
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function generateExam(selectedTopicKeys = [], count = 40) {
         const topicData = window.topicData || {};
         let pool = [];
 
-        const keysToUse = selectedTopicKeys.length > 0 ? selectedTopicKeys : Object.keys(topicData);
+        const keysToUse = (selectedTopicKeys && selectedTopicKeys.length > 0) 
+            ? selectedTopicKeys 
+            : Object.keys(topicData);
 
         keysToUse.forEach(key => {
             const topic = topicData[key];
@@ -37,7 +107,7 @@ window.ExamEngine = (function () {
 
         if (pool.length === 0) return [];
 
-        // Shuffle pool randomly
+        // Fisher-Yates Randomization Shuffle
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -116,8 +186,8 @@ window.ExamEngine = (function () {
     }
 
     return {
-        getAvailableTopics: getAvailableTopics,
         generateExam: generateExam,
+        startNewExamSession: startNewExamSession,
         startTimer: startTimer,
         stopTimer: stopTimer,
         submitExam: submitExam,
