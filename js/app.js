@@ -95,20 +95,31 @@ function setupEventListeners() {
         });
     }
 
-    // GLOBAL CLICK DELEGATION FOR ALL SUBMIT BUTTONS
+    // GLOBAL DELEGATION FOR SUBMIT BUTTONS & EXAM TRIGGERS
     document.addEventListener("click", (e) => {
-        const target = e.target.closest("#submit-topic-btn, .submit-exam-btn, [data-action='submit-paper']");
-        if (target) {
+        const submitTarget = e.target.closest("#submit-topic-btn, .submit-exam-btn, #submit-exam-btn, [data-action='submit-paper']");
+        if (submitTarget) {
             e.preventDefault();
             e.stopPropagation();
             handleSubmitPaper();
+            return;
+        }
+
+        const exitTarget = e.target.closest("#exit-exam-btn, .exit-exam-btn, [data-action='exit-exam']");
+        if (exitTarget) {
+            e.preventDefault();
+            e.stopPropagation();
+            exitExamMode();
         }
     });
 }
 
-// Make functions globally available for direct inline HTML handlers
+// Global functions for inline HTML event bindings
 window.handleSubmitPaper = handleSubmitPaper;
 window.exitExamMode = exitExamMode;
+window.selectOption = selectOption;
+window.gradeSingleQuestion = gradeSingleQuestion;
+window.resetSingleQuestion = resetSingleQuestion;
 
 /**
  * Exits Exam Mode and restores Practice Mode
@@ -130,11 +141,9 @@ function exitExamMode() {
     activeExamQuestions = null;
     isExamGraded = false;
 
-    // Hide Timer Bar
     const timerBar = document.getElementById('exam-timer-bar');
     if (timerBar) timerBar.classList.add('hidden');
 
-    // Restore selected practice topic UI
     if (currentTopicKey) {
         selectTopic(currentTopicKey);
     } else {
@@ -170,11 +179,9 @@ function handleSubmitPaper() {
     if (activeExamQuestions) {
         isExamGraded = true;
         
-        // Hide top sticky timer bar
         const timerBar = document.getElementById('exam-timer-bar');
         if (timerBar) timerBar.classList.add('hidden');
 
-        // Safely invoke ExamEngine or fall back to internal scoring
         try {
             if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
                 results = ExamEngine.submitExam(userAnswers, questions);
@@ -190,14 +197,13 @@ function handleSubmitPaper() {
             results = calculateExamResults(questions);
         }
 
-        // Show score modal
         showExamResultsModal(results);
     } else {
         results = calculateExamResults(questions);
         showPracticeResultsModal(results);
     }
 
-    // Mark all questions as submitted to reveal answer keys & explanations
+    // Mark questions as submitted
     questions.forEach(q => {
         if (!userAnswers[q.id]) {
             userAnswers[q.id] = { selected: undefined };
@@ -605,8 +611,7 @@ function renderQuestions() {
 }
 
 /**
- * FIXED: Dynamically injects a bottom floating Submit Action Bar 
- * to ensure submission is permanently accessible.
+ * Dynamically injects a bottom floating Submit Action Bar 
  */
 function renderSubmitBar(show = true) {
     let submitBar = document.getElementById("floating-submit-bar");
@@ -633,9 +638,9 @@ function renderSubmitBar(show = true) {
         <div class="text-xs text-slate-600">
             <span class="font-bold text-slate-900">${answered}</span> of <span class="font-bold text-slate-900">${questions.length}</span> questions answered
         </div>
-        <button id="submit-topic-btn" data-action="submit-paper" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center space-x-2 cursor-pointer">
+        <button id="submit-topic-btn" data-action="submit-paper" onclick="handleSubmitPaper()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center space-x-2 cursor-pointer">
             <i class="fa-solid fa-paper-plane"></i>
-            <span>Submit Answers & Grade</span>
+            <span>${activeExamQuestions ? "Submit Exam" : "Submit Answers & Grade"}</span>
         </button>
     `;
 }
@@ -692,22 +697,22 @@ window.renderExamToUI = function(examQuestions) {
     activeExamQuestions = examQuestions;
     isExamGraded = false;
 
-    // Reset temporary exam responses without destroying practice state
+    // Reset temporary exam responses
     examQuestions.forEach(q => {
         userAnswers[q.id] = { selected: undefined, submitted: false };
     });
 
-    // 1. Hide Sidebar for Full Workspace Mode
+    // Hide Sidebar
     const sidebar = document.getElementById("sidebar");
     const mobileBtn = document.getElementById("mobile-menu-btn");
     if (sidebar) sidebar.classList.add("hidden");
     if (mobileBtn) mobileBtn.classList.add("hidden");
 
-    // 2. Show Sticky Timer Bar
+    // Show Timer Bar
     const timerBar = document.getElementById('exam-timer-bar');
     if (timerBar) timerBar.classList.remove('hidden');
 
-    // 3. Update Header Details
+    // Update Header Details
     const topicBadge = document.getElementById("current-topic-badge");
     const topicTitle = document.getElementById("current-topic-title");
     const topicDesc = document.getElementById("current-topic-desc");
