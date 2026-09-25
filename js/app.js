@@ -30,8 +30,8 @@ function setupEventListeners() {
     const overlay = document.getElementById("sidebar-overlay");
 
     const toggleMobileMenu = () => {
-        sidebar.classList.toggle("-translate-x-full");
-        overlay.classList.toggle("hidden");
+        if (sidebar) sidebar.classList.toggle("-translate-x-full");
+        if (overlay) overlay.classList.toggle("hidden");
     };
 
     if (mobileBtn && sidebar && overlay) {
@@ -60,12 +60,12 @@ function setupEventListeners() {
                 b.classList.remove("bg-indigo-50", "text-indigo-700", "active");
                 b.classList.add("text-slate-600");
             });
-            e.target.classList.add("bg-indigo-50", "text-indigo-700", "active");
-            e.target.classList.remove("text-slate-600");
+            e.currentTarget.classList.add("bg-indigo-50", "text-indigo-700", "active");
+            e.currentTarget.classList.remove("text-slate-600");
 
-            if (e.target.id === "filter-all-btn") activeFilter = "all";
-            if (e.target.id === "filter-incorrect-btn") activeFilter = "incorrect";
-            if (e.target.id === "filter-unanswered-btn") activeFilter = "unanswered";
+            if (e.currentTarget.id === "filter-all-btn") activeFilter = "all";
+            if (e.currentTarget.id === "filter-incorrect-btn") activeFilter = "incorrect";
+            if (e.currentTarget.id === "filter-unanswered-btn") activeFilter = "unanswered";
 
             renderQuestions();
         });
@@ -287,6 +287,15 @@ function renderTopicSidebar() {
 }
 
 function selectTopic(key) {
+    // Restore Sidebar & Layout when returning to Practice Mode
+    const sidebar = document.getElementById("sidebar");
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const mainContainer = document.querySelector("main");
+
+    if (sidebar) sidebar.classList.remove("hidden");
+    if (mobileBtn) mobileBtn.classList.remove("hidden");
+    if (mainContainer) mainContainer.classList.add("md:ml-64");
+
     activeExamQuestions = null;
     isExamGraded = false;
     currentTopicKey = key;
@@ -508,29 +517,35 @@ function selectOption(qId, optIdx) {
     }
     userAnswers[qId].selected = optIdx;
 
+    const scrollPos = window.scrollY;
     saveProgress();
     renderQuestions();
     updateTopicProgress();
     updateGlobalStats();
     renderTopicSidebar();
+    window.scrollTo({ top: scrollPos });
 }
 
 function gradeSingleQuestion(qId) {
     if (userAnswers[qId] && userAnswers[qId].selected !== undefined) {
         userAnswers[qId].submitted = true;
+        const scrollPos = window.scrollY;
         saveProgress();
         renderQuestions();
         updateGlobalStats();
+        window.scrollTo({ top: scrollPos });
     }
 }
 
 function resetSingleQuestion(qId) {
     delete userAnswers[qId];
+    const scrollPos = window.scrollY;
     saveProgress();
     renderQuestions();
     updateTopicProgress();
     updateGlobalStats();
     renderTopicSidebar();
+    window.scrollTo({ top: scrollPos });
 }
 
 function saveProgress() {
@@ -538,15 +553,29 @@ function saveProgress() {
 }
 
 /**
- * Global Bridge: Called by ExamEngine when clicking "Start Papers"
+ * Global Bridge: Called by ExamEngine when clicking "Start Exam Paper"
  */
 window.renderExamToUI = function(examQuestions) {
     if (!examQuestions || examQuestions.length === 0) return;
 
-    // Retain questions and ensure exact references are maintained
     activeExamQuestions = examQuestions;
     isExamGraded = false;
 
+    // 1. Hide Sidebar for Full Workspace Mode
+    const sidebar = document.getElementById("sidebar");
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    if (sidebar) sidebar.classList.add("hidden");
+    if (mobileBtn) mobileBtn.classList.add("hidden");
+
+    // 2. Expand Main Container
+    const mainContainer = document.querySelector("main");
+    if (mainContainer) mainContainer.classList.remove("md:ml-64");
+
+    // 3. Show Sticky Timer Bar
+    const timerBar = document.getElementById('exam-timer-bar');
+    if (timerBar) timerBar.classList.remove('hidden');
+
+    // 4. Update Header Details
     const topicBadge = document.getElementById("current-topic-badge");
     const topicTitle = document.getElementById("current-topic-title");
     const topicDesc = document.getElementById("current-topic-desc");
@@ -554,10 +583,9 @@ window.renderExamToUI = function(examQuestions) {
 
     if (topicBadge) topicBadge.textContent = `EXAM MODE`;
     if (topicTitle) topicTitle.textContent = `40 MCQ Timed Mock Exam`;
-    if (topicDesc) topicDesc.textContent = `This is a timed paper composed of 40 randomized questions. Answer all questions and click "Submit Exam" to reveal explanations.`;
+    if (topicDesc) topicDesc.textContent = `Timed paper active. Select your answers and click "Submit Exam" at the top when finished.`;
     if (topicTotalQ) topicTotalQ.textContent = `${activeExamQuestions.length} Questions`;
 
-    renderTopicSidebar();
     updateTopicProgress();
     renderQuestions();
 };
