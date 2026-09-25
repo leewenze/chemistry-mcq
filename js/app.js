@@ -120,10 +120,25 @@ function handleSubmitPaper() {
 
     if (activeExamQuestions) {
         isExamGraded = true;
-        // Stop the sticky countdown timer
-        if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-            ExamEngine.stopTimer();
+        
+        // Hide top sticky timer bar
+        const timerBar = document.getElementById('exam-timer-bar');
+        if (timerBar) timerBar.classList.add('hidden');
+
+        // Stop timer & calculate results from ExamEngine
+        let results = null;
+        if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
+            results = ExamEngine.submitExam();
+        } else {
+            // Fallback calculation if submitExam is not in engine
+            if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
+                ExamEngine.stopTimer();
+            }
+            results = calculateExamResults(questions);
         }
+
+        // Show score and time spent popup
+        showExamResultsModal(results);
     }
 
     // Mark all questions as submitted to reveal answer key & explanations
@@ -141,6 +156,72 @@ function handleSubmitPaper() {
     renderTopicSidebar();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Calculates Score & Time Spent for Modal
+ */
+function calculateExamResults(questions) {
+    let score = 0;
+    const total = questions.length;
+
+    questions.forEach(q => {
+        const state = userAnswers[q.id];
+        if (state && state.selected !== undefined && state.selected === q.answer) {
+            score++;
+        }
+    });
+
+    const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+    
+    return {
+        score: score,
+        total: total,
+        percentage: percentage,
+        timeSpentFormatted: "Completed"
+    };
+}
+
+/**
+ * Renders Score & Time Spent Popup Modal
+ */
+function showExamResultsModal(results) {
+    const oldModal = document.getElementById('exam-result-modal');
+    if (oldModal) oldModal.remove();
+
+    const badgeColor = results.percentage >= 75 ? 'bg-emerald-500' : (results.percentage >= 50 ? 'bg-amber-500' : 'bg-rose-500');
+
+    const modalHTML = `
+        <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
+                <div class="w-16 h-16 ${badgeColor} text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                    <i class="fa-solid ${results.percentage >= 50 ? 'fa-award' : 'fa-triangle-exclamation'}"></i>
+                </div>
+
+                <h2 class="text-2xl font-bold text-slate-900">Exam Completed!</h2>
+                <p class="text-xs text-slate-500 mt-1">Here is your final performance breakdown.</p>
+
+                <div class="grid grid-cols-2 gap-3 my-6">
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Score</span>
+                        <span class="text-2xl font-black text-indigo-600">${results.score} <span class="text-sm text-slate-400 font-normal">/ ${results.total}</span></span>
+                        <span class="text-xs text-slate-500 block mt-0.5">(${results.percentage}%)</span>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Time Spent</span>
+                        <span class="text-lg font-bold text-slate-800 block mt-1">${results.timeSpentFormatted || 'Finished'}</span>
+                        <span class="text-[11px] text-slate-400 block">Out of 60:00</span>
+                    </div>
+                </div>
+
+                <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition cursor-pointer">
+                    Review Answers & Explanations
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
 function renderTopicSidebar() {
@@ -441,6 +522,12 @@ function selectOption(qId, optIdx) {
         userAnswers[qId] = {};
     }
     userAnswers[qId].selected = optIdx;
+
+    // Record answer in ExamEngine if active
+    if (window.ExamEngine && typeof ExamEngine.recordAnswer === 'function') {
+        ExamEngine.recordAnswer(qId, optIdx);
+    }
+
     saveProgress();
     renderQuestions();
     updateTopicProgress();
