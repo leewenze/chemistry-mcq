@@ -329,7 +329,16 @@ function selectTopic(key) {
     if (mobileBtn) mobileBtn.classList.remove("hidden");
     
     if (mainContainer) {
-        mainContainer.classList.add("md:ml-64");
+        // Clear conflicting auto-margin and offset classes
+        mainContainer.classList.remove("mx-auto", "ml-auto", "w-full", "md:ml-64", "md:ml-72", "md:ml-80");
+        
+        // Dynamically align main margin based on sidebar offset width
+        if (sidebar && sidebar.offsetWidth > 0) {
+            mainContainer.style.marginLeft = ""; // reset inline standard
+            mainContainer.classList.add("md:ml-72"); // Default snug fit for standard sidebars
+        } else {
+            mainContainer.classList.add("md:ml-72");
+        }
     }
 
     activeExamQuestions = null;
@@ -611,9 +620,12 @@ window.renderExamToUI = function(examQuestions) {
     if (sidebar) sidebar.classList.add("hidden");
     if (mobileBtn) mobileBtn.classList.add("hidden");
 
-    // 2. Expand Main Container
+    // 2. Expand Main Container to full width without offset
     const mainContainer = document.querySelector("main");
-    if (mainContainer) mainContainer.classList.remove("md:ml-64");
+    if (mainContainer) {
+        mainContainer.classList.remove("md:ml-64", "md:ml-72", "md:ml-80");
+        mainContainer.classList.add("w-full", "mx-auto");
+    }
 
     // 3. Show Timer Bar & Add Exit Button non-destructively
     const timerBar = document.getElementById('exam-timer-bar');
