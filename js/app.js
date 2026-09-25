@@ -128,7 +128,6 @@ function exitExamMode() {
     }
 }
 
-// Global hook for direct DOM onclick handlers
 window.exitExamMode = exitExamMode;
 
 /**
@@ -330,7 +329,6 @@ function selectTopic(key) {
     if (mobileBtn) mobileBtn.classList.remove("hidden");
     
     if (mainContainer) {
-        mainContainer.classList.remove("w-full");
         mainContainer.classList.add("md:ml-64");
     }
 
@@ -617,29 +615,22 @@ window.renderExamToUI = function(examQuestions) {
     const mainContainer = document.querySelector("main");
     if (mainContainer) mainContainer.classList.remove("md:ml-64");
 
-    // 3. Show & Populate Sticky Timer / Action Bar with Exit Exam Button
+    // 3. Show Timer Bar & Add Exit Button non-destructively
     const timerBar = document.getElementById('exam-timer-bar');
     if (timerBar) {
         timerBar.classList.remove('hidden');
-        timerBar.innerHTML = `
-            <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md">
-                        <i class="fa-solid fa-stopwatch mr-1"></i> Exam Mode
-                    </span>
-                    <span id="exam-timer-display" class="text-lg font-mono font-bold text-slate-800">60:00</span>
-                </div>
-                
-                <div class="flex items-center space-x-2">
-                    <button onclick="exitExamMode()" class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer">
-                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Exit Exam
-                    </button>
-                    <button onclick="handleSubmitPaper()" class="text-xs font-semibold px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
-                        Submit Exam
-                    </button>
-                </div>
-            </div>
-        `;
+        
+        let exitBtn = document.getElementById('exit-exam-btn');
+        if (!exitBtn) {
+            const actionContainer = timerBar.querySelector('.flex.items-center.space-x-2') || timerBar.firstElementChild || timerBar;
+            exitBtn = document.createElement('button');
+            exitBtn.id = 'exit-exam-btn';
+            exitBtn.onclick = exitExamMode;
+            exitBtn.className = "text-xs font-semibold px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer mr-2";
+            exitBtn.innerHTML = `<i class="fa-solid fa-arrow-left mr-1.5"></i> Exit Exam`;
+            
+            actionContainer.insertBefore(exitBtn, actionContainer.firstChild);
+        }
     }
 
     // 4. Update Header Details
