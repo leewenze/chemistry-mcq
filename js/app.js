@@ -302,10 +302,12 @@ function renderTopicSidebar() {
             if (overlay) overlay.classList.add("hidden");
         };
 
+        const cleanTitle = topic.title.replace(/^(Topic\s*\d+:?\s*)/i, '');
+
         btn.innerHTML = `
             <div class="truncate pr-2">
                 <div class="text-xs ${isSelected ? 'text-indigo-600 font-semibold' : 'text-slate-400'}">Topic ${index + 1}</div>
-                <div class="text-sm truncate font-medium">${topic.title.replace(/^Topic \d+:\s*/, '')}</div>
+                <div class="text-sm truncate font-medium">${cleanTitle}</div>
             </div>
             <div class="text-right flex-shrink-0">
                 <span class="text-xs px-2 py-0.5 rounded-full ${
@@ -323,18 +325,9 @@ function renderTopicSidebar() {
 function selectTopic(key) {
     const sidebar = document.getElementById("sidebar");
     const mobileBtn = document.getElementById("mobile-menu-btn");
-    const mainContainer = document.querySelector("main");
 
     if (sidebar) sidebar.classList.remove("hidden");
     if (mobileBtn) mobileBtn.classList.remove("hidden");
-    
-    if (mainContainer) {
-        // Remove centering auto-margins and standard offset constraints
-        mainContainer.classList.remove("mx-auto", "ml-auto", "w-full");
-        
-        // Ensure main container fills remaining width and stays left-aligned directly against the sidebar
-        mainContainer.classList.add("md:ml-72", "mr-auto", "max-w-none");
-    }
 
     activeExamQuestions = null;
     isExamGraded = false;
@@ -447,7 +440,6 @@ function renderQuestions() {
         const card = document.createElement("div");
         card.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition hover:border-slate-300 mb-6 last:mb-0";
 
-        // In Exam Mode, keep options and answers unrevealed until graded
         const isSubmitted = activeExamQuestions ? isExamGraded : (state && state.submitted);
         const selectedOpt = state ? state.selected : undefined;
 
@@ -604,9 +596,9 @@ window.renderExamToUI = function(examQuestions) {
     activeExamQuestions = examQuestions;
     isExamGraded = false;
 
-    // Reset user answers for all questions in this exam paper so they display blank
+    // Reset temporary exam responses without destroying practice state
     examQuestions.forEach(q => {
-        delete userAnswers[q.id];
+        userAnswers[q.id] = { selected: undefined, submitted: false };
     });
 
     // 1. Hide Sidebar for Full Workspace Mode
@@ -615,32 +607,11 @@ window.renderExamToUI = function(examQuestions) {
     if (sidebar) sidebar.classList.add("hidden");
     if (mobileBtn) mobileBtn.classList.add("hidden");
 
-    // 2. Expand Main Container to full width without offset
-    const mainContainer = document.querySelector("main");
-    if (mainContainer) {
-        mainContainer.classList.remove("md:ml-64", "md:ml-72", "md:ml-80", "mr-auto");
-        mainContainer.classList.add("w-full", "mx-auto");
-    }
-
-    // 3. Show Timer Bar & Add Exit Button non-destructively
+    // 2. Show Sticky Timer Bar
     const timerBar = document.getElementById('exam-timer-bar');
-    if (timerBar) {
-        timerBar.classList.remove('hidden');
-        
-        let exitBtn = document.getElementById('exit-exam-btn');
-        if (!exitBtn) {
-            const actionContainer = timerBar.querySelector('.flex.items-center.space-x-2') || timerBar.firstElementChild || timerBar;
-            exitBtn = document.createElement('button');
-            exitBtn.id = 'exit-exam-btn';
-            exitBtn.onclick = exitExamMode;
-            exitBtn.className = "text-xs font-semibold px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer mr-2";
-            exitBtn.innerHTML = `<i class="fa-solid fa-arrow-left mr-1.5"></i> Exit Exam`;
-            
-            actionContainer.insertBefore(exitBtn, actionContainer.firstChild);
-        }
-    }
+    if (timerBar) timerBar.classList.remove('hidden');
 
-    // 4. Update Header Details
+    // 3. Update Header Details
     const topicBadge = document.getElementById("current-topic-badge");
     const topicTitle = document.getElementById("current-topic-title");
     const topicDesc = document.getElementById("current-topic-desc");
