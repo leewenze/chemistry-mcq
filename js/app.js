@@ -177,7 +177,7 @@ function handleSubmitPaper() {
         // Safely invoke ExamEngine or fall back to internal scoring
         try {
             if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
-                results = ExamEngine.submitExam(userAnswers);
+                results = ExamEngine.submitExam(userAnswers, questions);
             }
         } catch (err) {
             console.error("ExamEngine submission failed, falling back to local calculation:", err);
