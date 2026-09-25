@@ -34,16 +34,22 @@ window.ExamEngine = (function () {
             const topic = topicData[key];
             if (topic && Array.isArray(topic.questions)) {
                 topic.questions.forEach((q, idx) => {
+                    // PRESERVE ORIGINAL ID FIRST so userAnswers map consistently
+                    const originalId = q.id || `q_${key}_${idx}`;
                     pool.push({
                         ...q,
-                        topicKey: key,
-                        id: q.id || `exam_${key}_${idx}`
+                        id: originalId,
+                        topicKey: key
                     });
                 });
             }
         });
 
-        if (pool.length === 0) return [];
+        if (pool.length === 0) {
+            examPaper = [];
+            isExamActive = false;
+            return [];
+        }
 
         // Fisher-Yates Shuffle
         for (let i = pool.length - 1; i > 0; i--) {
@@ -62,15 +68,22 @@ window.ExamEngine = (function () {
         timeRemaining = totalExamDuration;
         isExamActive = true;
 
-        if (onTick) onTick(formatTime(timeRemaining), timeRemaining);
+        if (typeof onTick === 'function') {
+            onTick(formatTime(timeRemaining), timeRemaining);
+        }
 
         timerInterval = setInterval(() => {
             timeRemaining--;
-            if (onTick) onTick(formatTime(timeRemaining), timeRemaining);
+            
+            if (typeof onTick === 'function') {
+                onTick(formatTime(timeRemaining), timeRemaining);
+            }
 
             if (timeRemaining <= 0) {
                 stopTimer();
-                if (onTimeUp) onTimeUp();
+                if (typeof onTimeUp === 'function') {
+                    onTimeUp();
+                }
             }
         }, 1000);
     }
@@ -84,22 +97,23 @@ window.ExamEngine = (function () {
     }
 
     /**
-     * FIXED: Can take userAnswers AND optional activeQuestions fallback array
+     * Grades the active exam against provided user answers
      */
     function submitExam(userAnswers = {}, fallbackQuestions = []) {
         stopTimer();
 
-        const secondsUsed = totalExamDuration - timeRemaining;
+        const secondsUsed = Math.max(0, totalExamDuration - timeRemaining);
         let score = 0;
         
-        // Use internal examPaper, or fallback to passed questions if internal paper is empty
+        // Use active examPaper, fallback to passed parameter if examPaper was cleared
         const activePaper = (examPaper && examPaper.length > 0) ? examPaper : fallbackQuestions;
         const total = activePaper.length;
 
         activePaper.forEach(q => {
             const userEntry = userAnswers[q.id];
-            const selected = userEntry ? userEntry.selected : undefined;
-            if (selected !== undefined && Number(selected) === Number(q.answer)) {
+            const selected = (userEntry && userEntry.selected !== undefined) ? userEntry.selected : undefined;
+            
+            if (selected !== undefined && String(selected) === String(q.answer)) {
                 score++;
             }
         });
@@ -116,13 +130,14 @@ window.ExamEngine = (function () {
     }
 
     function formatTime(seconds) {
+        if (isNaN(seconds) || seconds < 0) return "00:00";
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
         return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
     function formatTimeSpent(seconds) {
-        if (isNaN(seconds) || seconds < 0) return "0 sec";
+        if (isNaN(seconds) || seconds <= 0) return "0 secs";
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
         if (m === 0) return `${s} sec${s !== 1 ? 's' : ''}`;
@@ -136,6 +151,8 @@ window.ExamEngine = (function () {
         stopTimer: stopTimer,
         submitExam: submitExam,
         isExamRunning: function () { return isExamActive; },
-        getExamPaper: function () { return examPaper; }
+        getExamPaper: function () { return examPaper; },
+        getTimeRemaining: function () { return timeRemaining; },
+        getTotalDuration: function () { return totalExamDuration; }
     };
 })();
