@@ -91,13 +91,16 @@ function setupEventListeners() {
         });
     }
 
+    // Attach listener to Submit Topic/Exam Button
     const submitBtn = document.getElementById("submit-topic-btn");
     if (submitBtn) {
-        submitBtn.addEventListener("click", () => {
-            handleSubmitPaper();
-        });
+        submitBtn.removeEventListener("click", handleSubmitPaper);
+        submitBtn.addEventListener("click", handleSubmitPaper);
     }
 }
+
+// Make globally accessible in case HTML triggers via onclick="handleSubmitPaper()"
+window.handleSubmitPaper = handleSubmitPaper;
 
 /**
  * Exits Exam Mode and restores Practice Mode
@@ -109,7 +112,11 @@ function exitExamMode() {
     }
 
     if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-        ExamEngine.stopTimer();
+        try {
+            ExamEngine.stopTimer();
+        } catch (err) {
+            console.warn("Timer stop error:", err);
+        }
     }
 
     activeExamQuestions = null;
@@ -156,18 +163,24 @@ function handleSubmitPaper() {
         const timerBar = document.getElementById('exam-timer-bar');
         if (timerBar) timerBar.classList.add('hidden');
 
-        // Stop timer & calculate results from ExamEngine
+        // Safely invoke ExamEngine or fall back to internal scoring
         let results = null;
-        if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
-            results = ExamEngine.submitExam(userAnswers);
-        } else {
+        try {
+            if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
+                results = ExamEngine.submitExam(userAnswers);
+            }
+        } catch (err) {
+            console.error("ExamEngine submission failed, falling back to local calculation:", err);
+        }
+
+        if (!results) {
             if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-                ExamEngine.stopTimer();
+                try { ExamEngine.stopTimer(); } catch (e) {}
             }
             results = calculateExamResults(questions);
         }
 
-        // Show score and time spent popup
+        // Show score and time spent modal
         showExamResultsModal(results);
     }
 
@@ -284,7 +297,7 @@ function renderTopicSidebar() {
                 if (!leaveExam) return;
                 
                 if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-                    ExamEngine.stopTimer();
+                    try { ExamEngine.stopTimer(); } catch (e) {}
                 }
             }
             
@@ -611,7 +624,13 @@ window.renderExamToUI = function(examQuestions) {
     const timerBar = document.getElementById('exam-timer-bar');
     if (timerBar) timerBar.classList.remove('hidden');
 
-    // 3. Update Header Details
+    // 3. Ensure Submit Button Listener is Attached
+    const submitBtn = document.getElementById("submit-topic-btn");
+    if (submitBtn) {
+        submitBtn.onclick = handleSubmitPaper;
+    }
+
+    // 4. Update Header Details
     const topicBadge = document.getElementById("current-topic-badge");
     const topicTitle = document.getElementById("current-topic-title");
     const topicDesc = document.getElementById("current-topic-desc");
