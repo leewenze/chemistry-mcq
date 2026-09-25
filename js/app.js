@@ -148,7 +148,10 @@ function handleSubmitPaper() {
         userAnswers[q.id].submitted = true;
     });
 
-    saveProgress();
+    if (!activeExamQuestions) {
+        saveProgress();
+    }
+
     renderQuestions();
     updateGlobalStats();
     updateTopicProgress();
@@ -295,7 +298,6 @@ function selectTopic(key) {
     if (mobileBtn) mobileBtn.classList.remove("hidden");
     
     if (mainContainer) {
-        // Clear conflicting static margin offsets
         mainContainer.classList.remove("md:ml-64");
         mainContainer.classList.add("w-full");
     }
@@ -411,7 +413,8 @@ function renderQuestions() {
         const card = document.createElement("div");
         card.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition hover:border-slate-300 mb-6 last:mb-0";
 
-        const isSubmitted = state && state.submitted;
+        // In Exam Mode, keep options and answers unrevealed until graded
+        const isSubmitted = activeExamQuestions ? isExamGraded : (state && state.submitted);
         const selectedOpt = state ? state.selected : undefined;
 
         let imageHTML = "";
@@ -522,7 +525,9 @@ function selectOption(qId, optIdx) {
     userAnswers[qId].selected = optIdx;
 
     const scrollPos = window.scrollY;
-    saveProgress();
+    if (!activeExamQuestions) {
+        saveProgress();
+    }
     renderQuestions();
     updateTopicProgress();
     updateGlobalStats();
@@ -564,6 +569,11 @@ window.renderExamToUI = function(examQuestions) {
 
     activeExamQuestions = examQuestions;
     isExamGraded = false;
+
+    // Reset user answers for all questions in this exam paper so they display blank
+    examQuestions.forEach(q => {
+        delete userAnswers[q.id];
+    });
 
     // 1. Hide Sidebar for Full Workspace Mode
     const sidebar = document.getElementById("sidebar");
