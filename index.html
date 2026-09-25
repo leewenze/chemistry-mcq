@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <!-- Overall Progress Stats Bar -->
+        <!-- Overall Progress Stats Bar & Header Action Buttons -->
         <div class="flex items-center space-x-4">
             <div class="hidden sm:flex items-center space-x-6 bg-slate-50 border border-slate-200 px-4 py-1.5 rounded-xl text-xs">
                 <div>
@@ -74,6 +74,12 @@
                     <span id="global-accuracy" class="font-semibold text-indigo-600">0%</span>
                 </div>
             </div>
+
+            <!-- Quick Start Exam Button in Header -->
+            <button onclick="startTimedExam()" class="text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-file-pen"></i>
+                <span>Start Exam</span>
+            </button>
 
             <button id="reset-progress-btn" class="text-xs text-slate-500 hover:text-rose-600 px-3 py-2 rounded-lg border border-slate-200 hover:border-rose-200 hover:bg-rose-50 transition flex items-center space-x-1.5">
                 <i class="fa-solid fa-rotate-left"></i>
@@ -153,7 +159,7 @@
 
                 <div class="flex items-center justify-between pt-2 border-t border-indigo-800/60">
                     <span class="text-xs text-indigo-300"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> Timer auto-submits upon reaching 00:00</span>
-                    <button onclick="startTimedExam()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2">
+                    <button onclick="startTimedExam()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-play"></i>
                         <span>Start 60-Min Paper</span>
                     </button>
@@ -246,7 +252,7 @@
         const grid = document.getElementById('topic-checkboxes-grid');
         if (!grid || grid.children.length > 0) return;
 
-        const topics = ExamEngine.getAvailableTopics();
+        const topics = ExamEngine.getAvailableTopics ? ExamEngine.getAvailableTopics() : [];
         grid.innerHTML = '';
 
         topics.forEach(t => {
@@ -283,8 +289,14 @@
             }
         }
 
-        // Generate 40 questions paper
-        const examQuestions = ExamEngine.generateExam(selectedKeys, 40);
+        // Generate 40 questions paper using ExamEngine
+        let examQuestions = [];
+        if (typeof ExamEngine.generateExam === 'function') {
+            examQuestions = ExamEngine.generateExam(selectedKeys, 40);
+        } else if (typeof ExamEngine.start === 'function') {
+            ExamEngine.start();
+            return;
+        }
 
         if (examQuestions.length === 0) {
             alert('No questions available in selected topics.');
@@ -294,7 +306,7 @@
         // Show Timer Bar
         document.getElementById('exam-timer-bar').classList.remove('hidden');
 
-        // Render questions using your app's rendering method if available
+        // Render questions using available UI renderer
         if (typeof renderQuestions === 'function') {
             renderQuestions(examQuestions);
         } else if (typeof renderExamToUI === 'function') {
@@ -302,26 +314,28 @@
         }
 
         // Start Timer
-        ExamEngine.startTimer(
-            (timeStr, secondsLeft) => {
-                const timerEl = document.getElementById('timer-display');
-                if (timerEl) {
-                    timerEl.textContent = timeStr;
-                    if (secondsLeft <= 300) {
-                        timerEl.classList.add('timer-warning');
-                    } else {
-                        timerEl.classList.remove('timer-warning');
+        if (typeof ExamEngine.startTimer === 'function') {
+            ExamEngine.startTimer(
+                (timeStr, secondsLeft) => {
+                    const timerEl = document.getElementById('timer-display');
+                    if (timerEl) {
+                        timerEl.textContent = timeStr;
+                        if (secondsLeft <= 300) {
+                            timerEl.classList.add('timer-warning');
+                        } else {
+                            timerEl.classList.remove('timer-warning');
+                        }
                     }
-                }
-            },
-            () => {
-                alert("Time's up! Submitting your exam paper.");
-                if (typeof handleSubmitExam === 'function') {
-                    handleSubmitExam();
-                }
-            },
-            60
-        );
+                },
+                () => {
+                    alert("Time's up! Submitting your exam paper.");
+                    if (typeof handleSubmitExam === 'function') {
+                        handleSubmitExam();
+                    }
+                },
+                60
+            );
+        }
     }
 </script>
 
