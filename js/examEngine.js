@@ -1,5 +1,5 @@
 /**
- * Exam Engine - Handles Timed Mock Exam Mode with Score & Time Tracking
+ * Exam Engine - Handles Exam Generation & Timer Logic
  */
 window.ExamEngine = (function () {
     let timerInterval = null;
@@ -9,13 +9,13 @@ window.ExamEngine = (function () {
     let examPaper = [];
 
     /**
-     * Returns an array of available topic keys and titles for the configuration drawer
+     * Gets available topics for the checkbox configuration drawer
      */
     function getAvailableTopics() {
         const topicData = window.topicData || {};
         return Object.keys(topicData).map(key => ({
             key: key,
-            title: topicData[key].title || key
+            title: topicData[key].title ? topicData[key].title.replace(/^Topic \d+:\s*/, '') : key
         }));
     }
 
@@ -26,7 +26,6 @@ window.ExamEngine = (function () {
         const topicData = window.topicData || {};
         let pool = [];
 
-        // If no topics selected, grab all topic keys
         const keysToUse = (selectedTopicKeys && selectedTopicKeys.length > 0) 
             ? selectedTopicKeys 
             : Object.keys(topicData);
@@ -46,7 +45,7 @@ window.ExamEngine = (function () {
 
         if (pool.length === 0) return [];
 
-        // Shuffle questions (Fisher-Yates)
+        // Fisher-Yates Shuffle
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -94,7 +93,7 @@ window.ExamEngine = (function () {
         examPaper.forEach(q => {
             const userEntry = userAnswers[q.id];
             const selected = userEntry ? userEntry.selected : undefined;
-            if (selected !== undefined && selected === q.answer) {
+            if (selected !== undefined && Number(selected) === Number(q.answer)) {
                 score++;
             }
         });
@@ -119,7 +118,7 @@ window.ExamEngine = (function () {
     function formatTimeSpent(seconds) {
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
-        if (m === 0) return `${s} second${s !== 1 ? 's' : ''}`;
+        if (m === 0) return `${s} sec${s !== 1 ? 's' : ''}`;
         return `${m} min${m !== 1 ? 's' : ''} ${s} sec${s !== 1 ? 's' : ''}`;
     }
 
