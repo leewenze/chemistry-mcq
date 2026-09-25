@@ -6,7 +6,8 @@ let currentTopicKey = Object.keys(topicData)[0] || "";
 let activeFilter = "all"; // "all", "incorrect", "unanswered"
 let userAnswers = JSON.parse(localStorage.getItem("mcq_user_answers") || "{}");
 let topicShuffledOrder = {}; // Stores randomized question orders per topic
-let activeExamQuestions = null; // Holds ExamEngine paper when running a timed exam
+let activeExamQuestions = null; // Holds active 40-MCQ Exam paper when in Exam Mode
+let isExamGraded = false;
 
 // Initialize UI on DOM Load
 document.addEventListener("DOMContentLoaded", () => {
@@ -41,10 +42,11 @@ function setupEventListeners() {
     const resetBtn = document.getElementById("reset-progress-btn");
     if (resetBtn) {
         resetBtn.addEventListener("click", () => {
-            if (confirm("Are you sure you want to reset all saved answers and progress?")) {
+            if (confirm("Are you sure you want to reset all saved practice answers and progress?")) {
                 userAnswers = {};
                 localStorage.removeItem("mcq_user_answers");
                 activeExamQuestions = null;
+                isExamGraded = false;
                 renderTopicSidebar();
                 if (currentTopicKey) selectTopic(currentTopicKey);
                 updateGlobalStats();
@@ -73,7 +75,7 @@ function setupEventListeners() {
     if (randomizeBtn) {
         randomizeBtn.addEventListener("click", () => {
             if (activeExamQuestions) {
-                alert("Question shuffling is disabled during active timed mock exams.");
+                alert("Question shuffling is disabled during an active exam paper.");
                 return;
             }
             const topic = topicData[currentTopicKey];
@@ -92,15 +94,15 @@ function setupEventListeners() {
     const submitBtn = document.getElementById("submit-topic-btn");
     if (submitBtn) {
         submitBtn.addEventListener("click", () => {
-            handleSubmitExam();
+            handleSubmitPaper();
         });
     }
 }
 
 /**
- * Handles Grading for both Active ExamEngine Papers & Standard Topic Practice
+ * Handles Submission for both Exam Paper Mode and Practice Topic Mode
  */
-function handleSubmitExam() {
+function handleSubmitPaper() {
     const questions = getActiveQuestions();
     if (!questions || questions.length === 0) return;
 
@@ -116,12 +118,15 @@ function handleSubmitExam() {
         if (!confirmSubmit) return;
     }
 
-    // Stop ExamEngine timer if running
-    if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-        ExamEngine.stopTimer();
+    if (activeExamQuestions) {
+        isExamGraded = true;
+        // Stop the sticky countdown timer
+        if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
+            ExamEngine.stopTimer();
+        }
     }
 
-    // Mark all answered (and unanswered) items as submitted to trigger explanation card expansion
+    // Mark all questions as submitted to reveal answer key & explanations
     questions.forEach(q => {
         if (!userAnswers[q.id]) {
             userAnswers[q.id] = { selected: undefined };
@@ -135,7 +140,6 @@ function handleSubmitExam() {
     updateTopicProgress();
     renderTopicSidebar();
 
-    // Scroll smoothly to top of paper to view score and feedback
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -167,7 +171,25 @@ function renderTopicSidebar() {
         }`;
 
         btn.onclick = () => {
+            if (activeExamQuestions && !isExamGraded) {
+                const leaveExam = confirm("You are currently taking a timed exam. Leaving now will exit your exam paper. Do you want to return to Practice Mode?");
+                if (!leaveExam) return;
+                
+                if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
+                    ExamEngine.stopTimer();
+                }
+            }
+            
+            // Exit Exam Mode and return to Practice Mode
+            activeExamQuestions = null;
+            isExamGraded = false;
+            
+            // Hide exam timer bar if present
+            const timerBar = document.getElementById('exam-timer-bar');
+            if (timerBar) timerBar.classList.add('hidden');
+
             selectTopic(key);
+            
             const sidebar = document.getElementById("sidebar");
             const overlay = document.getElementById("sidebar-overlay");
             if (sidebar) sidebar.classList.add("-translate-x-full");
@@ -193,7 +215,8 @@ function renderTopicSidebar() {
 }
 
 function selectTopic(key) {
-    activeExamQuestions = null; // Exit exam mode if active
+    activeExamQuestions = null;
+    isExamGraded = false;
     currentTopicKey = key;
     renderTopicSidebar();
 
@@ -205,7 +228,7 @@ function selectTopic(key) {
     const topicDesc = document.getElementById("current-topic-desc");
     const topicTotalQ = document.getElementById("current-topic-total-q");
 
-    if (topicBadge) topicBadge.textContent = `Topic ${Object.keys(topicData).indexOf(key) + 1}`;
+    if (topicBadge) topicBadge.textContent = `Practice Mode - Topic ${Object.keys(topicData).indexOf(key) + 1}`;
     if (topicTitle) topicTitle.textContent = topic.title;
     if (topicDesc) topicDesc.textContent = topic.description;
     if (topicTotalQ) topicTotalQ.textContent = `${topic.questions.length} Questions`;
@@ -215,7 +238,7 @@ function selectTopic(key) {
 }
 
 /**
- * Returns active questions based on whether an Exam Engine paper or single topic is selected
+ * Returns active questions based on current mode (Exam vs Topic Practice)
  */
 function getActiveQuestions() {
     if (activeExamQuestions) {
@@ -281,7 +304,7 @@ function renderQuestions() {
         container.innerHTML = `
             <div class="bg-white p-12 text-center rounded-2xl border border-slate-200">
                 <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
-                <h3 class="text-slate-600 font-medium">No questions available in this selection.</h3>
+                <h3 class="text-slate-600 font-medium">No questions loaded for this paper.</h3>
             </div>
         `;
         return;
@@ -383,17 +406,20 @@ function renderQuestions() {
                     ${optionsHTML}
                 </div>
                 ${feedbackBanner}
-                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end">
-                    ${!isSubmitted ? `
-                        <button onclick="gradeSingleQuestion('${q.id}')" ${selectedOpt === undefined ? 'disabled' : ''} class="text-xs font-semibold px-3 py-1.5 rounded-lg ${selectedOpt === undefined ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-800 hover:bg-slate-900 text-white'} transition">
-                            Check Answer
-                        </button>
-                    ` : `
-                        <button onclick="resetSingleQuestion('${q.id}')" class="text-xs font-medium text-slate-500 hover:text-indigo-600 transition">
-                            <i class="fa-solid fa-rotate-right mr-1"></i> Retry Question
-                        </button>
-                    `}
-                </div>
+                
+                ${!activeExamQuestions ? `
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end">
+                        ${!isSubmitted ? `
+                            <button onclick="gradeSingleQuestion('${q.id}')" ${selectedOpt === undefined ? 'disabled' : ''} class="text-xs font-semibold px-3 py-1.5 rounded-lg ${selectedOpt === undefined ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-800 hover:bg-slate-900 text-white'} transition">
+                                Check Answer
+                            </button>
+                        ` : `
+                            <button onclick="resetSingleQuestion('${q.id}')" class="text-xs font-medium text-slate-500 hover:text-indigo-600 transition">
+                                <i class="fa-solid fa-rotate-right mr-1"></i> Retry Question
+                            </button>
+                        `}
+                    </div>
+                ` : ''}
             </div>
         `;
 
@@ -440,29 +466,33 @@ function resetSingleQuestion(qId) {
     renderTopicSidebar();
 }
 
-function gradeTopic(key) {
-    handleSubmitExam();
-}
-
 function saveProgress() {
     localStorage.setItem("mcq_user_answers", JSON.stringify(userAnswers));
 }
 
 /**
- * Global Bridge: Invoked when ExamEngine generates and launches a timed mock exam paper
+ * Global Bridge: Called by ExamEngine when clicking "Start Papers"
  */
 window.renderExamToUI = function(examQuestions) {
-    activeExamQuestions = examQuestions;
+    if (!examQuestions || examQuestions.length === 0) return;
+
+    // Standardize IDs for Exam Questions so option state saves cleanly
+    activeExamQuestions = examQuestions.map((q, idx) => ({
+        ...q,
+        id: q.id || `exam_q_${idx + 1}`
+    }));
+    
+    isExamGraded = false;
 
     const topicBadge = document.getElementById("current-topic-badge");
     const topicTitle = document.getElementById("current-topic-title");
     const topicDesc = document.getElementById("current-topic-desc");
     const topicTotalQ = document.getElementById("current-topic-total-q");
 
-    if (topicBadge) topicBadge.textContent = `Mock Exam`;
-    if (topicTitle) topicTitle.textContent = `60-Minute Timed Practice Paper`;
-    if (topicDesc) topicDesc.textContent = `Full randomized exam generated across all topics. Complete all questions and click submit to grade.`;
-    if (topicTotalQ) topicTotalQ.textContent = `${examQuestions.length} Questions`;
+    if (topicBadge) topicBadge.textContent = `EXAM MODE`;
+    if (topicTitle) topicTitle.textContent = `40 MCQ Timed Mock Exam`;
+    if (topicDesc) topicDesc.textContent = `This is a timed paper composed of 40 randomized questions. Answer all questions and click "Submit Exam" to reveal explanations.`;
+    if (topicTotalQ) topicTotalQ.textContent = `${activeExamQuestions.length} Questions`;
 
     renderTopicSidebar();
     updateTopicProgress();
