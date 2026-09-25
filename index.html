@@ -1,728 +1,343 @@
-// Access the topics loaded from external files
-const topicData = window.topicData || {};
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Question Bank & Practice Quiz</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for clean vector icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-// App State
-let currentTopicKey = Object.keys(topicData)[0] || "";
-let activeFilter = "all"; // "all", "incorrect", "unanswered"
-let userAnswers = JSON.parse(localStorage.getItem("mcq_user_answers") || "{}");
-let topicShuffledOrder = {}; // Stores randomized question orders per topic
-let activeExamQuestions = null; // Holds active 40-MCQ Exam paper when in Exam Mode
-let isExamGraded = false;
+        .question-image-container {
+            text-align: center;
+            margin: 15px 0;
+        }
 
-// Initialize UI on DOM Load
-document.addEventListener("DOMContentLoaded", () => {
-    initApp();
-});
+        .question-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 5px;
+            background-color: #fff;
+        }
 
-function initApp() {
-    renderTopicSidebar();
-    if (currentTopicKey) {
-        selectTopic(currentTopicKey);
-    }
-    updateGlobalStats();
-    setupEventListeners();
-}
+        /* Sticky Timer Bar Animation & Styles */
+        @keyframes pulse-red {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
+        }
+        .timer-warning {
+            color: #ef4444 !important;
+            animation: pulse-red 1s infinite alternate;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-700">
 
-// Global Event Delegation for reliable click handling
-function setupEventListeners() {
-    // Mobile menu triggers
-    const mobileBtn = document.getElementById("mobile-menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebar-overlay");
+<!-- Header Bar -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm w-full">
+    <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <button id="mobile-menu-btn" class="md:hidden text-slate-500 hover:text-slate-700 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-100 flex items-center justify-center">
+                <i class="fa-solid fa-graduation-cap text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg text-slate-900 leading-tight">Mastery Question Bank</h1>
+                <p class="text-xs text-slate-500 hidden sm:block">Self-Paced MCQ Practice Engine</p>
+            </div>
+        </div>
 
-    const toggleMobileMenu = () => {
-        if (sidebar) sidebar.classList.toggle("-translate-x-full");
-        if (overlay) overlay.classList.toggle("hidden");
-    };
+        <!-- Overall Progress Stats Bar & Header Action Buttons -->
+        <div class="flex items-center space-x-4">
+            <div class="hidden sm:flex items-center space-x-6 bg-slate-50 border border-slate-200 px-4 py-1.5 rounded-xl text-xs">
+                <div>
+                    <span class="text-slate-400 block">Total Answered</span>
+                    <span id="global-total-answered" class="font-semibold text-slate-700">0 / 0</span>
+                </div>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div>
+                    <span class="text-slate-400 block">Accuracy</span>
+                    <span id="global-accuracy" class="font-semibold text-indigo-600">0%</span>
+                </div>
+            </div>
 
-    if (mobileBtn && sidebar && overlay) {
-        mobileBtn.addEventListener("click", toggleMobileMenu);
-        overlay.addEventListener("click", toggleMobileMenu);
-    }
+            <!-- Start Exam Trigger Button -->
+            <button onclick="openExamConfigModal()" class="text-xs text-white bg-indigo-600 hover:bg-indigo-700 font-semibold px-4 py-2 rounded-xl shadow-sm transition flex items-center space-x-2 cursor-pointer">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Start Exam</span>
+            </button>
 
-    // Reset Progress
-    const resetBtn = document.getElementById("reset-progress-btn");
-    if (resetBtn) {
-        resetBtn.addEventListener("click", () => {
-            if (confirm("Are you sure you want to reset all saved practice answers and progress?")) {
-                userAnswers = {};
-                localStorage.removeItem("mcq_user_answers");
-                activeExamQuestions = null;
-                isExamGraded = false;
-                renderTopicSidebar();
-                if (currentTopicKey) selectTopic(currentTopicKey);
-                updateGlobalStats();
-            }
-        });
-    }
+            <button id="reset-progress-btn" class="text-xs text-slate-500 hover:text-rose-600 px-3 py-2 rounded-lg border border-slate-200 hover:border-rose-200 hover:bg-rose-50 transition flex items-center space-x-1.5 cursor-pointer">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span class="hidden md:inline">Reset Progress</span>
+            </button>
+        </div>
+    </div>
+</header>
 
-    // Question Filtering Buttons
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            document.querySelectorAll(".filter-btn").forEach(b => {
-                b.classList.remove("bg-indigo-50", "text-indigo-700", "active");
-                b.classList.add("text-slate-600");
-            });
-            e.currentTarget.classList.add("bg-indigo-50", "text-indigo-700", "active");
-            e.currentTarget.classList.remove("text-slate-600");
+<!-- Sticky Top Bar (Hidden by default, shown when Exam starts) -->
+<div id="exam-timer-bar" class="sticky top-16 z-40 bg-slate-900 text-white px-6 py-3 shadow-lg flex items-center justify-between border-b border-slate-800 hidden">
+    <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            Exam Mode Active
+        </span>
+        <span class="text-xs text-slate-400 hidden sm:inline">40 MCQs Timed Session</span>
+    </div>
 
-            if (e.currentTarget.id === "filter-all-btn") activeFilter = "all";
-            if (e.currentTarget.id === "filter-incorrect-btn") activeFilter = "incorrect";
-            if (e.currentTarget.id === "filter-unanswered-btn") activeFilter = "unanswered";
+    <div class="flex items-center space-x-3">
+        <button id="exit-exam-btn" class="exit-exam-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center space-x-1 border border-slate-700 cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Exit Exam</span>
+        </button>
 
-            renderQuestions();
-        });
-    });
+        <div class="flex items-center space-x-2 bg-slate-800 px-3.5 py-1.5 rounded-xl border border-slate-700/60">
+            <i class="fa-solid fa-stopwatch text-indigo-400 text-sm"></i>
+            <span id="timer-display" class="font-mono text-base font-bold text-emerald-400 tracking-wider">60:00</span>
+        </div>
 
-    // Question Shuffling
-    const randomizeBtn = document.getElementById("randomize-btn");
-    if (randomizeBtn) {
-        randomizeBtn.addEventListener("click", () => {
-            if (activeExamQuestions) {
-                alert("Question shuffling is disabled during an active exam paper.");
-                return;
-            }
-            const topic = topicData[currentTopicKey];
-            if (!topic) return;
+        <button id="submit-exam-btn" class="submit-exam-btn px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5 cursor-pointer">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Exam</span>
+        </button>
+    </div>
+</div>
+
+<!-- Main Workspace Wrapper -->
+<div class="flex-1 flex overflow-hidden w-full">
+    <!-- Sidebar Navigation for Topics -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform -translate-x-full md:translate-x-0 md:static transition-transform duration-200 ease-in-out flex flex-col flex-shrink-0">
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Topics & Chapters</span>
+            <span id="topic-count-badge" class="bg-indigo-50 text-indigo-700 text-xs px-2 py-0.5 rounded-full font-medium">0 Topics</span>
+        </div>
+        
+        <nav id="topic-list" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-1">
+            <!-- Dynamic Topics Rendered via JS -->
+        </nav>
+
+        <div class="p-4 bg-slate-50 border-t border-slate-200 text-xs text-slate-500">
+            <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Auto-saves your responses automatically in your browser.
+        </div>
+    </aside>
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- Main Quiz View Container -->
+    <main class="flex-1 min-w-0 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 w-full">
+        <div class="w-full space-y-6">
             
-            let indices = topic.questions.map((_, idx) => idx);
-            for (let i = indices.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [indices[i], indices[j]] = [indices[j], indices[i]];
-            }
-            topicShuffledOrder[currentTopicKey] = indices;
-            renderQuestions();
-        });
+            <!-- Active Topic Summary Header -->
+            <div id="topic-header" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span id="current-topic-badge" class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-md">Topic 1</span>
+                        <span id="current-topic-total-q" class="text-xs text-slate-400">0 Questions</span>
+                    </div>
+                    <h2 id="current-topic-title" class="text-xl font-bold text-slate-900 mt-1">Select a Topic</h2>
+                    <p id="current-topic-desc" class="text-sm text-slate-500 mt-0.5">Select a module from the sidebar to start practicing.</p>
+                </div>
+
+                <!-- Topic Progress Bar -->
+                <div class="flex items-center space-x-4 bg-slate-50 p-3 rounded-xl border border-slate-100 min-w-[200px]">
+                    <div class="flex-1">
+                        <div class="flex justify-between text-xs font-medium mb-1">
+                            <span class="text-slate-500">Topic Progress</span>
+                            <span id="topic-progress-text" class="text-slate-700">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                            <div id="topic-progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300 w-0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls & Filters Toolbar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-sm text-sm w-full">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter mr-1"></i> View:</span>
+                    <button id="filter-all-btn" class="filter-btn active text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 transition cursor-pointer">All</button>
+                    <button id="filter-incorrect-btn" class="filter-btn text-xs font-medium px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition cursor-pointer">Incorrect</button>
+                    <button id="filter-unanswered-btn" class="filter-btn text-xs font-medium px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition cursor-pointer">Unanswered</button>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button id="randomize-btn" class="text-xs font-medium px-3 py-1.5 rounded-lg text-slate-600 border border-slate-200 hover:bg-slate-50 transition flex items-center space-x-1 cursor-pointer">
+                        <i class="fa-solid fa-shuffle"></i>
+                        <span>Shuffle</span>
+                    </button>
+                    <button id="submit-topic-btn" class="text-xs font-semibold px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
+                        Submit All & Grade
+                    </button>
+                </div>
+            </div>
+
+            <!-- Questions Container -->
+            <div id="questions-list" class="space-y-6 w-full">
+                <!-- Question cards generated dynamically via JS -->
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- 1. External Topic Data Scripts -->
+<script src="js/experimental-chemistry.js"></script>
+<script src="js/separation-techniques.js"></script>
+<script src="js/kinetic-particle-theory.js"></script>
+<script src="js/atomic-structure.js"></script>
+<script src="js/chemical-bonding.js"></script>  
+<script src="js/chemical-calculations.js"></script>
+<script src="js/acid-base.js"></script>
+<script src="js/salts.js"></script>
+<script src="js/ammonia.js"></script>
+<script src="js/qualitative-analysis.js"></script>    
+
+<!-- 2. Exam Engine Script -->
+<script src="js/examEngine.js"></script>
+
+<!-- 3. Main External App Logic -->
+<script src="js/app.js"></script>
+
+<!-- 4. Exam Modal UI Integration -->
+<script>
+    function openExamConfigModal() {
+        const oldModal = document.getElementById('exam-config-modal');
+        if (oldModal) oldModal.remove();
+
+        const topics = window.ExamEngine ? ExamEngine.getAvailableTopics() : [];
+        let topicCheckboxesHTML = '';
+
+        if (topics.length === 0) {
+            topicCheckboxesHTML = '<p class="text-xs text-amber-600 col-span-2">No topic data loaded yet.</p>';
+        } else {
+            topics.forEach(t => {
+                topicCheckboxesHTML += `
+                    <label class="flex items-center space-x-2.5 p-2 rounded-lg border border-slate-100 hover:bg-slate-50 cursor-pointer transition">
+                        <input type="checkbox" class="exam-topic-cb rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" value="${t.key}" checked onclick="syncSelectAllCheckbox()">
+                        <span class="text-xs text-slate-700 font-medium truncate">${t.title}</span>
+                    </label>
+                `;
+            });
+        }
+
+        const modalHTML = `
+            <div id="exam-config-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+                <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 relative">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Exam Setup</h3>
+                            <p class="text-xs text-slate-500">Select topics to include in your 60-minute mock exam (40 MCQs).</p>
+                        </div>
+                        <button onclick="document.getElementById('exam-config-modal').remove()" class="text-slate-400 hover:text-slate-600 text-lg cursor-pointer">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="my-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-slate-600">Included Topics:</span>
+                            <label class="inline-flex items-center space-x-1.5 cursor-pointer text-xs text-indigo-600 font-medium">
+                                <input type="checkbox" id="select-all-topics" checked onchange="toggleAllExamTopics(this)" class="rounded text-indigo-600">
+                                <span>Select All</span>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto custom-scrollbar pr-1" id="topic-checkboxes-grid">
+                            ${topicCheckboxesHTML}
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-end space-x-3">
+                        <button onclick="document.getElementById('exam-config-modal').remove()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 transition cursor-pointer">
+                            Cancel
+                        </button>
+                        <button onclick="confirmAndStartExam()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-md transition flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Start 60-Min Paper</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
     }
 
-    // GLOBAL DELEGATION FOR SUBMIT BUTTONS & EXAM TRIGGERS
-    document.addEventListener("click", (e) => {
-        const submitTarget = e.target.closest("#submit-topic-btn, .submit-exam-btn, #submit-exam-btn, [data-action='submit-paper']");
-        if (submitTarget) {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSubmitPaper();
+    function toggleAllExamTopics(selectAllCb) {
+        const checkboxes = document.querySelectorAll('.exam-topic-cb');
+        checkboxes.forEach(cb => cb.checked = selectAllCb.checked);
+    }
+
+    function syncSelectAllCheckbox() {
+        const checkboxes = document.querySelectorAll('.exam-topic-cb');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        const selectAll = document.getElementById('select-all-topics');
+        if (selectAll) selectAll.checked = allChecked;
+    }
+
+    function confirmAndStartExam() {
+        const checkboxes = document.querySelectorAll('.exam-topic-cb');
+        let selectedKeys = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+        if (selectedKeys.length === 0) {
+            alert('Please select at least one topic for your exam!');
             return;
         }
 
-        const exitTarget = e.target.closest("#exit-exam-btn, .exit-exam-btn, [data-action='exit-exam']");
-        if (exitTarget) {
-            e.preventDefault();
-            e.stopPropagation();
-            exitExamMode();
-        }
-    });
-}
-
-// Global functions for inline HTML event bindings
-window.handleSubmitPaper = handleSubmitPaper;
-window.exitExamMode = exitExamMode;
-window.selectOption = selectOption;
-window.gradeSingleQuestion = gradeSingleQuestion;
-window.resetSingleQuestion = resetSingleQuestion;
-
-/**
- * Exits Exam Mode and restores Practice Mode
- */
-function exitExamMode() {
-    if (activeExamQuestions && !isExamGraded) {
-        const confirmExit = confirm("Are you sure you want to exit the exam? Your current exam progress will be lost.");
-        if (!confirmExit) return;
-    }
-
-    if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-        try {
-            ExamEngine.stopTimer();
-        } catch (err) {
-            console.warn("Timer stop error:", err);
-        }
-    }
-
-    activeExamQuestions = null;
-    isExamGraded = false;
-
-    const timerBar = document.getElementById('exam-timer-bar');
-    if (timerBar) timerBar.classList.add('hidden');
-
-    if (currentTopicKey) {
-        selectTopic(currentTopicKey);
-    } else {
-        renderTopicSidebar();
-        renderQuestions();
-    }
-}
-
-/**
- * Handles Submission for both Exam Paper Mode and Practice Topic Mode
- */
-function handleSubmitPaper() {
-    const questions = getActiveQuestions();
-    if (!questions || questions.length === 0) {
-        alert("No active questions available to grade.");
-        return;
-    }
-
-    let unansweredCount = 0;
-    questions.forEach(q => {
-        if (!userAnswers[q.id] || userAnswers[q.id].selected === undefined) {
-            unansweredCount++;
-        }
-    });
-
-    if (unansweredCount > 0) {
-        const confirmSubmit = confirm(`You have ${unansweredCount} unanswered question(s). Are you sure you want to submit and grade this paper?`);
-        if (!confirmSubmit) return;
-    }
-
-    let results = null;
-
-    if (activeExamQuestions) {
-        isExamGraded = true;
-        
-        const timerBar = document.getElementById('exam-timer-bar');
-        if (timerBar) timerBar.classList.add('hidden');
-
-        try {
-            if (window.ExamEngine && typeof ExamEngine.submitExam === 'function') {
-                results = ExamEngine.submitExam(userAnswers, questions);
-            }
-        } catch (err) {
-            console.error("ExamEngine submission failed, falling back to local calculation:", err);
+        const examQuestions = ExamEngine.generateExam(selectedKeys, 40);
+        if (!examQuestions || examQuestions.length === 0) {
+            alert('No questions available in selected topics.');
+            return;
         }
 
-        if (!results) {
-            if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-                try { ExamEngine.stopTimer(); } catch (e) {}
-            }
-            results = calculateExamResults(questions);
+        // Close Modal
+        const modal = document.getElementById('exam-config-modal');
+        if (modal) modal.remove();
+
+        // Render questions using app.js
+        if (typeof window.renderExamToUI === 'function') {
+            window.renderExamToUI(examQuestions);
         }
 
-        showExamResultsModal(results);
-    } else {
-        results = calculateExamResults(questions);
-        showPracticeResultsModal(results);
-    }
-
-    // Mark questions as submitted
-    questions.forEach(q => {
-        if (!userAnswers[q.id]) {
-            userAnswers[q.id] = { selected: undefined };
-        }
-        userAnswers[q.id].submitted = true;
-    });
-
-    if (!activeExamQuestions) {
-        saveProgress();
-    }
-
-    renderQuestions();
-    updateGlobalStats();
-    updateTopicProgress();
-    renderTopicSidebar();
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function calculateExamResults(questions) {
-    let score = 0;
-    const total = questions.length;
-
-    questions.forEach(q => {
-        const state = userAnswers[q.id];
-        if (state && state.selected !== undefined && state.selected === q.answer) {
-            score++;
-        }
-    });
-
-    const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-    
-    return {
-        score: score,
-        total: total,
-        percentage: percentage,
-        timeSpentFormatted: "Completed"
-    };
-}
-
-function showExamResultsModal(results) {
-    const oldModal = document.getElementById('exam-result-modal');
-    if (oldModal) oldModal.remove();
-
-    const badgeColor = results.percentage >= 75 ? 'bg-emerald-500' : (results.percentage >= 50 ? 'bg-amber-500' : 'bg-rose-500');
-
-    const modalHTML = `
-        <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
-                <div class="w-16 h-16 ${badgeColor} text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
-                    <i class="fa-solid ${results.percentage >= 50 ? 'fa-award' : 'fa-triangle-exclamation'}"></i>
-                </div>
-
-                <h2 class="text-2xl font-bold text-slate-900">Exam Completed!</h2>
-                <p class="text-xs text-slate-500 mt-1">Here is your final performance breakdown.</p>
-
-                <div class="grid grid-cols-2 gap-3 my-6">
-                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                        <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Score</span>
-                        <span class="text-2xl font-black text-indigo-600">${results.score} <span class="text-sm text-slate-400 font-normal">/ ${results.total}</span></span>
-                        <span class="text-xs text-slate-500 block mt-0.5">(${results.percentage}%)</span>
-                    </div>
-                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                        <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Time Spent</span>
-                        <span class="text-lg font-bold text-slate-800 block mt-1">${results.timeSpentFormatted || 'Finished'}</span>
-                        <span class="text-[11px] text-slate-400 block">Out of 60:00</span>
-                    </div>
-                </div>
-
-                <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition cursor-pointer">
-                    Review Answers & Explanations
-                </button>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-
-function showPracticeResultsModal(results) {
-    const oldModal = document.getElementById('exam-result-modal');
-    if (oldModal) oldModal.remove();
-
-    const modalHTML = `
-        <div id="exam-result-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center relative">
-                <div class="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
-                    <i class="fa-solid fa-check-double"></i>
-                </div>
-
-                <h2 class="text-2xl font-bold text-slate-900">Topic Graded!</h2>
-                <p class="text-xs text-slate-500 mt-1">Practice topic review score.</p>
-
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 my-6">
-                    <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider">Score</span>
-                    <span class="text-3xl font-black text-indigo-600">${results.score} <span class="text-sm text-slate-400 font-normal">/ ${results.total}</span></span>
-                    <span class="text-xs text-slate-500 block mt-1">(${results.percentage}%)</span>
-                </div>
-
-                <button onclick="document.getElementById('exam-result-modal').remove()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition cursor-pointer">
-                    Review Explanations
-                </button>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-
-function renderTopicSidebar() {
-    const list = document.getElementById("topic-list");
-    const countBadge = document.getElementById("topic-count-badge");
-    const keys = Object.keys(topicData);
-    
-    if (countBadge) countBadge.textContent = `${keys.length} Topics`;
-    if (!list) return;
-    
-    list.innerHTML = "";
-
-    keys.forEach((key, index) => {
-        const topic = topicData[key];
-        const qCount = topic.questions.length;
-        
-        let answeredCount = 0;
-        topic.questions.forEach(q => {
-            if (userAnswers[q.id] !== undefined && userAnswers[q.id].selected !== undefined) answeredCount++;
-        });
-
-        const isSelected = key === currentTopicKey && !activeExamQuestions;
-        const btn = document.createElement("button");
-        btn.className = `w-full text-left p-3 rounded-xl transition flex items-center justify-between group ${
-            isSelected 
-                ? "bg-indigo-50/80 border border-indigo-200 text-indigo-900 font-medium" 
-                : "hover:bg-slate-100 text-slate-700 border border-transparent"
-        }`;
-
-        btn.onclick = () => {
-            if (activeExamQuestions && !isExamGraded) {
-                const leaveExam = confirm("You are currently taking a timed exam. Leaving now will exit your exam paper. Do you want to return to Practice Mode?");
-                if (!leaveExam) return;
-                
-                if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
-                    try { ExamEngine.stopTimer(); } catch (e) {}
+        // Start 60-Minute Countdown Timer
+        ExamEngine.startTimer(
+            (timeStr, secondsLeft) => {
+                const timerEl = document.getElementById('timer-display');
+                if (timerEl) {
+                    timerEl.textContent = timeStr;
+                    if (secondsLeft <= 300) {
+                        timerEl.classList.add('timer-warning');
+                    } else {
+                        timerEl.classList.remove('timer-warning');
+                    }
                 }
-            }
-            
-            activeExamQuestions = null;
-            isExamGraded = false;
-            
-            const timerBar = document.getElementById('exam-timer-bar');
-            if (timerBar) timerBar.classList.add('hidden');
-
-            selectTopic(key);
-            
-            const sidebar = document.getElementById("sidebar");
-            const overlay = document.getElementById("sidebar-overlay");
-            if (sidebar) sidebar.classList.add("-translate-x-full");
-            if (overlay) overlay.classList.add("hidden");
-        };
-
-        const cleanTitle = topic.title.replace(/^(Topic\s*\d+:?\s*)/i, '');
-
-        btn.innerHTML = `
-            <div class="truncate pr-2">
-                <div class="text-xs ${isSelected ? 'text-indigo-600 font-semibold' : 'text-slate-400'}">Topic ${index + 1}</div>
-                <div class="text-sm truncate font-medium">${cleanTitle}</div>
-            </div>
-            <div class="text-right flex-shrink-0">
-                <span class="text-xs px-2 py-0.5 rounded-full ${
-                    answeredCount === qCount && qCount > 0
-                        ? 'bg-emerald-100 text-emerald-800 font-medium'
-                        : 'bg-slate-100 text-slate-500'
-                }">${answeredCount}/${qCount}</span>
-            </div>
-        `;
-
-        list.appendChild(btn);
-    });
-}
-
-function selectTopic(key) {
-    const sidebar = document.getElementById("sidebar");
-    const mobileBtn = document.getElementById("mobile-menu-btn");
-
-    if (sidebar) sidebar.classList.remove("hidden");
-    if (mobileBtn) mobileBtn.classList.remove("hidden");
-
-    activeExamQuestions = null;
-    isExamGraded = false;
-    currentTopicKey = key;
-    renderTopicSidebar();
-
-    const topic = topicData[key];
-    if (!topic) return;
-
-    const topicBadge = document.getElementById("current-topic-badge");
-    const topicTitle = document.getElementById("current-topic-title");
-    const topicDesc = document.getElementById("current-topic-desc");
-    const topicTotalQ = document.getElementById("current-topic-total-q");
-
-    if (topicBadge) topicBadge.textContent = `Practice Mode - Topic ${Object.keys(topicData).indexOf(key) + 1}`;
-    if (topicTitle) topicTitle.textContent = topic.title;
-    if (topicDesc) topicDesc.textContent = topic.description;
-    if (topicTotalQ) topicTotalQ.textContent = `${topic.questions.length} Questions`;
-
-    updateTopicProgress();
-    renderQuestions();
-}
-
-function getActiveQuestions() {
-    if (activeExamQuestions) {
-        return activeExamQuestions;
-    }
-    const topic = topicData[currentTopicKey];
-    return topic ? topic.questions : [];
-}
-
-function updateTopicProgress() {
-    const questions = getActiveQuestions();
-    if (!questions) return;
-
-    const total = questions.length;
-    let answered = 0;
-
-    questions.forEach(q => {
-        if (userAnswers[q.id] !== undefined && userAnswers[q.id].selected !== undefined) answered++;
-    });
-
-    const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
-    const progressText = document.getElementById("topic-progress-text");
-    const progressBar = document.getElementById("topic-progress-bar");
-
-    if (progressText) progressText.textContent = `${percent}%`;
-    if (progressBar) progressBar.style.width = `${percent}%`;
-}
-
-function updateGlobalStats() {
-    let totalQuestions = 0;
-    let totalAnswered = 0;
-    let totalCorrect = 0;
-
-    Object.keys(topicData).forEach(key => {
-        const topic = topicData[key];
-        topic.questions.forEach(q => {
-            totalQuestions++;
-            if (userAnswers[q.id] !== undefined && userAnswers[q.id].selected !== undefined) {
-                totalAnswered++;
-                if (userAnswers[q.id].selected === q.answer) {
-                    totalCorrect++;
+            },
+            () => {
+                alert("Time's up! Submitting your exam paper.");
+                if (typeof window.handleSubmitPaper === 'function') {
+                    window.handleSubmitPaper();
                 }
-            }
-        });
-    });
+            },
+            60
+        );
 
-    const globalAnsweredEl = document.getElementById("global-total-answered");
-    const globalAccuracyEl = document.getElementById("global-accuracy");
-
-    if (globalAnsweredEl) globalAnsweredEl.textContent = `${totalAnswered} / ${totalQuestions}`;
-    const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-    if (globalAccuracyEl) globalAccuracyEl.textContent = `${accuracy}%`;
-}
-
-function renderQuestions() {
-    const container = document.getElementById("questions-list");
-    if (!container) return;
-
-    const questions = getActiveQuestions();
-    container.innerHTML = "";
-
-    if (!questions || questions.length === 0) {
-        container.innerHTML = `
-            <div class="bg-white p-12 text-center rounded-2xl border border-slate-200">
-                <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
-                <h3 class="text-slate-600 font-medium">No questions loaded for this paper.</h3>
-            </div>
-        `;
-        renderSubmitBar(false);
-        return;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+</script>
 
-    let questionIndices = questions.map((_, i) => i);
-    if (!activeExamQuestions && topicShuffledOrder[currentTopicKey]) {
-        questionIndices = topicShuffledOrder[currentTopicKey];
-    }
-
-    let renderedCount = 0;
-
-    questionIndices.forEach(qIdx => {
-        const q = questions[qIdx];
-        const state = userAnswers[q.id];
-
-        if (activeFilter === "unanswered" && state && state.selected !== undefined) return;
-        if (activeFilter === "incorrect" && (!state || !state.submitted || state.selected === q.answer)) return;
-
-        renderedCount++;
-
-        const card = document.createElement("div");
-        card.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition hover:border-slate-300 mb-6 last:mb-0";
-
-        const isSubmitted = activeExamQuestions ? isExamGraded : (state && state.submitted);
-        const selectedOpt = state ? state.selected : undefined;
-
-        let imageHTML = "";
-        if (q.image) {
-            imageHTML = `
-                <div class="my-4 flex justify-center">
-                    <img src="${q.image}" alt="Question Diagram" class="max-h-72 w-auto object-contain rounded-xl border border-slate-200 bg-slate-50 p-2 shadow-sm" />
-                </div>
-            `;
-        }
-
-        let optionsHTML = "";
-        q.options.forEach((optText, optIdx) => {
-            let optionStyles = "border-slate-200 hover:bg-slate-50 text-slate-700";
-            let badgeHTML = `<span class="w-6 h-6 rounded-lg border border-slate-300 text-slate-500 flex items-center justify-center text-xs font-semibold mr-3 group-hover:border-indigo-500 group-hover:text-indigo-600">${String.fromCharCode(65 + optIdx)}</span>`;
-
-            if (selectedOpt === optIdx) {
-                optionStyles = "border-indigo-600 bg-indigo-50/50 text-indigo-900 font-medium";
-                badgeHTML = `<span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-semibold mr-3">${String.fromCharCode(65 + optIdx)}</span>`;
-            }
-
-            if (isSubmitted) {
-                if (optIdx === q.answer) {
-                    optionStyles = "border-emerald-500 bg-emerald-50 text-emerald-900 font-medium";
-                    badgeHTML = `<span class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-semibold mr-3"><i class="fa-solid fa-check"></i></span>`;
-                } else if (selectedOpt === optIdx && selectedOpt !== q.answer) {
-                    optionStyles = "border-rose-400 bg-rose-50 text-rose-900";
-                    badgeHTML = `<span class="w-6 h-6 rounded-lg bg-rose-500 text-white flex items-center justify-center text-xs font-semibold mr-3"><i class="fa-solid fa-xmark"></i></span>`;
-                } else {
-                    optionStyles = "border-slate-100 opacity-60 text-slate-500";
-                }
-            }
-
-            optionsHTML += `
-                <button 
-                    onclick="selectOption('${q.id}', ${optIdx})"
-                    ${isSubmitted ? 'disabled' : ''}
-                    class="w-full text-left p-3.5 rounded-xl border ${optionStyles} transition flex items-center group cursor-pointer mb-2.5 last:mb-0"
-                >
-                    ${badgeHTML}
-                    <span class="text-sm flex-1">${optText}</span>
-                </button>
-            `;
-        });
-
-        let feedbackBanner = "";
-        if (isSubmitted) {
-            const isCorrect = selectedOpt === q.answer;
-            feedbackBanner = `
-                <div class="mt-4 p-4 rounded-xl text-sm ${isCorrect ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' : 'bg-rose-50 border border-rose-200 text-rose-900'}">
-                    <div class="font-semibold flex items-center space-x-1.5 mb-1">
-                        <i class="fa-solid ${isCorrect ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-rose-600'}"></i>
-                        <span>${isCorrect ? 'Correct!' : 'Incorrect'}</span>
-                    </div>
-                    <p class="text-xs leading-relaxed text-slate-700 mt-1">${q.explanation || 'No detailed explanation provided for this question.'}</p>
-                </div>
-            `;
-        }
-
-        card.innerHTML = `
-            <div class="p-5 sm:p-6">
-                <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
-                    <span class="font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">Q${qIdx + 1}</span>
-                    <span class="text-slate-400"><i class="fa-solid fa-bookmark mr-1"></i>${q.source || 'Exam Question'}</span>
-                </div>
-                <h3 class="text-slate-900 font-semibold text-base sm:text-lg mb-4 leading-snug">${q.question}</h3>
-                
-                ${imageHTML}
-
-                <div class="space-y-2">
-                    ${optionsHTML}
-                </div>
-                ${feedbackBanner}
-                
-                ${!activeExamQuestions ? `
-                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end">
-                        ${!isSubmitted ? `
-                            <button onclick="gradeSingleQuestion('${q.id}')" ${selectedOpt === undefined ? 'disabled' : ''} class="text-xs font-semibold px-3 py-1.5 rounded-lg ${selectedOpt === undefined ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-800 hover:bg-slate-900 text-white'} transition">
-                                Check Answer
-                            </button>
-                        ` : `
-                            <button onclick="resetSingleQuestion('${q.id}')" class="text-xs font-medium text-slate-500 hover:text-indigo-600 transition">
-                                <i class="fa-solid fa-rotate-right mr-1"></i> Retry Question
-                            </button>
-                        `}
-                    </div>
-                ` : ''}
-            </div>
-        `;
-
-        container.appendChild(card);
-    });
-
-    if (renderedCount === 0) {
-        container.innerHTML = `
-            <div class="bg-white p-12 text-center rounded-2xl border border-slate-200">
-                <i class="fa-solid fa-filter-circle-xmark text-4xl text-slate-300 mb-3"></i>
-                <h3 class="text-slate-600 font-medium">No questions match the selected filter.</h3>
-            </div>
-        `;
-        renderSubmitBar(false);
-    } else {
-        renderSubmitBar(true);
-    }
-}
-
-/**
- * Dynamically injects a bottom floating Submit Action Bar 
- */
-function renderSubmitBar(show = true) {
-    let submitBar = document.getElementById("floating-submit-bar");
-
-    if (!show) {
-        if (submitBar) submitBar.remove();
-        return;
-    }
-
-    if (!submitBar) {
-        submitBar = document.createElement("div");
-        submitBar.id = "floating-submit-bar";
-        submitBar.className = "fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 shadow-lg flex items-center justify-between max-w-5xl mx-auto rounded-t-2xl";
-        document.body.appendChild(submitBar);
-    }
-
-    const questions = getActiveQuestions();
-    let answered = 0;
-    questions.forEach(q => {
-        if (userAnswers[q.id] && userAnswers[q.id].selected !== undefined) answered++;
-    });
-
-    submitBar.innerHTML = `
-        <div class="text-xs text-slate-600">
-            <span class="font-bold text-slate-900">${answered}</span> of <span class="font-bold text-slate-900">${questions.length}</span> questions answered
-        </div>
-        <button id="submit-topic-btn" data-action="submit-paper" onclick="handleSubmitPaper()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center space-x-2 cursor-pointer">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>${activeExamQuestions ? "Submit Exam" : "Submit Answers & Grade"}</span>
-        </button>
-    `;
-}
-
-function selectOption(qId, optIdx) {
-    if (!userAnswers[qId]) {
-        userAnswers[qId] = {};
-    }
-    userAnswers[qId].selected = optIdx;
-
-    const scrollPos = window.scrollY;
-    if (!activeExamQuestions) {
-        saveProgress();
-    }
-    renderQuestions();
-    updateTopicProgress();
-    updateGlobalStats();
-    renderTopicSidebar();
-    window.scrollTo({ top: scrollPos });
-}
-
-function gradeSingleQuestion(qId) {
-    if (userAnswers[qId] && userAnswers[qId].selected !== undefined) {
-        userAnswers[qId].submitted = true;
-        const scrollPos = window.scrollY;
-        saveProgress();
-        renderQuestions();
-        updateGlobalStats();
-        window.scrollTo({ top: scrollPos });
-    }
-}
-
-function resetSingleQuestion(qId) {
-    delete userAnswers[qId];
-    const scrollPos = window.scrollY;
-    saveProgress();
-    renderQuestions();
-    updateTopicProgress();
-    updateGlobalStats();
-    renderTopicSidebar();
-    window.scrollTo({ top: scrollPos });
-}
-
-function saveProgress() {
-    localStorage.setItem("mcq_user_answers", JSON.stringify(userAnswers));
-}
-
-/**
- * Global Bridge: Called by ExamEngine when clicking "Start Exam Paper"
- */
-window.renderExamToUI = function(examQuestions) {
-    if (!examQuestions || examQuestions.length === 0) return;
-
-    activeExamQuestions = examQuestions;
-    isExamGraded = false;
-
-    // Reset temporary exam responses
-    examQuestions.forEach(q => {
-        userAnswers[q.id] = { selected: undefined, submitted: false };
-    });
-
-    // Hide Sidebar
-    const sidebar = document.getElementById("sidebar");
-    const mobileBtn = document.getElementById("mobile-menu-btn");
-    if (sidebar) sidebar.classList.add("hidden");
-    if (mobileBtn) mobileBtn.classList.add("hidden");
-
-    // Show Timer Bar
-    const timerBar = document.getElementById('exam-timer-bar');
-    if (timerBar) timerBar.classList.remove('hidden');
-
-    // Update Header Details
-    const topicBadge = document.getElementById("current-topic-badge");
-    const topicTitle = document.getElementById("current-topic-title");
-    const topicDesc = document.getElementById("current-topic-desc");
-    const topicTotalQ = document.getElementById("current-topic-total-q");
-
-    if (topicBadge) topicBadge.textContent = `EXAM MODE`;
-    if (topicTitle) topicTitle.textContent = `40 MCQ Timed Mock Exam`;
-    if (topicDesc) topicDesc.textContent = `Timed paper active. Select your answers and click "Submit Exam" when finished.`;
-    if (topicTotalQ) topicTotalQ.textContent = `${activeExamQuestions.length} Questions`;
-
-    updateTopicProgress();
-    renderQuestions();
-};
+</body>
+</html>
