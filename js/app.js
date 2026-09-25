@@ -474,6 +474,7 @@ function renderQuestions() {
                 <h3 class="text-slate-600 font-medium">No questions loaded for this paper.</h3>
             </div>
         `;
+        renderSubmitBar(false);
         return;
     }
 
@@ -597,7 +598,46 @@ function renderQuestions() {
                 <h3 class="text-slate-600 font-medium">No questions match the selected filter.</h3>
             </div>
         `;
+        renderSubmitBar(false);
+    } else {
+        renderSubmitBar(true);
     }
+}
+
+/**
+ * FIXED: Dynamically injects a bottom floating Submit Action Bar 
+ * to ensure submission is permanently accessible.
+ */
+function renderSubmitBar(show = true) {
+    let submitBar = document.getElementById("floating-submit-bar");
+
+    if (!show) {
+        if (submitBar) submitBar.remove();
+        return;
+    }
+
+    if (!submitBar) {
+        submitBar = document.createElement("div");
+        submitBar.id = "floating-submit-bar";
+        submitBar.className = "fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 shadow-lg flex items-center justify-between max-w-5xl mx-auto rounded-t-2xl";
+        document.body.appendChild(submitBar);
+    }
+
+    const questions = getActiveQuestions();
+    let answered = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id] && userAnswers[q.id].selected !== undefined) answered++;
+    });
+
+    submitBar.innerHTML = `
+        <div class="text-xs text-slate-600">
+            <span class="font-bold text-slate-900">${answered}</span> of <span class="font-bold text-slate-900">${questions.length}</span> questions answered
+        </div>
+        <button id="submit-topic-btn" data-action="submit-paper" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Answers & Grade</span>
+        </button>
+    `;
 }
 
 function selectOption(qId, optIdx) {
