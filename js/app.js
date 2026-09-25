@@ -287,17 +287,17 @@ function renderTopicSidebar() {
 }
 
 function selectTopic(key) {
-    // Restore Sidebar & Layout when returning to Practice Mode
     const sidebar = document.getElementById("sidebar");
     const mobileBtn = document.getElementById("mobile-menu-btn");
     const mainContainer = document.querySelector("main");
 
     if (sidebar) sidebar.classList.remove("hidden");
     if (mobileBtn) mobileBtn.classList.remove("hidden");
+    
     if (mainContainer) {
-        mainContainer.classList.add("md:ml-64");
-        // Ensure main expands to fill all space next to sidebar
-        mainContainer.classList.add("w-full"); 
+        // Clear conflicting static margin offsets
+        mainContainer.classList.remove("md:ml-64");
+        mainContainer.classList.add("w-full");
     }
 
     activeExamQuestions = null;
