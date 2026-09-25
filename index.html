@@ -112,6 +112,7 @@
 </div>
 
 <!-- Main Workspace Wrapper -->
+<!-- Main Workspace Wrapper -->
 <div class="flex-1 flex overflow-hidden w-full">
     <!-- Sidebar Navigation for Topics -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform -translate-x-full md:translate-x-0 md:static transition-transform duration-200 ease-in-out flex flex-col flex-shrink-0">
@@ -132,12 +133,12 @@
     <!-- Overlay for Mobile Sidebar -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
 
-    <!-- Main Quiz View Container -->
-    <main class="flex-1 min-w-0 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8">
-        <div class="max-w-5xl mx-auto space-y-6">
+    <!-- Main Quiz View Container (Removes mx-auto centering & max-width bounds) -->
+    <main class="flex-1 min-w-0 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 w-full">
+        <div class="w-full space-y-6">
             
             <!-- Active Topic Summary Header -->
-            <div id="topic-header" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div id="topic-header" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
                 <div>
                     <div class="flex items-center space-x-2">
                         <span id="current-topic-badge" class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-md">Topic 1</span>
@@ -162,7 +163,7 @@
             </div>
 
             <!-- Controls & Filters Toolbar -->
-            <div class="flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-sm text-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-sm text-sm w-full">
                 <div class="flex items-center space-x-2">
                     <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter mr-1"></i> View:</span>
                     <button id="filter-all-btn" class="filter-btn active text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 transition">All</button>
@@ -182,7 +183,7 @@
             </div>
 
             <!-- Questions Container -->
-            <div id="questions-list" class="space-y-6">
+            <div id="questions-list" class="space-y-6 w-full">
                 <!-- Question cards generated dynamically via JS -->
             </div>
 
