@@ -100,6 +100,38 @@ function setupEventListeners() {
 }
 
 /**
+ * Exits Exam Mode and restores Practice Mode
+ */
+function exitExamMode() {
+    if (activeExamQuestions && !isExamGraded) {
+        const confirmExit = confirm("Are you sure you want to exit the exam? Your current exam progress will be lost.");
+        if (!confirmExit) return;
+    }
+
+    if (window.ExamEngine && typeof ExamEngine.stopTimer === 'function') {
+        ExamEngine.stopTimer();
+    }
+
+    activeExamQuestions = null;
+    isExamGraded = false;
+
+    // Hide Timer Bar
+    const timerBar = document.getElementById('exam-timer-bar');
+    if (timerBar) timerBar.classList.add('hidden');
+
+    // Restore selected practice topic UI
+    if (currentTopicKey) {
+        selectTopic(currentTopicKey);
+    } else {
+        renderTopicSidebar();
+        renderQuestions();
+    }
+}
+
+// Global hook for direct DOM onclick handlers
+window.exitExamMode = exitExamMode;
+
+/**
  * Handles Submission for both Exam Paper Mode and Practice Topic Mode
  */
 function handleSubmitPaper() {
@@ -298,8 +330,8 @@ function selectTopic(key) {
     if (mobileBtn) mobileBtn.classList.remove("hidden");
     
     if (mainContainer) {
-        mainContainer.classList.remove("md:ml-64");
-        mainContainer.classList.add("w-full");
+        mainContainer.classList.remove("w-full");
+        mainContainer.classList.add("md:ml-64");
     }
 
     activeExamQuestions = null;
@@ -585,9 +617,30 @@ window.renderExamToUI = function(examQuestions) {
     const mainContainer = document.querySelector("main");
     if (mainContainer) mainContainer.classList.remove("md:ml-64");
 
-    // 3. Show Sticky Timer Bar
+    // 3. Show & Populate Sticky Timer / Action Bar with Exit Exam Button
     const timerBar = document.getElementById('exam-timer-bar');
-    if (timerBar) timerBar.classList.remove('hidden');
+    if (timerBar) {
+        timerBar.classList.remove('hidden');
+        timerBar.innerHTML = `
+            <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md">
+                        <i class="fa-solid fa-stopwatch mr-1"></i> Exam Mode
+                    </span>
+                    <span id="exam-timer-display" class="text-lg font-mono font-bold text-slate-800">60:00</span>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <button onclick="exitExamMode()" class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Exit Exam
+                    </button>
+                    <button onclick="handleSubmitPaper()" class="text-xs font-semibold px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
+                        Submit Exam
+                    </button>
+                </div>
+            </div>
+        `;
+    }
 
     // 4. Update Header Details
     const topicBadge = document.getElementById("current-topic-badge");
@@ -597,7 +650,7 @@ window.renderExamToUI = function(examQuestions) {
 
     if (topicBadge) topicBadge.textContent = `EXAM MODE`;
     if (topicTitle) topicTitle.textContent = `40 MCQ Timed Mock Exam`;
-    if (topicDesc) topicDesc.textContent = `Timed paper active. Select your answers and click "Submit Exam" at the top when finished.`;
+    if (topicDesc) topicDesc.textContent = `Timed paper active. Select your answers and click "Submit Exam" when finished.`;
     if (topicTotalQ) topicTotalQ.textContent = `${activeExamQuestions.length} Questions`;
 
     updateTopicProgress();
