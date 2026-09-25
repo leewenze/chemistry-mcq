@@ -111,10 +111,10 @@
     </div>
 </div>
 
-<!-- Main Content Area -->
-<div class="flex-1 flex overflow-hidden max-w-7xl w-full mx-auto">
+<!-- Main Workspace Wrapper -->
+<div class="flex-1 flex overflow-hidden w-full">
     <!-- Sidebar Navigation for Topics -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform -translate-x-full md:translate-x-0 md:static transition-transform duration-200 ease-in-out flex flex-col">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform -translate-x-full md:translate-x-0 md:static transition-transform duration-200 ease-in-out flex flex-col flex-shrink-0">
         <div class="p-4 border-b border-slate-100 flex items-center justify-between">
             <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Topics & Chapters</span>
             <span id="topic-count-badge" class="bg-indigo-50 text-indigo-700 text-xs px-2 py-0.5 rounded-full font-medium">0 Topics</span>
@@ -133,22 +133,11 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
 
     <!-- Main Quiz View Container -->
-    <!-- Inside index.html -->
-        <main class="flex-1 min-w-0 md:ml-64 transition-all duration-300 p-4 sm:p-6 lg:p-8">
+    <main class="flex-1 min-w-0 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8">
         <div class="max-w-5xl mx-auto space-y-6">
-    <!-- Header Section -->
-    <div id="topic-header" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        ...
-    </div>
-
-    <!-- Questions Container -->
-    <div id="questions-list" class="w-full">
-        <!-- Questions render dynamically here -->
-    </div>
-</div>
-
+            
             <!-- Active Topic Summary Header -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div id="topic-header" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <div class="flex items-center space-x-2">
                         <span id="current-topic-badge" class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-md">Topic 1</span>
@@ -194,7 +183,7 @@
 
             <!-- Questions Container -->
             <div id="questions-list" class="space-y-6">
-                <!-- Question cards generated dynamically -->
+                <!-- Question cards generated dynamically via JS -->
             </div>
 
         </div>
