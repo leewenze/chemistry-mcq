@@ -59,7 +59,7 @@ window.topicData['chemical_bonding'] = {
         'ions present: Z<sup>+</sup> Y<sup>2-</sup> | formula: Z<sub>2</sub>Y',
         'ions present: Z<sup>2+</sup> Y<sup>-</sup> | formula: ZY<sub>2</sub>'
       ],
-      answer: 0,
+      answer: 1,
       explanation: 'To maintain electrical neutrality, if each Y<sup>n+</sup> ion coordinates with 8 Z<sup>m-</sup> ions while each Z<sup>m-</sup> coordinates with 4 Y<sup>n+</sup>, there must be twice as many Y ions as Z ions. Thus, Y has a 1+ charge (Y<sup>+</sup>), Z has a 2- charge (Z<sup>2-</sup>), yielding the empirical formula Y<sub>2</sub>Z.'
     },
     {
