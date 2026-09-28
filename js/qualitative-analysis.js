@@ -37,7 +37,7 @@ window.topicData['qualitative_analysis'] = {
     {
       id: 'qa_q3',
       source: '[2015 Paper 1, Q24]',
-      question: 'The following observations were made by separately reacting three solutions containing metal ions with an excess of aqueous sodium hydroxide and an excess of aqueous ammonia:<br><br>• Solution 1: White precipitate insoluble in excess NaOH(aq); No precipitate in NH<sub>3</sub>(aq).<br>• Solution 2: White precipitate soluble in excess NaOH(aq) giving a colourless solution; White precipitate insoluble in excess NH<sub>3</sub>(aq).<br>• Solution 3: White precipitate soluble in excess NaOH(aq); White precipitate soluble in excess NH<sub>3</sub>(aq).<br><br>Which metal ions are present in each solution?',
+      question: 'The following observations were made by separately reacting three solutions containing metal ions with an excess of aqueous sodium hydroxide and an excess of aqueous ammonia:<br><br>Which metal ions are present in each solution?',
       image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/qualitative-analysis-03.png',
       options: [
         '1: Al³⁺ | 2: Ca²⁺ | 3: Zn²⁺',
@@ -46,7 +46,7 @@ window.topicData['qualitative_analysis'] = {
         '1: Zn²⁺ | 2: Al³⁺ | 3: Ca²⁺'
       ],
       answer: 1,
-      explanation: '• Solution 1: Forms no precipitate with aqueous ammonia, which is characteristic of Calcium (Ca<sup>2+</sup>).<br>• Solution 2: White ppt soluble in excess NaOH but insoluble in excess NH<sub>3</sub> is Aluminium (Al<sup>3+</sup>).<br>• Solution 3: White ppt soluble in excess of BOTH NaOH and NH<sub>3</sub> is Zinc (Zn<sup>2+</sup>).'
+      explanation: '• Solution 1: White ppt soluble in excess NaOH but insoluble in excess NH<sub>3</sub> is Aluminium (Al<sup>3+</sup>).<br>• Solution 2: White ppt soluble in excess of BOTH NaOH and NH<sub>3</sub> is Zinc (Zn<sup>2+</sup>).<br>• Solution 3: Forms no precipitate with aqueous ammonia, which is characteristic of Calcium (Ca<sup>2+</sup>).'
     },
     {
       id: 'qa_q4',
