@@ -57,7 +57,7 @@ window.topicData['acids_bases'] = {
         'H',
         'H⁺',
         'H₂⁺',
-        'C₃H₇CO₂⁻'
+        'C₂H₅CO₂⁻'
       ],
       answer: 1,
       explanation: 'Propanoic acid (C<sub>2</sub>H<sub>5</sub>COOH) is a weak acid that partially ionises in aqueous solution to produce hydrogen ions (H<sup>+</sup>) and propanoate ions (C<sub>2</sub>H<sub>5</sub>COO<sup>−</sup>).'
@@ -185,8 +185,8 @@ window.topicData['acids_bases'] = {
         '3',
         '4'
       ],
-      answer: 3,
-      explanation: 'The reagents can prepare 4 salts via neutralization & precipitation reactions:<br>1. Lead(II) nitrate: PbCO<sub>3</sub> + 2HNO<sub>3</sub> → Pb(NO<sub>3</sub>)<sub>2</sub> + CO<sub>2</sub> + H<sub>2</sub>O<br>2. Copper(II) nitrate: CuCO<sub>3</sub> + 2HNO<sub>3</sub> → Cu(NO<sub>3</sub>)<sub>2</sub> + CO<sub>2</sub> + H<sub>2</sub>O<br>3. Sodium nitrate: NaOH + HNO<sub>3</sub> → NaNO<sub>3</sub> + H<sub>2</sub>O<br>4. Lead(II) hydroxide (or sodium plumbate precipitate via precipitation/double decomposition).'
+      answer: 2,
+      explanation: 'The reagents can prepare 3 nitrate salts via neutralization reactions with nitric acid:<br>1. Lead(II) nitrate: PbCO<sub>3</sub> + 2HNO<sub>3</sub> → Pb(NO<sub>3</sub>)<sub>2</sub> + CO<sub>2</sub> + H<sub>2</sub>O<br>2. Copper(II) nitrate: CuCO<sub>3</sub> + 2HNO<sub>3</sub> → Cu(NO<sub>3</sub>)<sub>2</sub> + CO<sub>2</sub> + H<sub>2</sub>O<br>3. Sodium nitrate: NaOH + HNO<sub>3</sub> → NaNO<sub>3</sub> + H<sub>2</sub>O'
     },
     {
       id: 'ab_q14',
