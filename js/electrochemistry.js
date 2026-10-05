@@ -34,7 +34,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q3",
       source: "2015 P1 Q14",
       question: "Four different solutions were electrolysed in separate experiments.<br>In one of the experiments, element X₂ was formed at the positive electrode.<br>For which combination of solution and electrodes can the reaction for the formation of X₂ be represented by the equation shown below?<br>2X⁻ → X₂ + 2e⁻",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-03.png',
       options: [
         "aqueous copper(II) sulfate with copper electrodes",
         "aqueous copper(II) sulfate with inert electrodes",
@@ -48,7 +48,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q4",
       source: "2015 P1 Q17 / 2018 P1 Q13",
       question: "In the diagram, each cell contains an aqueous solution of a single salt. All four electrodes are platinum.<br>Electrodes Q and S increase in mass during the electrolysis but no gas is given off at Q or S. The increase in mass of Q is greater than the increase in mass of S.<br>Which statement must be correct?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-04.png',
       options: [
         "The cation in cell 1 is the same as in cell 2 but the solution in cell 1 is more concentrated than in cell 2.",
         "The cation of the solution in cell 1 is different from the cation of the solution in cell 2.",
@@ -62,7 +62,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q5",
       source: "2016 P1 Q10",
       question: "Processes 1, 2 and 3 each involve the movement of charged particles.<br>Which processes involve the movement of ions?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-05.png',
       options: [
         "process 1 only",
         "process 2 only",
@@ -115,7 +115,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q9",
       source: "2017 P1 Q13",
       question: "Dilute aqueous sodium chloride and concentrated aqueous sodium chloride are electrolysed using inert electrodes in separate experiments.<br>Which row shows the products of these experiments?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-09.png',
       options: [
         "dilute aqueous sodium chloride positive electrode: chlorine | dilute aqueous sodium chloride negative electrode: hydrogen | concentrated aqueous sodium chloride positive electrode: chlorine | concentrated aqueous sodium chloride negative electrode: sodium",
         "dilute aqueous sodium chloride positive electrode: chlorine | dilute aqueous sodium chloride negative electrode: oxygen | concentrated aqueous sodium chloride positive electrode: oxygen | concentrated aqueous sodium chloride negative electrode: hydrogen",
@@ -168,7 +168,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q13",
       source: "2019 P1 Q14",
       question: "Aqueous copper(II) sulfate is electrolysed using a positive carbon electrode and a negative copper electrode.<br>Which row is correct?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-13.png',
       options: [
         "at the positive electrode: electrode dissolves | at the negative electrode: copper deposited",
         "at the positive electrode: hydrogen gas given off | at the negative electrode: oxygen gas given off",
@@ -195,7 +195,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q15",
       source: "2020 P1 Q12",
       question: "Three different compounds are electrolysed.<br>Which experiments produce a gas at the negative electrode?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-15.png',
       options: [
         "1 only",
         "2 only",
@@ -209,7 +209,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q16",
       source: "2020 P1 Q13",
       question: "The diagram shows a cell.<br>Which statement about the cell is correct?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-16.png',
       options: [
         "Electrons pass from the magnesium electrode to the silver electrode through the electrolyte.",
         "The cell shows that silver is more reactive than magnesium.",
@@ -236,7 +236,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q18",
       source: "2022 P1 Q13",
       question: "The metals L and M form soluble sulfates with the formulae L₂SO₄ and MSO₄.<br>L is a Group I metal. M is a less reactive transition metal.<br>A dilute aqueous solution, 0.1 mol/dm³, of each sulfate is prepared.<br>Equal volumes of each aqueous sulfate are put in a beaker.<br>The aqueous mixture is electrolysed using inert electrodes, X and Y.<br>What is formed at electrode X and what is formed at electrode Y?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-18.png',
       options: [
         "electrode X: L(s) | electrode Y: O₂(g)",
         "electrode X: M(s) | electrode Y: O₂(g)",
@@ -250,7 +250,7 @@ window.topicData["electrochemistry"] = {
       id: "electrochemistry_q19",
       source: "2022 P1 Q14",
       question: "A metal object is electroplated with silver.<br>Which row correctly describes the electrolysis cell used?",
-      image: '',
+      image: 'https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/electrochemistry-19.png',
       options: [
         "electrolyte in aqueous solution: silver iodide | positive electrode: object to be plated | negative electrode: silver",
         "electrolyte in aqueous solution: silver iodide | positive electrode: silver | negative electrode: object to be plated",
