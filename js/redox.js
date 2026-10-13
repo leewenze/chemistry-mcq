@@ -2,7 +2,7 @@ window.topicData = window.topicData || {};
 
 window.topicData["redox"] = {
   title: "Redox Reactions",
-  description: "O-Level Chemistry Multiple Choice Questions on Oxidation, Reduction, Redox Reactions, and Oxidising/Reducing Agents.",
+  description: "Questions on Oxidation, Reduction, Redox Reactions, and Oxidising/Reducing Agents.",
   questions: [
     {
       id: "redox_q1",
