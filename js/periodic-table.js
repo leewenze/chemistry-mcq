@@ -20,7 +20,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q2",
       source: "2014 P1 Q22",
-      image: "images/periodictable_q2.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-02.png",
       question: "The diagram shows the arrangement of electrons in the atoms of four different elements.<br>Which element is the most reactive with water?",
       options: [
         "Atom with electronic structure 2,1",
@@ -86,7 +86,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q7",
       source: "2016 P1 Q20",
-      image: "images/periodictable_q7.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-07.png",
       question: "The positions of the elements W, X, Y and Z are shown in the outline of part of the Periodic Table.<br>Which statement is not correct?",
       options: [
         "All the elements are reactive with the exception of element Z.",
@@ -100,7 +100,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q8",
       source: "2016 P1 Q22",
-      image: "images/periodictable_q8.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-08.png",
       question: "The statements refer to a number of elements in the Periodic Table.<br>1. The elements form coloured compounds.<br>2. The elements have variable oxidation states.<br>For which pair of elements is each statement correct?",
       options: [
         "form coloured compounds: Cr, Tl | have variable oxidation states: Mn, Al",
@@ -153,7 +153,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q12",
       source: "2017 P1 Q25",
-      image: "images/periodictable_q12.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-12.png",
       question: "The diagram shows part of the Periodic Table.<br>Which row is correct?",
       options: [
         "can donate or share an electron: W | reacts with water: X",
@@ -193,7 +193,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q15",
       source: "2018 P1 Q26",
-      image: "images/periodictable_q15.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-15.png",
       question: "Part of the Periodic Table is shown.<br>Which of the elements W, X, Y and Z would react together least violently?",
       options: [
         "W and X",
@@ -246,7 +246,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q19",
       source: "2019 P1 Q25",
-      image: "images/periodictable_q19.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-19.png",
       question: "Lithium reacts with water to form solution P and gas Q. When solution P reacts with dilute sulfuric acid, salt R is formed.<br>What are the formulae of P, Q and R?",
       options: [
         "P: LiOH | Q: H₂ | R: Li₂SO₄",
@@ -273,7 +273,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q21",
       source: "2019 P1 Q27",
-      image: "images/periodictable_q21.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-21.png",
       question: "Five statements about different elements are given.<br>1. proton number = 24<br>2. cuts easily with a knife<br>3. constituent of brass<br>4. burns in oxygen with a bright white light<br>5. catalyst in the Haber process<br>Which statement is correct for each element?",
       options: [
         "Na: 2 | Zn: 3 | Fe: 4 | Cr: 5 | Mg: 1",
@@ -287,7 +287,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q22",
       source: "2020 P1 Q23",
-      image: "images/periodictable_q22.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-22.png",
       question: "The diagram shows part of the Periodic Table.<br>Which two elements would react together most vigorously?",
       options: [
         "P and R",
@@ -328,7 +328,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q25",
       source: "2021 P1 Q20",
-      image: "images/periodictable_q25.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-25.png",
       question: "A small piece of lithium is added to aqueous ammonium chloride.<br>Two gases are produced and tested.<br>Which row identifies the expected observations for the gases produced?",
       options: [
         "red litmus: turns blue | blue litmus: no change | burning splint: burns with a 'pop' | glowing splint: no change",
@@ -342,7 +342,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q26",
       source: "2021 P1 Q21",
-      image: "images/periodictable_q26.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-26.png",
       question: "The table shows data for atoms or ions of the elements P, Q, R and S.<br>Which statement is correct?",
       options: [
         "P and Q are non-metallic.",
@@ -382,7 +382,7 @@ window.topicData["periodictable"] = {
     {
       id: "periodictable_q29",
       source: "2021 P1 Q24",
-      image: "images/periodictable_q29.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/periodictable-29.png",
       question: "An ionic chloride of element Z has the formula ZCl.<br>When ZCl is added to water and swirled, a coloured solution appears. The formula of the coloured solution is ZCl₂.<br>Which letter identifies element Z?",
       options: [
         "A",
