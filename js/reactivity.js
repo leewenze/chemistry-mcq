@@ -73,7 +73,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q6",
       source: "2015 P1 Q31",
-      image: "images/reactivity_q6.png",
+      image: "",
       question: "Metal M is below copper in the reactivity series.<br>Which row correctly shows how metal M can be obtained from its oxide?",
       options: [
         "heating with carbon: ✓ | heating with hydrogen: ✓",
@@ -148,8 +148,8 @@ window.topicData["reactivity"] = {
         "3 and 4",
         "4 only"
       ],
-      answer: 1,
-      explanation: "Iron rusting requires both oxygen and water. In tube 2, both oxygen and water are present without any protective coating or sacrificial metal, so rusting occurs."
+      answer: 3,
+      explanation: "Iron rusting requires both oxygen and water. In tube 4, both oxygen and water are present without any protective coating or sacrificial metal, so rusting occurs."
     },
     {
       id: "reactivity_q12",
@@ -175,8 +175,8 @@ window.topicData["reactivity"] = {
         "Pb → Fe → X → Mg",
         "Pb → X → Fe → Mg"
       ],
-      answer: 1,
-      explanation: "Magnesium displaces all other metal ions (most reactive). X displaces Iron and Lead, but not Magnesium. Iron displaces Lead, but not X or Magnesium. Lead displaces none (least reactive). Order: Mg → X → Fe → Pb."
+      answer: 0,
+      explanation: "Magnesium displaces all other metal ions (most reactive). X displaces Lead, but not Iron and Magnesium. Iron displaces Lead and X, but not Magnesium. Lead displaces none (least reactive). Order: Mg → X → Fe → Pb."
     },
     {
       id: "reactivity_q14",
@@ -236,4 +236,95 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q18",
       source: "2020 P1 Q26",
-      question: "X is a metal
+      question: "X is a metal. It occurs naturally as an element and sometimes in ores containing its oxide. X can be used to make a chloride of formula XCl but no other chloride of X exists.<br>A student made some statements about metal X.<br>1. It can be displaced from solutions containing its ions according to the equation below.<br>3X⁺(aq) + Fe(s) → Fe³⁺(aq) + 3X(s)<br>2. It can be extracted from its ore by electrolysis.<br>3. It can be extracted from its ore by reduction with carbon.<br>4. It is likely to be found as an ore containing the compound X₂O₃.<br>Which statements are correct?",
+      options: [
+        "1, 2 and 3",
+        "1 and 3 only",
+        "2 and 3 only",
+        "3 and 4"
+      ],
+      answer: 1,
+      explanation: "Since X occurs natively, it is very unreactive (like Silver, Ag). Statement 1 is correct (Iron is more reactive than X and displaces X⁺). Statement 3 is correct (unreactive metal oxides are easily reduced with carbon). Statement 2 is incorrect (electrolysis is for reactive metals). Statement 4 is incorrect (valency is +1, so its oxide is X₂O)."
+    },
+    {
+      id: "reactivity_q19",
+      source: "2021 P1 Q26",
+      image: "images/reactivity_q19.png",
+      question: "Copper(II) oxide is reduced to copper as shown. The burner is then turned off but the hydrogen is kept flowing until the tube is cold.<br>What is the main reason why the hydrogen is kept flowing?",
+      options: [
+        "to lessen the risk of explosion in the hot tube",
+        "to make certain that the reaction is complete",
+        "to prevent the copper from reacting with the air",
+        "to remove any traces of water left in the tube"
+      ],
+      answer: 2,
+      explanation: "Hot copper metal readily reacts with oxygen in atmospheric air to re-form copper(II) oxide. Hydrogen gas is kept flowing until the apparatus cools down to prevent re-oxidation."
+    },
+    {
+      id: "reactivity_q20",
+      source: "2021 P1 Q27",
+      question: "Which metal forms the most thermally stable carbonate?",
+      options: [
+        "calcium",
+        "copper",
+        "sodium",
+        "zinc"
+      ],
+      answer: 2,
+      explanation: "Group I metals (like Sodium) are at the top of the reactivity series and form extremely thermally stable carbonates that do not decompose upon heating in a Bunsen burner flame."
+    },
+    {
+      id: "reactivity_q21",
+      source: "2021 P1 Q28",
+      question: "Iron can be protected from rusting by galvanising and by sacrificial protection.<br>Which reactions take place in either one or both of these methods of protection?<br>1. Zn(s) → Zn²⁺(aq) + 2e⁻<br>2. Mg(s) → Mg²⁺(aq) + 2e⁻<br>3. Cu(s) → Cu²⁺(aq) + 2e⁻",
+      options: [
+        "1 and 2 only",
+        "1 and 3 only",
+        "2 and 3 only",
+        "1, 2 and 3"
+      ],
+      answer: 0,
+      explanation: "Galvanising involves coating iron with Zinc (reaction 1). Sacrificial protection uses metals more reactive than iron, such as Zinc or Magnesium (reaction 2). Copper (3) is less reactive than iron and would accelerate rusting rather than protect it."
+    },
+    {
+      id: "reactivity_q22",
+      source: "2022 P1 Q27",
+      question: "Which redox reaction is least likely to occur?",
+      options: [
+        "Ag₂O + Mg → MgO + 2Ag",
+        "Fe₂O₃ + 3Zn → 3ZnO + 2Fe",
+        "MgO + Ca → CaO + Mg",
+        "PbO + Cu → CuO + Pb"
+      ],
+      answer: 3,
+      explanation: "In option D, Copper is less reactive than Lead. A less reactive metal cannot reduce the oxide of a more reactive metal, so this reaction is least likely to occur."
+    },
+    {
+      id: "reactivity_q23",
+      source: "2022 P1 Q28",
+      image: "images/reactivity_q23.png",
+      question: "An equal number of moles of metal carbonates XCO₃ and ZCO₃ are heated strongly.<br>They both decompose and release a gas.<br>The time taken for the compound to decompose completely is measured.<br>Which row describes this decomposition?",
+      options: [
+        "reactivity of metals X and Z: X is more reactive than Z | positive test for the gas produced: relights a glowing splint",
+        "reactivity of metals X and Z: X is more reactive than Z | positive test for the gas produced: white precipitate with limewater",
+        "reactivity of metals X and Z: Z is more reactive than X | positive test for the gas produced: relights a glowing splint",
+        "reactivity of metals X and Z: Z is more reactive than X | positive test for the gas produced: white precipitate with limewater"
+      ],
+      answer: 3,
+      explanation: "More reactive metals form more thermally stable carbonates that take longer to decompose. If ZCO₃ takes longer to decompose than XCO₃, metal Z is more reactive than metal X. Carbonate decomposition produces CO₂ gas, which forms a white precipitate with limewater."
+    },
+    {
+      id: "reactivity_q24",
+      source: "2022 P1 Q29",
+      question: "What should be considered when deciding whether to extract a metal from its ore or recycle the metal?<br>1. the amount of raw materials used in each process<br>2. the cost of each process<br>3. the amount of carbon dioxide produced in each process",
+      options: [
+        "1, 2 and 3",
+        "1 and 2 only",
+        "1 and 3 only",
+        "2 and 3 only"
+      ],
+      answer: 0,
+      explanation: "All three factors are essential considerations: raw material conservation, economic cost, and environmental impact (greenhouse gas emissions like CO₂)."
+    }
+  ]
+};
