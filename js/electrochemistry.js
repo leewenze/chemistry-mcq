@@ -1,7 +1,7 @@
 window.topicData = window.topicData || {};
 
 window.topicData["electrochemistry"] = {
-  title: "Topic: Electrochemistry",
+  title: "Electrochemistry",
   description: "O-Level Chemistry Multiple Choice Questions on Electrolysis, Preferred Discharge of Ions, Electroplating, and Simple Cells.",
   questions: [
     {
