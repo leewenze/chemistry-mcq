@@ -2,7 +2,7 @@ window.topicData = window.topicData || {};
 
 window.topicData["reactivity"] = {
   title: "Reactivity Series & Metals",
-  description: "O-Level Chemistry Multiple Choice Questions on Metal Reactivity, Displacement Reactions, Metal Extraction, Sacrificial Protection, and Corrosion.",
+  description: "Questions on Metal Reactivity, Displacement Reactions, Metal Extraction, Sacrificial Protection, and Corrosion.",
   questions: [
     {
       id: "reactivity_q1",
