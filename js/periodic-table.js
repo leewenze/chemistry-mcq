@@ -2,7 +2,7 @@ window.topicData = window.topicData || {};
 
 window.topicData["periodictable"] = {
   title: "Topic: The Periodic Table",
-  description: "O-Level Chemistry Multiple Choice Questions on Periodic Trends, Group I Alkali Metals, Group VII Halogens, Transition Metals, and Noble Gases.",
+  description: "O-Level Chemistry Multiple Choice Questions on Periodic Trends, Group 1 Alkali Metals, Group 17 Halogens, Transition Metals, and Noble Gases.",
   questions: [
     {
       id: "periodictable_q1",
@@ -23,13 +23,13 @@ window.topicData["periodictable"] = {
       image: "images/periodictable_q2.png",
       question: "The diagram shows the arrangement of electrons in the atoms of four different elements.<br>Which element is the most reactive with water?",
       options: [
-        "Atom with electronic structure 2,1 (Lithium)",
-        "Atom with electronic structure 2,8,1 (Sodium)",
-        "Atom with electronic structure 2,8,8,1 (Potassium)",
-        "Atom with electronic structure 2,2 (Beryllium)"
+        "Atom with electronic structure 2,1",
+        "Atom with electronic structure 2,8,8",
+        "Atom with electronic structure 2,8,2",
+        "Atom with electronic structure 2,8,8,1"
       ],
-      answer: 2,
-      explanation: "Reactivity of Group I alkali metals increases down the group as the valence electron gets further from the nucleus and is lost more easily. Potassium (2,8,8,1) is further down Group I than Sodium (2,8,1) and Lithium (2,1)."
+      answer: 3,
+      explanation: "Reactivity of Group 1 alkali metals increases down the group as the valence electron gets further from the nucleus and is lost more easily. Potassium (2,8,8,1) is further down Group 1 than Lithium (2,1)."
     },
     {
       id: "periodictable_q3",
@@ -68,7 +68,7 @@ window.topicData["periodictable"] = {
         "Solid astatine is white."
       ],
       answer: 3,
-      explanation: "Halogens become darker in color down Group VII (Chlorine is yellow-green, Bromine is reddish-brown, Iodine is shiny black). Astatine is below iodine, so it is a dark/black solid, not white."
+      explanation: "Halogens become darker in color down Group 17 (Chlorine is yellow-green, Bromine is reddish-brown, Iodine is shiny black). Astatine is below iodine, so it is a dark/black solid, not white."
     },
     {
       id: "periodictable_q6",
@@ -81,7 +81,7 @@ window.topicData["periodictable"] = {
         "They show variable oxidation states."
       ],
       answer: 2,
-      explanation: "Transition metals typically have high densities, high melting points, form coloured compounds, and exhibit variable oxidation states. Low density is characteristic of Group I alkali metals, not transition metals."
+      explanation: "Transition metals typically have high densities, high melting points, form coloured compounds, and exhibit variable oxidation states. Low density is characteristic of Group 1 alkali metals, not transition metals."
     },
     {
       id: "periodictable_q7",
@@ -95,7 +95,7 @@ window.topicData["periodictable"] = {
         "Only one of these elements will form an ion with a negative charge."
       ],
       answer: 2,
-      explanation: "If element X is a Group II metal (forming X²⁺ ions) and Y is a Group VII non-metal (forming Y⁻ ions), they react in a 1:2 ratio to form XY₂, not a 1:1 ratio."
+      explanation: "If element X is a Group 2 metal (forming X²⁺ ions) and Y is a Group 17 non-metal (forming Y⁻ ions), they react in a 1:2 ratio to form XY₂, not a 1:1 ratio."
     },
     {
       id: "periodictable_q8",
@@ -135,16 +135,16 @@ window.topicData["periodictable"] = {
         "sodium and chlorine"
       ],
       answer: 0,
-      explanation: "Group I metals become more reactive down the group (Caesium is most reactive), and Group VII halogens become more reactive up the group (Fluorine is most reactive). Combining Caesium and Fluorine yields the most violent reaction."
+      explanation: "Group 1 metals become more reactive down the group (Caesium is most reactive), and Group 17 halogens become more reactive up the group (Fluorine is most reactive). Combining Caesium and Fluorine yields the most violent reaction."
     },
     {
       id: "periodictable_q11",
       source: "2017 P1 Q24",
       question: "Element Q has the following properties.<br>- forms QCl₃ when heated with chlorine<br>- forms QSO₄ when reacted with dilute sulfuric acid<br>To which part of the Periodic Table does Q belong?",
       options: [
-        "Group II",
-        "Group III",
-        "Group IV",
+        "Group 2",
+        "Group 13",
+        "Group 14",
         "the transition elements"
       ],
       answer: 3,
@@ -162,7 +162,7 @@ window.topicData["periodictable"] = {
         "can donate or share an electron: Z | reacts with water: W"
       ],
       answer: 1,
-      explanation: "Hydrogen (W) can donate an electron (forming H⁺) or share an electron (forming covalent bonds). Group I alkali metals like Potassium (Y) react vigorously with cold water."
+      explanation: "Hydrogen (W) can donate an electron (forming H⁺) or share an electron (forming covalent bonds). Group 1 alkali metals like Potassium (Y) react vigorously with cold water."
     },
     {
       id: "periodictable_q13",
@@ -175,7 +175,7 @@ window.topicData["periodictable"] = {
         "S exists as diatomic molecules."
       ],
       answer: 1,
-      explanation: "Q and R are formed at the positive electrode (anode), so they are non-metals (halogens). Q displaces R from R⁻, meaning Q is more reactive than R. Down Group VII, reactivity decreases, so Bromine (Q) is above Iodine (R) and can displace iodide ions."
+      explanation: "Q and R are formed at the positive electrode (anode), so they are non-metals (halogens). Q displaces R from R⁻, meaning Q is more reactive than R. Down Group 17, reactivity decreases, so Bromine (Q) is above Iodine (R) and can displace iodide ions."
     },
     {
       id: "periodictable_q14",
@@ -202,7 +202,7 @@ window.topicData["periodictable"] = {
         "Y and Z"
       ],
       answer: 2,
-      explanation: "Reactivity between metals and non-metals is highest when combining the most reactive metal (bottom of Group I) with the most reactive non-metal (top of Group VII). The least violent reaction would be between elements closer together in reactivity, such as a higher Group I element (X) and a lower Group VII element (Y)."
+      explanation: "Reactivity between metals and non-metals is highest when combining the most reactive metal (bottom of Group 1) with the most reactive non-metal (top of Group 17). The least violent reaction would be between elements closer together in reactivity, such as a higher Group 1 element (X) and a lower Group 17 element (Y)."
     },
     {
       id: "periodictable_q16",
@@ -235,7 +235,7 @@ window.topicData["periodictable"] = {
       source: "2019 P1 Q24",
       question: "Element Z forms a positive ion when it reacts with oxygen.<br>Which statement about Z is correct?",
       options: [
-        "Z could be a member of Group VII.",
+        "Z could be a member of Group 17.",
         "Z could have the most non-metallic character in the period.",
         "Z's atomic number could be 20.",
         "Z's electronic structure could be 2,8,6."
@@ -282,7 +282,7 @@ window.topicData["periodictable"] = {
         "Na: 4 | Zn: 5 | Fe: 2 | Cr: 3 | Mg: 1"
       ],
       answer: 1,
-      explanation: "Na is a soft Group I metal (cuts with knife, 2). Zn is alloyed with copper to make brass (3). Fe is the catalyst in the Haber process (5). Cr has proton number 24 (1). Mg burns with a bright white light (4)."
+      explanation: "Na is a soft Group 1 metal (cuts with knife, 2). Zn is alloyed with copper to make brass (3). Fe is the catalyst in the Haber process (5). Cr has proton number 24 (1). Mg burns with a bright white light (4)."
     },
     {
       id: "periodictable_q22",
@@ -296,13 +296,13 @@ window.topicData["periodictable"] = {
         "Q and S"
       ],
       answer: 3,
-      explanation: "Reactivity increases down Group I (Q > P) and decreases down Group VII (S > R). Thus, the most vigorous reaction occurs between Q (lower Group I metal) and S (higher Group VII halogen)."
+      explanation: "Reactivity increases down Group 1 (Q > P) and decreases down Group 17 (S > R). Thus, the most vigorous reaction occurs between Q (lower Group 1 metal) and S (higher Group 17 halogen)."
     },
     {
       id: "periodictable_q23",
       source: "2020 P1 Q24",
-      image: "images/periodictable_q23.png",
-      question: "In the equation shown, X and Y represent elements in Group VII of the Periodic Table.<br>X₂ + 2KY → Y₂ + 2KX<br>Which pair of elements could be X and Y?",
+      image: "",
+      question: "In the equation shown, X and Y represent elements in Group 17 of the Periodic Table.<br>X₂ + 2KY → Y₂ + 2KX<br>Which pair of elements could be X and Y?",
       options: [
         "X: Cl₂ | Y: Br₂",
         "X: I₂ | Y: Cl₂",
@@ -310,7 +310,7 @@ window.topicData["periodictable"] = {
         "X: I₂ | Y: Br₂"
       ],
       answer: 0,
-      explanation: "A more reactive halogen X₂ displaces a less reactive halogen Y⁻ from its salt KY. Since halogen reactivity decreases down Group VII, Chlorine (Cl₂) can displace Bromine (Br⁻)."
+      explanation: "A more reactive halogen X₂ displaces a less reactive halogen Y⁻ from its salt KY. Since halogen reactivity decreases down Group 17, Chlorine (Cl₂) can displace Bromine (Br⁻)."
     },
     {
       id: "periodictable_q24",
@@ -364,12 +364,12 @@ window.topicData["periodictable"] = {
         "It is an inert gas and so prevents the metals oxidising."
       ],
       answer: 3,
-      explanation: "Argon is a Group VIII noble gas with a full outer electron shell, making it chemically inert. It provides an unreactive atmosphere that shields hot molten metals from reacting with oxygen in the air."
+      explanation: "Argon is a Group 18 noble gas with a full outer electron shell, making it chemically inert. It provides an unreactive atmosphere that shields hot molten metals from reacting with oxygen in the air."
     },
     {
       id: "periodictable_q28",
       source: "2021 P1 Q23",
-      question: "Which statements about the Group VII elements are correct?<br>1. Bromine reacts with iodide ions to form iodine.<br>2. The elements become more reactive down the group.<br>3. Bromine is a liquid while iodine is a solid at room temperature.",
+      question: "Which statements about the Group 17 elements are correct?<br>1. Bromine reacts with iodide ions to form iodine.<br>2. The elements become more reactive down the group.<br>3. Bromine is a liquid while iodine is a solid at room temperature.",
       options: [
         "1, 2 and 3",
         "1 and 2 only",
@@ -377,7 +377,7 @@ window.topicData["periodictable"] = {
         "2 and 3 only"
       ],
       answer: 2,
-      explanation: "Statement 1 is correct (Bromine is more reactive than Iodine and displaces it). Statement 2 is incorrect (reactivity decreases down Group VII). Statement 3 is correct (Br₂ is liquid, I₂ is solid at r.t.p.)."
+      explanation: "Statement 1 is correct (Bromine is more reactive than Iodine and displaces it). Statement 2 is incorrect (reactivity decreases down Group 17). Statement 3 is correct (Br₂ is liquid, I₂ is solid at r.t.p.)."
     },
     {
       id: "periodictable_q29",
@@ -404,7 +404,7 @@ window.topicData["periodictable"] = {
         "Al₃P₅"
       ],
       answer: 0,
-      explanation: "Aluminium is in Group III and forms Al³⁺ ions. Phosphorus is in Group V and forms P³⁻ ions. Combining Al³⁺ and P³⁻ in a 1:1 ratio gives the formula AlP."
+      explanation: "Aluminium is in Group 13 and forms Al³⁺ ions. Phosphorus is in Group 15 and forms P³⁻ ions. Combining Al³⁺ and P³⁻ in a 1:1 ratio gives the formula AlP."
     },
     {
       id: "periodictable_q31",
