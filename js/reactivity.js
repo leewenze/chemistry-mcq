@@ -7,7 +7,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q1",
       source: "2014 P1 Q24",
-      image: "images/reactivity_q1.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-01.png",
       question: "Two large pieces of iron are placed in water. In experiment 1, a small piece of copper is attached to the iron. In experiment 2, a small piece of magnesium is attached to the iron.",
       options: [
         "Cu(s) → Cu²⁺(aq) + 2e⁻ | Fe(s) → Fe²⁺(aq) + 2e⁻",
@@ -100,7 +100,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q8",
       source: "2016 P1 Q25",
-      image: "images/reactivity_q8.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-08.png",
       question: "Metal P is more reactive than metal Q which is more reactive than metal R.<br>The sulfates of P and R are colourless; the sulfate of Q is blue.<br>Which observation is correct when a metal is added to a solution of sulfate?",
       options: [
         "metal added: P | solution of sulfate: Q | colour change: blue → colourless",
@@ -140,7 +140,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q11",
       source: "2016 P1 Q28",
-      image: "images/reactivity_q11.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-11.png",
       question: "A student set up four test-tubes to investigate the prevention of rusting of iron nails.<br>After leaving the tubes for one week, which tubes would show evidence of rusting?",
       options: [
         "1 and 2",
@@ -167,7 +167,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q13",
       source: "2018 P1 Q29",
-      image: "images/reactivity_q13.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-13.png",
       question: "Pieces of lead, magnesium, iron and an unknown metal, X, were placed separately in test-tubes containing aqueous solutions of their ions.<br>The following observations were made.<br>What is the correct order of reactivity of the metals?",
       options: [
         "Mg → Fe → X → Pb",
@@ -181,7 +181,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q14",
       source: "2018 P1 Q30",
-      image: "images/reactivity_q14.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-14.png",
       question: "In the experiment shown, steam is passed over a heated solid P. Gas Q is collected.<br>What are substances P and Q?",
       options: [
         "P: copper | Q: hydrogen",
@@ -195,7 +195,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q15",
       source: "2018 P1 Q31",
-      image: "images/reactivity_q15.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-15.png",
       question: "Metals are found naturally as the metal or as metal compounds.<br>The metal compounds can be reduced to the metal using carbon as a reducing agent or by electrolysis.<br>Which row is correct?",
       options: [
         "can be found as the metal: Mg | obtained by reduction using carbon: Fe, Zn | obtained by electrolysis: Na, K",
@@ -249,7 +249,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q19",
       source: "2021 P1 Q26",
-      image: "images/reactivity_q19.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-19.png",
       question: "Copper(II) oxide is reduced to copper as shown. The burner is then turned off but the hydrogen is kept flowing until the tube is cold.<br>What is the main reason why the hydrogen is kept flowing?",
       options: [
         "to lessen the risk of explosion in the hot tube",
@@ -302,7 +302,7 @@ window.topicData["reactivity"] = {
     {
       id: "reactivity_q23",
       source: "2022 P1 Q28",
-      image: "images/reactivity_q23.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/reactivity-23.png",
       question: "An equal number of moles of metal carbonates XCO₃ and ZCO₃ are heated strongly.<br>They both decompose and release a gas.<br>The time taken for the compound to decompose completely is measured.<br>Which row describes this decomposition?",
       options: [
         "reactivity of metals X and Z: X is more reactive than Z | positive test for the gas produced: relights a glowing splint",
