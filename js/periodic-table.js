@@ -2,7 +2,7 @@ window.topicData = window.topicData || {};
 
 window.topicData["periodictable"] = {
   title: "The Periodic Table",
-  description: "O-Level Chemistry Multiple Choice Questions on Periodic Trends, Group 1 Alkali Metals, Group 17 Halogens, Transition Metals, and Noble Gases.",
+  description: "Questions on Periodic Trends, Group 1 Alkali Metals, Group 17 Halogens, Transition Metals, and Noble Gases.",
   questions: [
     {
       id: "periodictable_q1",
