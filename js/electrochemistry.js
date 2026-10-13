@@ -2,7 +2,7 @@ window.topicData = window.topicData || {};
 
 window.topicData["electrochemistry"] = {
   title: "Electrochemistry",
-  description: "O-Level Chemistry Multiple Choice Questions on Electrolysis, Preferred Discharge of Ions, Electroplating, and Simple Cells.",
+  description: "Questions on Electrolysis, Preferred Discharge of Ions, Electroplating, and Simple Cells.",
   questions: [
     {
       id: "electrochemistry_q1",
