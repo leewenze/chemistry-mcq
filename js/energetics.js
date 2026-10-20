@@ -116,7 +116,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q9",
       source: "2018 P1 Q18",
-      image: [
+      images: [
         "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09a.png",
         "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09b.png"
         ],
@@ -174,7 +174,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q13",
       source: "2020 P1 Q16",
-      image: [
+      images: [
         "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13a.png",
         "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13b.png"
         ],
