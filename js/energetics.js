@@ -55,8 +55,8 @@ window.topicData["energetics"] = {
         "The reaction has a negative ΔH value.",
         "X is the activation energy for the reaction."
       ],
-      answer: 1,
-      explanation: "The diagram depicts an exothermic reaction (products at a lower energy level than reactants). The complete combustion of methane (CH₄ + 2O₂ → CO₂ + 2H₂O) is an exothermic reaction."
+      answer: 0,
+      explanation: "Bond breaking absorbs energy (endothermic process) while bond making releases energy (exothermic process). Since the overall reaction is endothermic, the energy absorbed in breaking bonds is greater than the energy released in forming bonds."
     },
     {
       id: "energetics_q5",
