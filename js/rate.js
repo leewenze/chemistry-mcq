@@ -33,7 +33,7 @@ window.topicData["rate"] = {
     {
       id: "rate_q3",
       source: "2016 P1 Q13 / 2019 P1 Q17",
-      image: "images/rate_q3.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/rate-03.png",
       question: "Dilute hydrochloric acid is reacted with 1.2 g of magnesium ribbon at room temperature in two experiments, experiment 1 and experiment 2.<br>In experiment 1, 100 cm³ of 1 mol/dm³ hydrochloric acid is used.<br>In experiment 2, 50 cm³ of 2 mol/dm³ hydrochloric acid is used.<br>The volume of hydrogen given off is plotted against time.<br>Which graph is correct?",
       options: [
         "Graph A",
@@ -47,7 +47,7 @@ window.topicData["rate"] = {
     {
       id: "rate_q4",
       source: "2017 P1 Q16",
-      image: "images/rate_q4.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/rate-04.png",
       question: "A student added excess hydrochloric acid to calcium carbonate. As the reaction proceeded he measured the volume of carbon dioxide released, at room temperature and pressure, and plotted a graph.<br>CaCO₃(s) + 2HCl(aq) → CaCl₂(aq) + CO₂(g) + H₂O(l)<br>What can the student conclude from the information?<br>1 The number of moles of calcium carbonate used was 1.67 × 10⁻².<br>2 During the reaction, the rate steadily increased.<br>3 After 15 minutes, the reaction has stopped.",
       options: [
         "1, 2 and 3",
@@ -75,8 +75,8 @@ window.topicData["rate"] = {
       id: "rate_q6",
       source: "2018 P1 Q19",
       images: [
-        "images/rate_q6_part1.png",
-        "images/rate_q6_part2.png",
+        "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/rate-06a.png",
+        "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/rate-06b.png",
       ],
       question: "1 mol of X reacts with 1 mol of Y to produce a gas.<br>A student investigates the rate of this reaction by measuring the volume of gas produced at timed intervals.<br>He plots his results on a graph.<br>The table gives the volumes and concentrations of X and Y that he uses to produce line R.<br>The student varies both volume and concentration of X and Y over a series of experiments. The results of one of these experiments is plotted on the same graph.<br>Which row shows the volumes and concentrations that the student used to obtain line U?",
       options: [
@@ -104,7 +104,7 @@ window.topicData["rate"] = {
     {
       id: "rate_q8",
       source: "2020 P1 Q17",
-      image: "images/rate_q8.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/rate-08.png",
       question: "A sample of 0.5 g of magnesium ribbon is reacted with an excess of 1 mol/dm³ hydrochloric acid.<br>The volume of hydrogen produced over time is measured.<br>The results are plotted to give graph 1.<br>Which graph would be produced when 0.5 g of magnesium ribbon is reacted with an excess of 2.0 mol/dm³ hydrochloric acid under the same conditions?",
       options: [
         "Graph A",
@@ -144,7 +144,7 @@ window.topicData["rate"] = {
     {
       id: "rate_q11",
       source: "2022 P1 Q18",
-      image: "images/rate_q11.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/rate-11.png",
       question: "In experiment 1, 1.0 g of zinc granules and 50 cm³ of 0.50 mol/dm³ sulfuric acid react to produce hydrogen gas. The volume of hydrogen produced is measured. The results for experiment 1 are plotted on the graph.<br>The experiment is repeated with one change. The results for experiment 2 are plotted on the graph.<br>Which change is made in experiment 2?",
       options: [
         "A catalyst is used.",
