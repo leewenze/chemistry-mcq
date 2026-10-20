@@ -20,7 +20,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q2",
       source: "2015 P1 Q19",
-      image: "images/energetics_q2.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-02.png",
       question: "The equation and the energy profile diagram for the reversible reaction in the Haber process are shown.<br>N₂ + 3H₂ ⇌ 2NH₃<br>Which statement about the reactions is correct?",
       options: [
         "The activation energy for the forward reaction is y - x.",
@@ -47,7 +47,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q4",
       source: "2016 P1 Q12",
-      image: "images/energetics_q4.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-04.png",
       question: "The energy profile diagram shows the energy changes that occur as a reaction takes place.<br>From the diagram, which statement about this reaction is correct?",
       options: [
         "The energy change when breaking bonds is greater than the energy change when making bonds.",
@@ -61,7 +61,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q5",
       source: "2017 P1 Q14",
-      image: "images/energetics_q5.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-05.png",
       question: "The equation for the combustion of hydrogen is shown.<br>2H₂(g) + O₂(g) → 2H₂O(g)<br>What is the enthalpy change of this reaction?",
       options: [
         "-482 kJ/mol",
@@ -75,7 +75,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q6",
       source: "2017 P1 Q15",
-      image: "images/energetics_q6.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-06.png",
       question: "The enthalpy change of combustion, ΔH, of an alcohol is the heat given out when one mole of the alcohol is completely burned in oxygen.<br>The enthalpy change of combustion for some alcohols is given.<br>How many carbon atoms and how many hydrogen atoms would there be in the formula of an alcohol that has an enthalpy change of combustion of -3900 kJ/mol?",
       options: [
         "number of carbon atoms: 5 | number of hydrogen atoms: 11",
@@ -102,7 +102,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q8",
       source: "2018 P1 Q17",
-      image: "images/energetics_q8.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-08.png",
       question: "When steam is passed through excess hot coke a reaction occurs and the coke cools.<br>C(s) + H₂O(g) → CO(g) + H₂(g)<br>The activation energy for the reaction is X.<br>Which energy profile diagram for this reaction is correct?",
       options: [
         "Diagram A",
@@ -116,8 +116,8 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q9",
       source: "2018 P1 Q18",
-      image: "images/energetics_q9a.png",
-      image: "images/energetics_q9b.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09a.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09b.png",
       question: "The energy profile diagram for a given reaction without the use of a catalyst is shown below.<br>Which energy profile diagram is correct when a catalyst is used?",
       options: [
         "Diagram A",
@@ -131,7 +131,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q10",
       source: "2019 P1 Q15",
-      image: "images/energetics_q10.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-10.png",
       question: "The energy profile diagram for the reversible reaction 2NH₃ ⇌ N₂ + 3H₂ is shown.<br>Which statements about this reaction are both correct?",
       options: [
         "statement 1: The forward reaction is endothermic. | statement 2: The activation energy is different for the forward and reverse reactions.",
@@ -158,7 +158,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q12",
       source: "2020 P1 Q15",
-      image: "images/energetics_q12.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-12.png",
       question: "Hydrogen burns in the air to form water as shown.<br>2H₂(g) + O₂(g) → 2H₂O(l)<br>Which statement concerning the enthalpy change, ΔH, for the reaction is correct?",
       options: [
         "ΔH: negative | explanation: energy change in breaking bonds in hydrogen and oxygen is greater than the energy change in making the bonds in water",
@@ -172,8 +172,8 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q13",
       source: "2020 P1 Q16",
-      image: "images/energetics_q13a.png",
-      image: "images/energetics_q13b.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13a.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13b.png",
       question: "The energy profile diagram for a reaction is shown.<br>A catalyst was added and no other reaction condition was changed.<br>Which energy profile diagram is correct for the catalysed reaction?",
       options: [
         "Diagram A",
@@ -187,7 +187,7 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q14",
       source: "2021 P1 Q14",
-      image: "images/energetics_q14.png",
+      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-14.png",
       question: "Methane burns in oxygen to form carbon dioxide and water. The energy profile diagram is shown.<br>Which statement about bond breaking and forming is correct?",
       options: [
         "The energy released in forming bonds is labelled x.",
