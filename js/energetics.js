@@ -110,7 +110,7 @@ window.topicData["energetics"] = {
         "Diagram C",
         "Diagram D"
       ],
-      answer: 0,
+      answer: 2,
       explanation: "Because the coke cools, heat is absorbed from the surroundings, meaning the reaction is endothermic (products have higher energy than reactants). The activation energy X is measured from the reactants to the peak of the curve."
     },
     {
