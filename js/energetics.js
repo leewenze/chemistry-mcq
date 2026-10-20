@@ -127,7 +127,7 @@ window.topicData["energetics"] = {
         "Diagram C",
         "Diagram D"
       ],
-      answer: 0,
+      answer: 3,
       explanation: "A catalyst provides an alternative reaction pathway with a lower activation energy (lowering the peak height), while leaving the energy levels of the reactants and products (and thus ΔH) unchanged."
     },
     {
@@ -185,7 +185,7 @@ window.topicData["energetics"] = {
         "Diagram C",
         "Diagram D"
       ],
-      answer: 0,
+      answer: 2,
       explanation: "Adding a catalyst lowers the peak of the energy barrier (activation energy) while leaving the energy levels of the initial reactants and final products completely unchanged."
     },
     {
