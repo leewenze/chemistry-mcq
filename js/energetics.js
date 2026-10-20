@@ -116,8 +116,10 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q9",
       source: "2018 P1 Q18",
-      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09a.png",
-      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09b.png",
+      image: [
+        "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09a.png",
+        "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-09b.png"
+        ],
       question: "The energy profile diagram for a given reaction without the use of a catalyst is shown below.<br>Which energy profile diagram is correct when a catalyst is used?",
       options: [
         "Diagram A",
@@ -172,8 +174,10 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q13",
       source: "2020 P1 Q16",
-      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13a.png",
-      image: "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13b.png",
+      image: [
+        "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13a.png",
+        "https://raw.githubusercontent.com/leewenze/chemistry-mcq/main/js/images/energetics-13b.png"
+        ],
       question: "The energy profile diagram for a reaction is shown.<br>A catalyst was added and no other reaction condition was changed.<br>Which energy profile diagram is correct for the catalysed reaction?",
       options: [
         "Diagram A",
