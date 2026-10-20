@@ -521,10 +521,18 @@ function renderQuestions() {
         const selectedOpt = state ? state.selected : undefined;
 
         let imageHTML = "";
-        if (q.image) {
+        const imgList = Array.isArray(q.images) 
+            ? q.images 
+            : (q.image ? [q.image] : []);
+        
+        if (imgList.length > 0) {
+            const imagesMarkup = imgList.map(src => `
+                <img src="${src}" alt="Question Diagram" class="max-h-72 w-auto object-contain rounded-xl border border-slate-200 bg-slate-50 p-2 shadow-sm flex-1 min-w-[200px]" />
+            `).join("");
+        
             imageHTML = `
-                <div class="my-4 flex justify-center">
-                    <img src="${q.image}" alt="Question Diagram" class="max-h-72 w-auto object-contain rounded-xl border border-slate-200 bg-slate-50 p-2 shadow-sm" />
+                <div class="my-4 flex flex-wrap justify-center items-center gap-3">
+                    ${imagesMarkup}
                 </div>
             `;
         }
