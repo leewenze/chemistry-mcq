@@ -105,10 +105,10 @@ window.topicData["energetics"] = {
       image: "images/energetics_q8.png",
       question: "When steam is passed through excess hot coke a reaction occurs and the coke cools.<br>C(s) + H₂O(g) → CO(g) + H₂(g)<br>The activation energy for the reaction is X.<br>Which energy profile diagram for this reaction is correct?",
       options: [
-        "Endothermic diagram A",
-        "Endothermic diagram B",
-        "Exothermic diagram C",
-        "Exothermic diagram D"
+        "Diagram A",
+        "Diagram B",
+        "Diagram C",
+        "Diagram D"
       ],
       answer: 0,
       explanation: "Because the coke cools, heat is absorbed from the surroundings, meaning the reaction is endothermic (products have higher energy than reactants). The activation energy X is measured from the reactants to the peak of the curve."
@@ -116,7 +116,8 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q9",
       source: "2018 P1 Q18",
-      image: "images/energetics_q9.png",
+      image: "images/energetics_q9a.png",
+      image: "images/energetics_q9b.png",
       question: "The energy profile diagram for a given reaction without the use of a catalyst is shown below.<br>Which energy profile diagram is correct when a catalyst is used?",
       options: [
         "Diagram A",
@@ -171,7 +172,8 @@ window.topicData["energetics"] = {
     {
       id: "energetics_q13",
       source: "2020 P1 Q16",
-      image: "images/energetics_q13.png",
+      image: "images/energetics_q13a.png",
+      image: "images/energetics_q13b.png",
       question: "The energy profile diagram for a reaction is shown.<br>A catalyst was added and no other reaction condition was changed.<br>Which energy profile diagram is correct for the catalysed reaction?",
       options: [
         "Diagram A",
