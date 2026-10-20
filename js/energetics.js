@@ -1,7 +1,7 @@
 window.topicData = window.topicData || {};
 
 window.topicData["energetics"] = {
-  title: "Topic: Energetics & Chemical Energy",
+  title: "Energetics & Chemical Energy",
   description: "Questions on Exothermic and Endothermic Reactions, Energy Profile Diagrams, Activation Energy, Bond Breaking/Making, and Enthalpy Changes.",
   questions: [
     {
