@@ -325,15 +325,15 @@ window.topicData["organic"] = {
     {
       id: "organic_q25",
       source: "2017 P1 Q40",
-      question: "The reaction between a carboxylic acid, CₓH_yCO₂H, and an alcohol, C_nH₂ₙ₊₁OH, produces an ester. How many hydrogen atoms does one molecule of the ester contain?",
+      question: "The reaction between a carboxylic acid, CₓHᵧCO₂H, and an alcohol, CₙH₂ₙ₊₁OH, produces an ester. How many hydrogen atoms does one molecule of the ester contain?",
       options: [
         "y + 2n",
         "y + 2n + 1",
         "y + 2n + 2",
         "y + 2n + 3"
       ],
-      answer: 0,
-      explanation: "Esterification equation:<br>CₓH_yCO₂H + C_nH₂ₙ₊₁OH → CₓH_yCO₂C_nH₂ₙ₊₁ + H₂O.<br>Total hydrogen atoms in the ester molecule = y + (2n + 1) - 1 (since H and OH are removed to form water) = y + 2n."
+      answer: 1,
+      explanation: "Esterification equation:<br>CₓHᵧCO₂H + CₙH₂ₙ₊₁OH → CₓHᵧCO₂CₙH₂ₙ₊₁ + H₂O.<br>Total hydrogen atoms in the ester molecule = y + (2n + 1) (since H and OH are removed to form water)."
     },
     {
       id: "organic_q26",
